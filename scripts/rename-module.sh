@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# rename-module.sh — `geregetemplateai` module-ийн нэрийг шинэ Go module нэр болгож
+# rename-module.sh — `govtemplateai` module-ийн нэрийг шинэ Go module нэр болгож
 # нийт repo-д өөрчилнө. Template-ийг clone хийсний дараа эхэлж энэ script-ийг
 # нэг л удаа ажиллуулна.
 #
@@ -7,9 +7,9 @@
 #   ./scripts/rename-module.sh github.com/myorg/my-api
 #
 # Юу хийдэг вэ:
-#   1. backend/go.mod-ийн "module geregetemplateai" мөрийг шинэ нэрээр сольно.
-#   2. бүх .go файл доторх "geregetemplateai/..." import-ыг шинэ нэр + "/..." болгон солино.
-#   3. swagger docs (`backend/docs/`) дотрох static "geregetemplateai" мөрүүдийг солино.
+#   1. backend/go.mod-ийн "module govtemplateai" мөрийг шинэ нэрээр сольно.
+#   2. бүх .go файл доторх "govtemplateai/..." import-ыг шинэ нэр + "/..." болгон солино.
+#   3. swagger docs (`backend/docs/`) дотрох static "govtemplateai" мөрүүдийг солино.
 #   4. backend.env.example болон docker-compose.yml дахь template-тусгай service
 #      нэрс (gerege-template гэх мэт) утга өөрчлөгдөхгүй — те доорх "грep" гэдэг
 #      алхмаар үлдсэн ишлэлүүдийг шалгана.
@@ -26,7 +26,7 @@ if [[ $# -ne 1 ]]; then
 fi
 
 NEW="$1"
-OLD="geregetemplateai"
+OLD="govtemplateai"
 
 # Эх module-аас өөр модуль нэрийг ялгахын тулд жаахан паттернтэй байя.
 # .git, vendor, node_modules доторх файлуудыг тоохгүй.

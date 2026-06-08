@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package bpm
@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"geregetemplateai/internal/apperror"
-	"geregetemplateai/internal/business/domain"
+	"govtemplateai/internal/apperror"
+	"govtemplateai/internal/business/domain"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

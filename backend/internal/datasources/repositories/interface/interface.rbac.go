@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package _interface
@@ -6,7 +6,7 @@ package _interface
 import (
 	"context"
 
-	"geregetemplateai/internal/business/domain"
+	"govtemplateai/internal/business/domain"
 )
 
 // RBACRepository нь динамик эрх (roles) болон role↔permission холбоосыг

@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package users
@@ -7,9 +7,9 @@ import (
 	"context"
 	"fmt"
 
-	"geregetemplateai/internal/apperror"
-	"geregetemplateai/internal/datasources/caches"
-	repointerface "geregetemplateai/internal/datasources/repositories/interface"
+	"govtemplateai/internal/apperror"
+	"govtemplateai/internal/datasources/caches"
+	repointerface "govtemplateai/internal/datasources/repositories/interface"
 	"golang.org/x/sync/singleflight"
 )
 

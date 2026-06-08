@@ -1,4 +1,4 @@
-# Gerege Template AI v1.0
+# Government AI Platform Template V1.0
 
 > 🌐 [English](README.md) · **Монгол**
 
@@ -224,5 +224,5 @@ curl http://localhost:8080/health
 
 ---
 
-**Gerege Template AI v1.0** — **Gerege Systems Development Team** болон
+**Government AI Platform Template V1.0** — **Gerege Systems Development Team** болон
 **Claude AI** хамтран бүтээв, 2026.

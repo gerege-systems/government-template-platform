@@ -1,6 +1,6 @@
 # gerege-template-ai-web
 
-**Gerege Template AI**-ийн Go backend-д тохирсон **Next.js** frontend.
+**Government AI Platform Template**-ийн Go backend-д тохирсон **Next.js** frontend.
 Дизайныг [`me.gerege.mn`](https://me.gerege.mn)-ээс хуулбарласан **gerege theme** дээр суурилсан.
 
 ## Архитектур — BFF (Backend-for-Frontend)

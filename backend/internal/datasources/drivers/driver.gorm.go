@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package drivers
@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"time"
 
-	"geregetemplateai/internal/constants"
-	"geregetemplateai/pkg/logger"
+	"govtemplateai/internal/constants"
+	"govtemplateai/pkg/logger"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

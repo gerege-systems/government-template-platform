@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package auth
@@ -8,13 +8,13 @@ import (
 	"fmt"
 	"time"
 
-	"geregetemplateai/internal/business/ports"
-	"geregetemplateai/internal/business/usecases/users"
-	"geregetemplateai/internal/datasources/rls"
-	"geregetemplateai/pkg/jwt"
-	"geregetemplateai/pkg/logger"
-	"geregetemplateai/pkg/mailer"
-	"geregetemplateai/pkg/verify"
+	"govtemplateai/internal/business/ports"
+	"govtemplateai/internal/business/usecases/users"
+	"govtemplateai/internal/datasources/rls"
+	"govtemplateai/pkg/jwt"
+	"govtemplateai/pkg/logger"
+	"govtemplateai/pkg/mailer"
+	"govtemplateai/pkg/verify"
 	"golang.org/x/crypto/bcrypt"
 )
 

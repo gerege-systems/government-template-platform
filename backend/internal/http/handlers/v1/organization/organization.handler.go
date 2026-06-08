@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Package organization нь байгууллагын модны HTTP handler-ууд.
@@ -7,11 +7,11 @@ package organization
 import (
 	"net/http"
 
-	orguc "geregetemplateai/internal/business/usecases/organization"
-	"geregetemplateai/internal/http/datatransfers/requests"
-	"geregetemplateai/internal/http/datatransfers/responses"
-	v1 "geregetemplateai/internal/http/handlers/v1"
-	"geregetemplateai/pkg/validators"
+	orguc "govtemplateai/internal/business/usecases/organization"
+	"govtemplateai/internal/http/datatransfers/requests"
+	"govtemplateai/internal/http/datatransfers/responses"
+	v1 "govtemplateai/internal/http/handlers/v1"
+	"govtemplateai/pkg/validators"
 	"github.com/gofiber/fiber/v3"
 	"github.com/google/uuid"
 )

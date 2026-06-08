@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package ai
@@ -6,7 +6,7 @@ package ai
 import (
 	"context"
 
-	"geregetemplateai/internal/apperror"
+	"govtemplateai/internal/apperror"
 )
 
 func (u *usecase) ListConversations(ctx context.Context, req ListConversationsRequest) (ListConversationsResponse, error) {

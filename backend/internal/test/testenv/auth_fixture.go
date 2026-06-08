@@ -1,6 +1,6 @@
 //go:build integration
 
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package testenv
@@ -11,14 +11,14 @@ import (
 	"testing"
 	"time"
 
-	"geregetemplateai/internal/business/usecases/auth"
-	"geregetemplateai/internal/business/usecases/users"
-	"geregetemplateai/internal/config"
-	"geregetemplateai/internal/datasources/caches"
-	userspostgres "geregetemplateai/internal/datasources/repositories/postgres/users"
-	"geregetemplateai/pkg/helpers"
-	"geregetemplateai/pkg/jwt"
-	"geregetemplateai/pkg/verify"
+	"govtemplateai/internal/business/usecases/auth"
+	"govtemplateai/internal/business/usecases/users"
+	"govtemplateai/internal/config"
+	"govtemplateai/internal/datasources/caches"
+	userspostgres "govtemplateai/internal/datasources/repositories/postgres/users"
+	"govtemplateai/pkg/helpers"
+	"govtemplateai/pkg/jwt"
+	"govtemplateai/pkg/verify"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 )

@@ -1,14 +1,14 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package main
 
 import (
-	"geregetemplateai/cmd/seed/seeders"
-	"geregetemplateai/internal/config"
-	"geregetemplateai/internal/constants"
-	"geregetemplateai/internal/datasources/drivers"
-	"geregetemplateai/pkg/logger"
+	"govtemplateai/cmd/seed/seeders"
+	"govtemplateai/internal/config"
+	"govtemplateai/internal/constants"
+	"govtemplateai/internal/datasources/drivers"
+	"govtemplateai/pkg/logger"
 )
 
 func init() {

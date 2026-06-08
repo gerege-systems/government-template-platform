@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Package postgres (organization) нь OrganizationRepository-г Postgres (ltree)
@@ -10,12 +10,12 @@ import (
 	"errors"
 	"strings"
 
-	"geregetemplateai/internal/apperror"
-	"geregetemplateai/internal/business/domain"
-	"geregetemplateai/internal/datasources/records"
-	repointerface "geregetemplateai/internal/datasources/repositories/interface"
-	"geregetemplateai/internal/datasources/rls"
-	"geregetemplateai/pkg/logger"
+	"govtemplateai/internal/apperror"
+	"govtemplateai/internal/business/domain"
+	"govtemplateai/internal/datasources/records"
+	repointerface "govtemplateai/internal/datasources/repositories/interface"
+	"govtemplateai/internal/datasources/rls"
+	"govtemplateai/pkg/logger"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"

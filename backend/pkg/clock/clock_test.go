@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package clock_test
@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"geregetemplateai/pkg/clock"
+	"govtemplateai/pkg/clock"
 	"github.com/stretchr/testify/assert"
 )
 

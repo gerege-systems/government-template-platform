@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package users_test
@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"geregetemplateai/internal/business/domain"
-	"geregetemplateai/internal/business/usecases/users"
-	"geregetemplateai/internal/test/mocks"
+	"govtemplateai/internal/business/domain"
+	"govtemplateai/internal/business/usecases/users"
+	"govtemplateai/internal/test/mocks"
 	"golang.org/x/crypto/bcrypt"
 )
 

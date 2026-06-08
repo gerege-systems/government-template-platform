@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package postgres
@@ -6,8 +6,8 @@ package postgres
 import (
 	"context"
 
-	"geregetemplateai/internal/business/domain"
-	"geregetemplateai/pkg/logger"
+	"govtemplateai/internal/business/domain"
+	"govtemplateai/pkg/logger"
 
 	"gorm.io/gorm"
 )

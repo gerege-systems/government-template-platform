@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package bpm
@@ -8,7 +8,7 @@ import (
 	"encoding/xml"
 	"strings"
 
-	"geregetemplateai/internal/apperror"
+	"govtemplateai/internal/apperror"
 )
 
 // definition нь цэвэр BPMN 2.0 XML (.bpmn). Доорхи стандарт extension-уудыг

@@ -1,18 +1,18 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
-// Package main нь Gerege Template AI v1.0-ийн API эхлэх цэг юм.
+// Package main нь Government AI Platform Template V1.0-ийн API эхлэх цэг юм.
 //
 // Энэ нь нээлттэй эхийн snykk/go-rest-boilerplate (MIT, зохиогч Najib
 // Fikri)-ээс үүсэлтэй; HTTP давхаргыг Gin -> Fiber v3 руу, өгөгдлийн давхаргыг
 // sqlx -> GORM руу хөрвүүлсэн. Бүрэн зохиогчийн мэдээллийг README.md болон docs/ARCHITECTURE.md-ээс үзнэ үү.
 //
-// @title           Gerege Template AI v1.0 API
+// @title           Government AI Platform Template V1.0 API
 // @version         1.0
 // @description     Fiber v3 + GORM (PostgreSQL) + Redis дээр суурилсан Clean Architecture бүхий Go backend. Нээлттэй эхийн snykk/go-rest-boilerplate (MIT, зохиогч Najib Fikri)-ээс үүсэлтэй; Gin -> Fiber v3 болон sqlx -> GORM руу хөрвүүлсэн.
 // @termsOfService  https://github.com/snykk/go-rest-boilerplate
 //
-// @contact.name   Gerege Template AI v1.0
+// @contact.name   Government AI Platform Template V1.0
 // @contact.url    https://github.com/snykk/go-rest-boilerplate
 //
 // @license.name  MIT
@@ -31,11 +31,11 @@ package main
 import (
 	"runtime"
 
-	"geregetemplateai/cmd/api/server"
-	_ "geregetemplateai/docs" // OpenAPI тодорхойлолт, `make swag`-аар үүсгэгддэг
-	"geregetemplateai/internal/config"
-	"geregetemplateai/internal/constants"
-	"geregetemplateai/pkg/logger"
+	"govtemplateai/cmd/api/server"
+	_ "govtemplateai/docs" // OpenAPI тодорхойлолт, `make swag`-аар үүсгэгддэг
+	"govtemplateai/internal/config"
+	"govtemplateai/internal/constants"
+	"govtemplateai/pkg/logger"
 )
 
 func init() {

@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package ai
@@ -11,14 +11,14 @@ import (
 	"fmt"
 	"net/http"
 
-	"geregetemplateai/internal/apperror"
-	aiuc "geregetemplateai/internal/business/usecases/ai"
-	"geregetemplateai/internal/http/auth"
-	"geregetemplateai/internal/http/datatransfers/requests"
-	v1 "geregetemplateai/internal/http/handlers/v1"
-	"geregetemplateai/internal/i18n"
-	"geregetemplateai/pkg/logger"
-	"geregetemplateai/pkg/validators"
+	"govtemplateai/internal/apperror"
+	aiuc "govtemplateai/internal/business/usecases/ai"
+	"govtemplateai/internal/http/auth"
+	"govtemplateai/internal/http/datatransfers/requests"
+	v1 "govtemplateai/internal/http/handlers/v1"
+	"govtemplateai/internal/i18n"
+	"govtemplateai/pkg/logger"
+	"govtemplateai/pkg/validators"
 	"github.com/gofiber/fiber/v3"
 )
 

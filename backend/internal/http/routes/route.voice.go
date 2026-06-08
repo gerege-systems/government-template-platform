@@ -1,13 +1,13 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package routes
 
 import (
-	"geregetemplateai/internal/business/domain"
-	voiceuc "geregetemplateai/internal/business/usecases/voice"
-	voicehandler "geregetemplateai/internal/http/handlers/v1/voice"
-	"geregetemplateai/internal/http/middlewares"
+	"govtemplateai/internal/business/domain"
+	voiceuc "govtemplateai/internal/business/usecases/voice"
+	voicehandler "govtemplateai/internal/http/handlers/v1/voice"
+	"govtemplateai/internal/http/middlewares"
 	"github.com/gofiber/fiber/v3"
 )
 

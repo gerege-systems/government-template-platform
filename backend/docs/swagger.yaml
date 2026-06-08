@@ -1,6 +1,6 @@
 basePath: /api/v1
 definitions:
-  geregetemplateai_internal_http_datatransfers_requests.AIChatRequest:
+  govtemplateai_internal_http_datatransfers_requests.AIChatRequest:
     properties:
       conversation_id:
         type: string
@@ -11,7 +11,7 @@ definitions:
     required:
     - message
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.AIKnowledgeRequest:
+  govtemplateai_internal_http_datatransfers_requests.AIKnowledgeRequest:
     properties:
       content:
         maxLength: 8000
@@ -23,7 +23,7 @@ definitions:
     required:
     - content
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.AdminCreateUserRequest:
+  govtemplateai_internal_http_datatransfers_requests.AdminCreateUserRequest:
     properties:
       email:
         type: string
@@ -44,14 +44,14 @@ definitions:
     - role_id
     - username
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.AdminUpdateOrgRequest:
+  govtemplateai_internal_http_datatransfers_requests.AdminUpdateOrgRequest:
     properties:
       org_id:
         type: string
     required:
     - org_id
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.AdminUpdateRoleRequest:
+  govtemplateai_internal_http_datatransfers_requests.AdminUpdateRoleRequest:
     properties:
       role_id:
         minimum: 1
@@ -59,7 +59,7 @@ definitions:
     required:
     - role_id
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.BPMGenerateRequest:
+  govtemplateai_internal_http_datatransfers_requests.BPMGenerateRequest:
     properties:
       description:
         maxLength: 4000
@@ -68,7 +68,7 @@ definitions:
     required:
     - description
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.BPMSaveFormRequest:
+  govtemplateai_internal_http_datatransfers_requests.BPMSaveFormRequest:
     properties:
       name:
         maxLength: 200
@@ -82,7 +82,7 @@ definitions:
     - name
     - schema
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.BPMSaveProcessRequest:
+  govtemplateai_internal_http_datatransfers_requests.BPMSaveProcessRequest:
     properties:
       bpmn:
         type: string
@@ -102,7 +102,7 @@ definitions:
     - bpmn
     - name
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.BPMSubmitTaskRequest:
+  govtemplateai_internal_http_datatransfers_requests.BPMSubmitTaskRequest:
     properties:
       data:
         items:
@@ -111,7 +111,7 @@ definitions:
     required:
     - data
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.ChangePasswordRequest:
+  govtemplateai_internal_http_datatransfers_requests.ChangePasswordRequest:
     properties:
       current_password:
         maxLength: 72
@@ -125,7 +125,7 @@ definitions:
     - current_password
     - new_password
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.CreateRoleRequest:
+  govtemplateai_internal_http_datatransfers_requests.CreateRoleRequest:
     properties:
       description:
         maxLength: 500
@@ -144,7 +144,7 @@ definitions:
     required:
     - name
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.FedPeerCreateRequest:
+  govtemplateai_internal_http_datatransfers_requests.FedPeerCreateRequest:
     properties:
       base_url:
         type: string
@@ -169,7 +169,7 @@ definitions:
     - jwks_url
     - key
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.FedPeerUpdateRequest:
+  govtemplateai_internal_http_datatransfers_requests.FedPeerUpdateRequest:
     properties:
       base_url:
         type: string
@@ -191,7 +191,7 @@ definitions:
     - jwks_url
     - status
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.ForgotPasswordRequest:
+  govtemplateai_internal_http_datatransfers_requests.ForgotPasswordRequest:
     properties:
       email:
         maxLength: 50
@@ -199,7 +199,7 @@ definitions:
     required:
     - email
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.LoginRequest:
+  govtemplateai_internal_http_datatransfers_requests.LoginRequest:
     properties:
       email:
         maxLength: 50
@@ -212,7 +212,7 @@ definitions:
     - email
     - password
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.OrgCreateRequest:
+  govtemplateai_internal_http_datatransfers_requests.OrgCreateRequest:
     properties:
       kind:
         enum:
@@ -230,7 +230,7 @@ definitions:
     - name
     - parent_id
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.OrgUpdateRequest:
+  govtemplateai_internal_http_datatransfers_requests.OrgUpdateRequest:
     properties:
       kind:
         enum:
@@ -246,14 +246,14 @@ definitions:
     required:
     - name
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.RefreshRequest:
+  govtemplateai_internal_http_datatransfers_requests.RefreshRequest:
     properties:
       refresh_token:
         type: string
     required:
     - refresh_token
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.RegisterRequest:
+  govtemplateai_internal_http_datatransfers_requests.RegisterRequest:
     properties:
       email:
         maxLength: 50
@@ -271,7 +271,7 @@ definitions:
     - password
     - username
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.ResetPasswordRequest:
+  govtemplateai_internal_http_datatransfers_requests.ResetPasswordRequest:
     properties:
       new_password:
         maxLength: 72
@@ -283,7 +283,7 @@ definitions:
     - new_password
     - token
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.SendOTPRequest:
+  govtemplateai_internal_http_datatransfers_requests.SendOTPRequest:
     properties:
       email:
         maxLength: 50
@@ -291,14 +291,14 @@ definitions:
     required:
     - email
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.SetRolePermissionsRequest:
+  govtemplateai_internal_http_datatransfers_requests.SetRolePermissionsRequest:
     properties:
       permissions:
         items:
           type: string
         type: array
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.UpdateRoleRequest:
+  govtemplateai_internal_http_datatransfers_requests.UpdateRoleRequest:
     properties:
       description:
         maxLength: 500
@@ -314,7 +314,7 @@ definitions:
     required:
     - name
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.VerifyOTPRequest:
+  govtemplateai_internal_http_datatransfers_requests.VerifyOTPRequest:
     properties:
       code:
         type: string
@@ -325,7 +325,7 @@ definitions:
     - code
     - email
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.VoiceSpeakRequest:
+  govtemplateai_internal_http_datatransfers_requests.VoiceSpeakRequest:
     properties:
       text:
         maxLength: 5000
@@ -334,7 +334,7 @@ definitions:
     required:
     - text
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.VoiceTranscribeRequest:
+  govtemplateai_internal_http_datatransfers_requests.VoiceTranscribeRequest:
     properties:
       audio_base64:
         type: string
@@ -355,7 +355,7 @@ definitions:
     - lang
     - mime_type
     type: object
-  geregetemplateai_internal_http_datatransfers_requests.VoiceTranslateRequest:
+  govtemplateai_internal_http_datatransfers_requests.VoiceTranslateRequest:
     properties:
       audio_base64:
         type: string
@@ -380,7 +380,7 @@ definitions:
     - mime_type
     - source_lang
     type: object
-  geregetemplateai_internal_http_datatransfers_responses.AIConversationResponse:
+  govtemplateai_internal_http_datatransfers_responses.AIConversationResponse:
     properties:
       created_at:
         type: string
@@ -391,7 +391,7 @@ definitions:
       updated_at:
         type: string
     type: object
-  geregetemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse:
+  govtemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse:
     properties:
       content:
         type: string
@@ -406,7 +406,7 @@ definitions:
       updated_at:
         type: string
     type: object
-  geregetemplateai_internal_http_datatransfers_responses.AIMessageResponse:
+  govtemplateai_internal_http_datatransfers_responses.AIMessageResponse:
     properties:
       content:
         type: string
@@ -419,7 +419,7 @@ definitions:
       role:
         type: string
     type: object
-  geregetemplateai_internal_http_datatransfers_responses.BPMEventResponse:
+  govtemplateai_internal_http_datatransfers_responses.BPMEventResponse:
     properties:
       created_at:
         type: string
@@ -432,7 +432,7 @@ definitions:
       type:
         type: string
     type: object
-  geregetemplateai_internal_http_datatransfers_responses.BPMFormResponse:
+  govtemplateai_internal_http_datatransfers_responses.BPMFormResponse:
     properties:
       created_at:
         type: string
@@ -447,7 +447,7 @@ definitions:
       updated_at:
         type: string
     type: object
-  geregetemplateai_internal_http_datatransfers_responses.BPMInstanceResponse:
+  govtemplateai_internal_http_datatransfers_responses.BPMInstanceResponse:
     properties:
       completed_at:
         type: string
@@ -466,7 +466,7 @@ definitions:
           type: integer
         type: array
     type: object
-  geregetemplateai_internal_http_datatransfers_responses.BPMProcessResponse:
+  govtemplateai_internal_http_datatransfers_responses.BPMProcessResponse:
     properties:
       bpmn:
         type: string
@@ -485,16 +485,16 @@ definitions:
       version:
         type: integer
     type: object
-  geregetemplateai_internal_http_datatransfers_responses.BPMRunResponse:
+  govtemplateai_internal_http_datatransfers_responses.BPMRunResponse:
     properties:
       done:
         type: boolean
       instance:
-        $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMInstanceResponse'
+        $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMInstanceResponse'
       task:
-        $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMTaskResponse'
+        $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMTaskResponse'
     type: object
-  geregetemplateai_internal_http_datatransfers_responses.BPMTaskResponse:
+  govtemplateai_internal_http_datatransfers_responses.BPMTaskResponse:
     properties:
       form:
         items:
@@ -507,7 +507,7 @@ definitions:
       status:
         type: string
     type: object
-  geregetemplateai_internal_http_datatransfers_responses.FedPeerResponse:
+  govtemplateai_internal_http_datatransfers_responses.FedPeerResponse:
     properties:
       base_url:
         type: string
@@ -528,14 +528,14 @@ definitions:
       updated_at:
         type: string
     type: object
-  geregetemplateai_internal_http_datatransfers_responses.FedStatusResponse:
+  govtemplateai_internal_http_datatransfers_responses.FedStatusResponse:
     properties:
       configured:
         type: boolean
       node_id:
         type: string
     type: object
-  geregetemplateai_internal_http_datatransfers_responses.OrganizationResponse:
+  govtemplateai_internal_http_datatransfers_responses.OrganizationResponse:
     properties:
       created_at:
         type: string
@@ -552,7 +552,7 @@ definitions:
       updated_at:
         type: string
     type: object
-  geregetemplateai_internal_http_datatransfers_responses.PermissionResponse:
+  govtemplateai_internal_http_datatransfers_responses.PermissionResponse:
     properties:
       category:
         type: string
@@ -561,7 +561,7 @@ definitions:
       label:
         type: string
     type: object
-  geregetemplateai_internal_http_datatransfers_responses.RoleResponse:
+  govtemplateai_internal_http_datatransfers_responses.RoleResponse:
     properties:
       created_at:
         type: string
@@ -582,7 +582,7 @@ definitions:
       updated_at:
         type: string
     type: object
-  geregetemplateai_internal_http_datatransfers_responses.UserResponse:
+  govtemplateai_internal_http_datatransfers_responses.UserResponse:
     properties:
       created_at:
         type: string
@@ -603,19 +603,19 @@ definitions:
       username:
         type: string
     type: object
-  geregetemplateai_internal_http_datatransfers_responses.VoiceSpeakResponse:
+  govtemplateai_internal_http_datatransfers_responses.VoiceSpeakResponse:
     properties:
       audio_base64:
         type: string
       audio_mime:
         type: string
     type: object
-  geregetemplateai_internal_http_datatransfers_responses.VoiceTranscribeResponse:
+  govtemplateai_internal_http_datatransfers_responses.VoiceTranscribeResponse:
     properties:
       text:
         type: string
     type: object
-  geregetemplateai_internal_http_datatransfers_responses.VoiceTranslateResponse:
+  govtemplateai_internal_http_datatransfers_responses.VoiceTranslateResponse:
     properties:
       audio_base64:
         type: string
@@ -634,7 +634,7 @@ definitions:
       translated_text:
         type: string
     type: object
-  geregetemplateai_internal_http_datatransfers_responses.VoiceTranslationResponse:
+  govtemplateai_internal_http_datatransfers_responses.VoiceTranslationResponse:
     properties:
       created_at:
         type: string
@@ -649,7 +649,7 @@ definitions:
       translated_text:
         type: string
     type: object
-  geregetemplateai_internal_http_handlers_v1.BaseResponse:
+  govtemplateai_internal_http_handlers_v1.BaseResponse:
     properties:
       data: {}
       message:
@@ -662,7 +662,7 @@ definitions:
 host: localhost:8080
 info:
   contact:
-    name: Gerege Template AI v1.0
+    name: Government AI Platform Template V1.0
     url: https://github.com/snykk/go-rest-boilerplate
   description: Fiber v3 + GORM (PostgreSQL) + Redis дээр суурилсан Clean Architecture
     бүхий Go backend. Нээлттэй эхийн snykk/go-rest-boilerplate (MIT, зохиогч Najib
@@ -671,7 +671,7 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
   termsOfService: https://github.com/snykk/go-rest-boilerplate
-  title: Gerege Template AI v1.0 API
+  title: Government AI Platform Template V1.0 API
   version: "1.0"
 paths:
   /ai/chat:
@@ -687,7 +687,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.AIChatRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.AIChatRequest'
       produces:
       - text/event-stream
       responses:
@@ -698,23 +698,23 @@ paths:
         "400":
           description: Malformed body
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "401":
           description: Unauthenticated
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "403":
           description: Daily limit exceeded
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "422":
           description: Validation error
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "503":
           description: AI not configured
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: AI туслахтай streaming чат (SSE)
@@ -729,17 +729,17 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.AIConversationResponse'
+                    $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.AIConversationResponse'
                   type: array
               type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Хэрэглэгчийн AI харилцан яриануудыг жагсаах
@@ -760,21 +760,21 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.AIMessageResponse'
+                    $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.AIMessageResponse'
                   type: array
               type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Нэг харилцан ярианы мессежүүдийг авах
@@ -789,11 +789,11 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse'
+                    $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse'
                   type: array
               type: object
       security:
@@ -810,7 +810,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.AIKnowledgeRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.AIKnowledgeRequest'
       produces:
       - application/json
       responses:
@@ -818,10 +818,10 @@ paths:
           description: Created
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse'
               type: object
       security:
       - BearerAuth: []
@@ -842,7 +842,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: AI мэдлэгийн бичлэг устгах
@@ -862,7 +862,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.AIKnowledgeRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.AIKnowledgeRequest'
       produces:
       - application/json
       responses:
@@ -870,10 +870,10 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse'
               type: object
       security:
       - BearerAuth: []
@@ -889,11 +889,11 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse'
+                    $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse'
                   type: array
               type: object
       security:
@@ -914,7 +914,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.LoginRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.LoginRequest'
       produces:
       - application/json
       responses:
@@ -922,27 +922,27 @@ paths:
           description: Tokens issued
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.UserResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.UserResponse'
               type: object
         "400":
           description: Malformed JSON body
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "401":
           description: Invalid email or password
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "403":
           description: Account not yet activated
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "422":
           description: Validation error
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       summary: Баталгаажуулж токен хос олгох
       tags:
       - auth
@@ -959,22 +959,22 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.RefreshRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.RefreshRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Logged out
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "401":
           description: Refresh token invalid
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "422":
           description: Validation error
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       summary: Refresh токеныг хүчингүй болгох
       tags:
       - auth
@@ -990,26 +990,26 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.ChangePasswordRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.ChangePasswordRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Password changed
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "400":
           description: Malformed JSON body
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "401":
           description: Current password incorrect
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "422":
           description: Validation error
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Баталгаажуулагдсан хэрэглэгчийн нууц үгийг солих
@@ -1027,7 +1027,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.ForgotPasswordRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.ForgotPasswordRequest'
       produces:
       - application/json
       responses:
@@ -1035,15 +1035,15 @@ paths:
           description: Reset email queued (or email not registered — same response
             either way)
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "400":
           description: Malformed JSON body
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "422":
           description: Validation error
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       summary: Нууц үг сэргээх токен олгох
       tags:
       - auth
@@ -1059,26 +1059,26 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.ResetPasswordRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.ResetPasswordRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Password reset
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "400":
           description: Malformed JSON body
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "401":
           description: Reset token invalid or expired
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "422":
           description: Validation error
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       summary: Сэргээх токеныг ашиглаж шинэ нууц үг тогтоох
       tags:
       - auth
@@ -1095,7 +1095,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.RefreshRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.RefreshRequest'
       produces:
       - application/json
       responses:
@@ -1103,23 +1103,23 @@ paths:
           description: New token pair
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.UserResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.UserResponse'
               type: object
         "401":
           description: Refresh token invalid, expired, or already revoked
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "403":
           description: Account no longer active
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "422":
           description: Validation error
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       summary: Refresh токеныг сэлгэж, шинэ хос буцаах
       tags:
       - auth
@@ -1136,7 +1136,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.RegisterRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.RegisterRequest'
       produces:
       - application/json
       responses:
@@ -1144,27 +1144,27 @@ paths:
           description: User created
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.UserResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.UserResponse'
               type: object
         "400":
           description: Malformed JSON body
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "409":
           description: Email or username already in use
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "422":
           description: Validation error (per-field detail in data.errors)
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "500":
           description: Internal error
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       summary: Шинэ хэрэглэгч бүртгэх
       tags:
       - auth
@@ -1181,30 +1181,30 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.SendOTPRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.SendOTPRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OTP enqueued
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "400":
           description: Account already activated
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "404":
           description: Email not registered
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "422":
           description: Validation error
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "500":
           description: Failed to enqueue mail
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       summary: Хэрэглэгчийн email рүү OTP код илгээх
       tags:
       - auth
@@ -1222,30 +1222,30 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.VerifyOTPRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.VerifyOTPRequest'
       produces:
       - application/json
       responses:
         "200":
           description: Account activated
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "400":
           description: Invalid OTP code
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "403":
           description: Locked out — too many invalid attempts
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "404":
           description: Email not registered
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "422":
           description: Validation error
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       summary: OTP кодыг шалгаж бүртгэлийг идэвхжүүлэх
       tags:
       - auth
@@ -1258,11 +1258,11 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMFormResponse'
+                    $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMFormResponse'
                   type: array
               type: object
       security:
@@ -1279,7 +1279,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.BPMSaveFormRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.BPMSaveFormRequest'
       produces:
       - application/json
       responses:
@@ -1287,10 +1287,10 @@ paths:
           description: Created
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMFormResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMFormResponse'
               type: object
       security:
       - BearerAuth: []
@@ -1311,7 +1311,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Хуваалцсан форм устгах
@@ -1331,7 +1331,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.BPMSaveFormRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.BPMSaveFormRequest'
       produces:
       - application/json
       responses:
@@ -1339,10 +1339,10 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMFormResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMFormResponse'
               type: object
       security:
       - BearerAuth: []
@@ -1359,7 +1359,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.BPMGenerateRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.BPMGenerateRequest'
       produces:
       - application/json
       responses:
@@ -1367,23 +1367,23 @@ paths:
           description: Created
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMProcessResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMProcessResponse'
               type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Текст тайлбараас AI-аар BPM процесс үүсгэх
@@ -1404,21 +1404,21 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMEventResponse'
+                    $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMEventResponse'
                   type: array
               type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Гүйлтийн audit timeline (events)
@@ -1439,19 +1439,19 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMRunResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMRunResponse'
               type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Гүйлтийн идэвхтэй даалгаврыг авах (рендерлэх дэлгэц)
@@ -1466,17 +1466,17 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMProcessResponse'
+                    $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMProcessResponse'
                   type: array
               type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Хэрэглэгчийн BPM процессуудыг жагсаах
@@ -1491,7 +1491,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.BPMSaveProcessRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.BPMSaveProcessRequest'
       produces:
       - application/json
       responses:
@@ -1499,19 +1499,19 @@ paths:
           description: Created
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMProcessResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMProcessResponse'
               type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Шинэ BPM процесс үүсгэх
@@ -1531,15 +1531,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: BPM процесс устгах
@@ -1559,19 +1559,19 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMProcessResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMProcessResponse'
               type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: BPM процессыг ID-ээр авах
@@ -1591,7 +1591,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.BPMSaveProcessRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.BPMSaveProcessRequest'
       produces:
       - application/json
       responses:
@@ -1599,23 +1599,23 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMProcessResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMProcessResponse'
               type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: BPM процесс шинэчлэх
@@ -1636,21 +1636,21 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMInstanceResponse'
+                    $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMInstanceResponse'
                   type: array
               type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Процессын гүйлтүүдийг (instances) жагсаах
@@ -1671,19 +1671,19 @@ paths:
           description: Created
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMRunResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMRunResponse'
               type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: BPM процессын гүйлт эхлүүлэх
@@ -1704,7 +1704,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.BPMSubmitTaskRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.BPMSubmitTaskRequest'
       produces:
       - application/json
       responses:
@@ -1712,27 +1712,27 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMRunResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMRunResponse'
               type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "422":
           description: Unprocessable Entity
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Form даалгаврыг бөглөж дараагийн алхам руу шилжих
@@ -1746,7 +1746,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Гарах дарааллыг (outbox) нэн даруй боловсруулах
@@ -1762,7 +1762,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       summary: Орох федерацийн мессеж (peer гарын үсгээр баталгаажна)
       tags:
       - federation
@@ -1775,11 +1775,11 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.FedPeerResponse'
+                    $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.FedPeerResponse'
                   type: array
               type: object
       security:
@@ -1796,7 +1796,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.FedPeerCreateRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.FedPeerCreateRequest'
       produces:
       - application/json
       responses:
@@ -1804,10 +1804,10 @@ paths:
           description: Created
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.FedPeerResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.FedPeerResponse'
               type: object
       security:
       - BearerAuth: []
@@ -1828,7 +1828,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Гишүүн node устгах
@@ -1848,7 +1848,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.FedPeerUpdateRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.FedPeerUpdateRequest'
       produces:
       - application/json
       responses:
@@ -1856,10 +1856,10 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.FedPeerResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.FedPeerResponse'
               type: object
       security:
       - BearerAuth: []
@@ -1880,7 +1880,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Peer руу гарын үсэгтэй ping илгээж round-trip шалгах
@@ -1895,10 +1895,10 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.FedStatusResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.FedStatusResponse'
               type: object
       security:
       - BearerAuth: []
@@ -1914,11 +1914,11 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.OrganizationResponse'
+                    $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.OrganizationResponse'
                   type: array
               type: object
       security:
@@ -1935,7 +1935,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.OrgCreateRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.OrgCreateRequest'
       produces:
       - application/json
       responses:
@@ -1943,10 +1943,10 @@ paths:
           description: Created
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.OrganizationResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.OrganizationResponse'
               type: object
       security:
       - BearerAuth: []
@@ -1967,7 +1967,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Байгууллага устгах (дэд мод бүхэлдээ)
@@ -1987,7 +1987,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.OrgUpdateRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.OrgUpdateRequest'
       produces:
       - application/json
       responses:
@@ -1995,10 +1995,10 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.OrganizationResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.OrganizationResponse'
               type: object
       security:
       - BearerAuth: []
@@ -2014,7 +2014,7 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
                   items:
@@ -2035,11 +2035,11 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.PermissionResponse'
+                    $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.PermissionResponse'
                   type: array
               type: object
       security:
@@ -2056,11 +2056,11 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.RoleResponse'
+                    $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.RoleResponse'
                   type: array
               type: object
       security:
@@ -2077,7 +2077,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.CreateRoleRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.CreateRoleRequest'
       produces:
       - application/json
       responses:
@@ -2085,10 +2085,10 @@ paths:
           description: Created
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.RoleResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.RoleResponse'
               type: object
       security:
       - BearerAuth: []
@@ -2109,7 +2109,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Эрх устгах
@@ -2129,7 +2129,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.UpdateRoleRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.UpdateRoleRequest'
       produces:
       - application/json
       responses:
@@ -2137,10 +2137,10 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.RoleResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.RoleResponse'
               type: object
       security:
       - BearerAuth: []
@@ -2162,14 +2162,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.SetRolePermissionsRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.SetRolePermissionsRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Эрхийн permission-уудыг тохируулах
@@ -2184,21 +2184,21 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.UserResponse'
+                    $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.UserResponse'
                   type: array
               type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Бүх хэрэглэгчдийг жагсаах (admin)
@@ -2213,7 +2213,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.AdminCreateUserRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.AdminCreateUserRequest'
       produces:
       - application/json
       responses:
@@ -2221,10 +2221,10 @@ paths:
           description: Created
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.UserResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.UserResponse'
               type: object
       security:
       - BearerAuth: []
@@ -2245,7 +2245,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Хэрэглэгчийг устгах (admin)
@@ -2266,14 +2266,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.AdminUpdateOrgRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.AdminUpdateOrgRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Хэрэглэгчийг байгууллагад шилжүүлэх (admin)
@@ -2294,14 +2294,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.AdminUpdateRoleRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.AdminUpdateRoleRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Хэрэглэгчийн эрхийг солих (admin)
@@ -2318,19 +2318,19 @@ paths:
           description: User profile
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.UserResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.UserResponse'
               type: object
         "401":
           description: Missing or invalid token
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "404":
           description: User no longer exists
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Одоогийн хэрэглэгчийн профайлыг буцаах
@@ -2345,17 +2345,17 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.VoiceTranslationResponse'
+                    $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.VoiceTranslationResponse'
                   type: array
               type: object
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Дуу хоолойн орчуулгын түүх
@@ -2373,7 +2373,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.VoiceSpeakRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.VoiceSpeakRequest'
       produces:
       - application/json
       responses:
@@ -2381,23 +2381,23 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.VoiceSpeakResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.VoiceSpeakResponse'
               type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Бичвэр → дуу (TTS)
@@ -2415,7 +2415,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.VoiceTranscribeRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.VoiceTranscribeRequest'
       produces:
       - application/json
       responses:
@@ -2423,23 +2423,23 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.VoiceTranscribeResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.VoiceTranscribeResponse'
               type: object
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "503":
           description: Service Unavailable
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Дуу → бичвэр (STT)
@@ -2458,7 +2458,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_requests.VoiceTranslateRequest'
+          $ref: '#/definitions/govtemplateai_internal_http_datatransfers_requests.VoiceTranslateRequest'
       produces:
       - application/json
       responses:
@@ -2466,31 +2466,31 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            - $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
             - properties:
                 data:
-                  $ref: '#/definitions/geregetemplateai_internal_http_datatransfers_responses.VoiceTranslateResponse'
+                  $ref: '#/definitions/govtemplateai_internal_http_datatransfers_responses.VoiceTranslateResponse'
               type: object
         "400":
           description: Malformed body / audio
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "401":
           description: Unauthenticated
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "403":
           description: Daily limit exceeded
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "422":
           description: Validation error
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
         "503":
           description: Voice service not configured
           schema:
-            $ref: '#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse'
+            $ref: '#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse'
       security:
       - BearerAuth: []
       summary: Дуу хоолойн орчуулга (MN↔EN)

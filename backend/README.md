@@ -1,4 +1,4 @@
-# Gerege Template AI v1.0
+# Government AI Platform Template V1.0
 
 > 🌐 **English** · [Монгол](README_MN.md)
 
@@ -209,5 +209,5 @@ template is itself **MIT-licensed** (see the `LICENSE` file).
 
 ---
 
-**Gerege Template AI v1.0** — Co-developed by the **Gerege Systems
+**Government AI Platform Template V1.0** — Co-developed by the **Gerege Systems
 Development Team** and **Claude AI**, 2026.

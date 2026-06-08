@@ -1,4 +1,4 @@
-# Gerege Template AI
+# Government AI Platform Template
 
 > 🌐 **English** · [Монгол](README_MN.md)
 
@@ -71,8 +71,8 @@ Anthropic + Gemini API keys (the AI/voice endpoints return `503` until set).
 
 ### 0) Rename the Go module (one-time)
 
-The template ships under the module path `geregetemplateai`. Replace it with your
-own module path before extending — every Go file imports `geregetemplateai/...`,
+The template ships under the module path `govtemplateai`. Replace it with your
+own module path before extending — every Go file imports `govtemplateai/...`,
 so renaming early avoids a sed sweep later.
 
 ```bash
@@ -134,5 +134,5 @@ are retained in [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
 ---
 
-**Gerege Template AI v1.0** — Co-developed by the **Gerege Systems
+**Government AI Platform Template V1.0** — Co-developed by the **Gerege Systems
 Development Team** and **Claude AI**, 2026.

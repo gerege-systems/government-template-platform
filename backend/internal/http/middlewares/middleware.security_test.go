@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package middlewares_test
@@ -8,9 +8,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"geregetemplateai/internal/config"
-	"geregetemplateai/internal/constants"
-	"geregetemplateai/internal/http/middlewares"
+	"govtemplateai/internal/config"
+	"govtemplateai/internal/constants"
+	"govtemplateai/internal/http/middlewares"
 	"github.com/gofiber/fiber/v3"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

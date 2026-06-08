@@ -1,6 +1,6 @@
 //go:build integration
 
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package testenv
@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"geregetemplateai/internal/datasources/caches"
+	"govtemplateai/internal/datasources/caches"
 	"github.com/testcontainers/testcontainers-go"
 	tcredis "github.com/testcontainers/testcontainers-go/modules/redis"
 )

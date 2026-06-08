@@ -2,7 +2,7 @@
 
 > 🌐 [English](API_CONTRACT.md) · **Монгол**
 
-**Gerege Template AI v1.0**-ийн REST API лавлагаа. Шууд, автоматаар үүсэх
+**Government AI Platform Template V1.0**-ийн REST API лавлагаа. Шууд, автоматаар үүсэх
 бүрэн тодорхойлолтыг `GET /swagger/` дээр үзнэ (эх: `docs/swagger.json`).
 Англи хувилбар: [API_CONTRACT.md](./API_CONTRACT.md).
 
@@ -120,4 +120,4 @@ annotation-аас `make swag`-аар дахин үүсгэнэ.
 
 ---
 
-**Gerege Template AI v1.0** — **Gerege Systems Development Team** болон **Claude AI** хамтран бүтээв, 2026.
+**Government AI Platform Template V1.0** — **Gerege Systems Development Team** болон **Claude AI** хамтран бүтээв, 2026.

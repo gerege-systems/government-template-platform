@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Package voice нь платформын дуу хоолойн орчуулгын (Gemini) business
@@ -10,7 +10,7 @@ package voice
 import (
 	"context"
 
-	"geregetemplateai/internal/business/domain"
+	"govtemplateai/internal/business/domain"
 )
 
 // Usecase нь оролтын хил (input boundary) юм. ai.Usecase-тэй ижил

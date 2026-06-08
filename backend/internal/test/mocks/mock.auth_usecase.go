@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // auth.Usecase-д зориулсан гараар бичсэн mock бөгөөд төслийн бусад
@@ -11,7 +11,7 @@ package mocks
 import (
 	"context"
 
-	"geregetemplateai/internal/business/usecases/auth"
+	"govtemplateai/internal/business/usecases/auth"
 	mock "github.com/stretchr/testify/mock"
 )
 

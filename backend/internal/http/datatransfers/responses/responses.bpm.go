@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package responses
@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"geregetemplateai/internal/business/domain"
+	"govtemplateai/internal/business/domain"
 )
 
 // BPMProcessResponse нь процессын тодорхойлолтын DTO. BPMN нь цэвэр BPMN 2.0

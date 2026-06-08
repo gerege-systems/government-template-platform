@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package voice
@@ -6,10 +6,10 @@ package voice
 import (
 	"fmt"
 
-	"geregetemplateai/internal/apperror"
-	"geregetemplateai/internal/business/ports"
-	repointerface "geregetemplateai/internal/datasources/repositories/interface"
-	"geregetemplateai/pkg/geminiclient"
+	"govtemplateai/internal/apperror"
+	"govtemplateai/internal/business/ports"
+	repointerface "govtemplateai/internal/datasources/repositories/interface"
+	"govtemplateai/pkg/geminiclient"
 )
 
 // Config нь voice usecase-ийн тохируулга. Утгууд нь internal/config-оос

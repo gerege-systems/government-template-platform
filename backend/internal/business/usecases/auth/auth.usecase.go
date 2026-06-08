@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Package auth нь credential баталгаажуулалт, session-ийн амьдралын мөчлөг
@@ -9,7 +9,7 @@ package auth
 import (
 	"context"
 
-	"geregetemplateai/internal/business/domain"
+	"govtemplateai/internal/business/domain"
 )
 
 // Usecase нь HTTP handler-ийн харьцдаг оролтын хил (input boundary) юм. Method

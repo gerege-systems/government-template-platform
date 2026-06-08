@@ -1,4 +1,4 @@
-# Кодын Review — Gerege Template AI BPM
+# Кодын Review — Government AI Platform Template BPM
 
 Огноо: 2026-06-08 · Хамрах хүрээ: backend (Go), frontend (Next.js/TS), migration/RLS/infra
 
@@ -15,7 +15,7 @@ live.
 
 **ЗАСАГДСАН ✅ (batch 3):** M5 (хэл/загвар propagation — shared useSyncExternalStore
 store), M8 (chat stream AbortController + EOF flush), + LOW и-мэйл branding
-(Go Rest → Gerege Template AI).
+(Go Rest → Government AI Platform Template).
 
 **ЗАСАГДСАН ✅ (batch 4):** M1 (role өөрчлөлт → token cutoff: TokenRevoker port,
 Redis cutoff, refresh role_id дахин уншина — live баталгаажсан), M2 (lockout-ийг

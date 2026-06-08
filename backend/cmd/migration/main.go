@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package main
@@ -7,11 +7,11 @@ import (
 	"context"
 	"flag"
 
-	"geregetemplateai/internal/config"
-	"geregetemplateai/internal/constants"
-	"geregetemplateai/internal/datasources/drivers"
-	"geregetemplateai/internal/datasources/migration"
-	"geregetemplateai/pkg/logger"
+	"govtemplateai/internal/config"
+	"govtemplateai/internal/constants"
+	"govtemplateai/internal/datasources/drivers"
+	"govtemplateai/internal/datasources/migration"
+	"govtemplateai/pkg/logger"
 )
 
 // migrationsDir нь модулийн root-оос харьцангуй (make mig-up нь backend/-ээс

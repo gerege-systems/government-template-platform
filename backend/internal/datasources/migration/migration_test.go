@@ -1,6 +1,6 @@
 //go:build integration
 
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package migration_test
@@ -11,9 +11,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"geregetemplateai/internal/datasources/migration"
-	"geregetemplateai/internal/test/testenv"
-	"geregetemplateai/pkg/logger"
+	"govtemplateai/internal/datasources/migration"
+	"govtemplateai/internal/test/testenv"
+	"govtemplateai/pkg/logger"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

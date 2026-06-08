@@ -1,10 +1,10 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package middlewares
 
 import (
-	"geregetemplateai/pkg/observability"
+	"govtemplateai/pkg/observability"
 	"github.com/gofiber/fiber/v3"
 	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
 	"go.opentelemetry.io/otel/trace"

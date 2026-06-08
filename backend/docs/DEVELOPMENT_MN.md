@@ -2,7 +2,7 @@
 
 > 🌐 [English](DEVELOPMENT.md) · **Монгол**
 
-Энэ заавар нь хөгжүүлэгчдэд **Gerege Template AI v1.0** кодын бааз дээр тохиргоо
+Энэ заавар нь хөгжүүлэгчдэд **Government AI Platform Template V1.0** кодын бааз дээр тохиргоо
 хийж, ажиллахад туслана.
 
 > **Эх сурвалж.** Najib Fikri-ийн нээлттэй эх
@@ -340,4 +340,4 @@ Deploy хийхээс өмнө дараахыг баталгаажуул:
 
 ---
 
-**Gerege Template AI v1.0** — **Gerege Systems Development Team** болон **Claude AI** хамтран бүтээв, 2026.
+**Government AI Platform Template V1.0** — **Gerege Systems Development Team** болон **Claude AI** хамтран бүтээв, 2026.

@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Package users нь хэрэглэгчийн identity-ийн CRUD-ийг хариуцдаг: үүсгэх, хайх,
@@ -8,7 +8,7 @@ package users
 import (
 	"context"
 
-	"geregetemplateai/internal/business/domain"
+	"govtemplateai/internal/business/domain"
 )
 
 // Usecase нь оролтын хил (input boundary) юм. Method бүр Request struct авч,

@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package users
@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"time"
 
-	"geregetemplateai/internal/apperror"
-	"geregetemplateai/pkg/logger"
+	"govtemplateai/internal/apperror"
+	"govtemplateai/pkg/logger"
 )
 
 // UpdatePassword нь аль хэдийн hash хийсэн нууц үг + хүчингүй болгох timestamp-ийг

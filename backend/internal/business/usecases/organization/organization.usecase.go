@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Package organization нь байгууллагын модны use case давхарга.
@@ -10,9 +10,9 @@ import (
 	"fmt"
 	"strings"
 
-	"geregetemplateai/internal/apperror"
-	"geregetemplateai/internal/business/domain"
-	repointerface "geregetemplateai/internal/datasources/repositories/interface"
+	"govtemplateai/internal/apperror"
+	"govtemplateai/internal/business/domain"
+	repointerface "govtemplateai/internal/datasources/repositories/interface"
 )
 
 // Usecase нь байгууллагын мод (CRUD).

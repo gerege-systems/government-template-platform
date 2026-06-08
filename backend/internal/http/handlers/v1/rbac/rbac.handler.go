@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Package rbac нь /rbac/* endpoint-уудыг үйлчилнэ — эрх (roles) CRUD, эрхийн
@@ -9,12 +9,12 @@ import (
 	"net/http"
 	"strconv"
 
-	rbacuc "geregetemplateai/internal/business/usecases/rbac"
-	httpauth "geregetemplateai/internal/http/auth"
-	"geregetemplateai/internal/http/datatransfers/requests"
-	"geregetemplateai/internal/http/datatransfers/responses"
-	v1 "geregetemplateai/internal/http/handlers/v1"
-	"geregetemplateai/pkg/validators"
+	rbacuc "govtemplateai/internal/business/usecases/rbac"
+	httpauth "govtemplateai/internal/http/auth"
+	"govtemplateai/internal/http/datatransfers/requests"
+	"govtemplateai/internal/http/datatransfers/responses"
+	v1 "govtemplateai/internal/http/handlers/v1"
+	"govtemplateai/pkg/validators"
 
 	"github.com/gofiber/fiber/v3"
 )

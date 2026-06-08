@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package seeders
@@ -7,10 +7,10 @@ import (
 	"errors"
 	"time"
 
-	"geregetemplateai/internal/constants"
-	"geregetemplateai/internal/datasources/records"
-	"geregetemplateai/internal/datasources/rls"
-	"geregetemplateai/pkg/logger"
+	"govtemplateai/internal/constants"
+	"govtemplateai/internal/datasources/records"
+	"govtemplateai/internal/datasources/rls"
+	"govtemplateai/pkg/logger"
 
 	"gorm.io/gorm"
 )

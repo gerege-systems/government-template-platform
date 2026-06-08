@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package helpers_test
@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"testing"
 
-	"geregetemplateai/pkg/helpers"
+	"govtemplateai/pkg/helpers"
 )
 
 func TestGenerateHash(t *testing.T) {

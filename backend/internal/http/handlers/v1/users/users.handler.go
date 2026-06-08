@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Package users нь /users/* HTTP endpoint-уудыг үйлчилдэг —
@@ -10,11 +10,11 @@ package users
 import (
 	"net/http"
 
-	"geregetemplateai/internal/business/usecases/users"
-	httpauth "geregetemplateai/internal/http/auth"
-	"geregetemplateai/internal/http/datatransfers/responses"
-	v1 "geregetemplateai/internal/http/handlers/v1"
-	"geregetemplateai/pkg/logger"
+	"govtemplateai/internal/business/usecases/users"
+	httpauth "govtemplateai/internal/http/auth"
+	"govtemplateai/internal/http/datatransfers/responses"
+	v1 "govtemplateai/internal/http/handlers/v1"
+	"govtemplateai/pkg/logger"
 	"github.com/gofiber/fiber/v3"
 )
 

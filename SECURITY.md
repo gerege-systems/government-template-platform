@@ -44,5 +44,5 @@ We follow coordinated disclosure: we will work with you on a fix and credit you
 
 ---
 
-**Gerege Template AI v1.0** — Co-developed by the Gerege Systems
+**Government AI Platform Template V1.0** — Co-developed by the Gerege Systems
 Development Team and Claude AI, 2026.

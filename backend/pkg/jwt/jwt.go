@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package jwt
@@ -15,8 +15,8 @@ import (
 	"math/big"
 	"time"
 
-	"geregetemplateai/pkg/clock"
-	"geregetemplateai/pkg/logger"
+	"govtemplateai/pkg/clock"
+	"govtemplateai/pkg/logger"
 	golangJWT "github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )

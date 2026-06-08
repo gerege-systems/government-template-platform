@@ -5,8 +5,8 @@ package mocks
 import (
 	context "context"
 
-	"geregetemplateai/internal/business/domain"
-	repointerface "geregetemplateai/internal/datasources/repositories/interface"
+	"govtemplateai/internal/business/domain"
+	repointerface "govtemplateai/internal/datasources/repositories/interface"
 	mock "github.com/stretchr/testify/mock"
 )
 

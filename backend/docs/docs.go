@@ -11,7 +11,7 @@ const docTemplate = `{
         "title": "{{.Title}}",
         "termsOfService": "https://github.com/snykk/go-rest-boilerplate",
         "contact": {
-            "name": "Gerege Template AI v1.0",
+            "name": "Government AI Platform Template V1.0",
             "url": "https://github.com/snykk/go-rest-boilerplate"
         },
         "license": {
@@ -48,7 +48,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.AIChatRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.AIChatRequest"
                         }
                     }
                 ],
@@ -62,31 +62,31 @@ const docTemplate = `{
                     "400": {
                         "description": "Malformed body",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthenticated",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "403": {
                         "description": "Daily limit exceeded",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "422": {
                         "description": "Validation error",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "503": {
                         "description": "AI not configured",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -112,7 +112,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
@@ -120,7 +120,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.AIConversationResponse"
+                                                "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.AIConversationResponse"
                                             }
                                         }
                                     }
@@ -131,7 +131,7 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -166,7 +166,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
@@ -174,7 +174,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.AIMessageResponse"
+                                                "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.AIMessageResponse"
                                             }
                                         }
                                     }
@@ -185,13 +185,13 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -217,7 +217,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
@@ -225,7 +225,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse"
+                                                "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse"
                                             }
                                         }
                                     }
@@ -258,7 +258,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.AIKnowledgeRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.AIKnowledgeRequest"
                         }
                     }
                 ],
@@ -268,13 +268,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse"
                                         }
                                     }
                                 }
@@ -304,7 +304,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
@@ -312,7 +312,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse"
+                                                "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse"
                                             }
                                         }
                                     }
@@ -354,7 +354,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.AIKnowledgeRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.AIKnowledgeRequest"
                         }
                     }
                 ],
@@ -364,13 +364,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse"
                                         }
                                     }
                                 }
@@ -405,7 +405,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -431,7 +431,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.LoginRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.LoginRequest"
                         }
                     }
                 ],
@@ -441,13 +441,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.UserResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.UserResponse"
                                         }
                                     }
                                 }
@@ -457,25 +457,25 @@ const docTemplate = `{
                     "400": {
                         "description": "Malformed JSON body",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "401": {
                         "description": "Invalid email or password",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "403": {
                         "description": "Account not yet activated",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "422": {
                         "description": "Validation error",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -501,7 +501,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.RefreshRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.RefreshRequest"
                         }
                     }
                 ],
@@ -509,19 +509,19 @@ const docTemplate = `{
                     "200": {
                         "description": "Logged out",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "401": {
                         "description": "Refresh token invalid",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "422": {
                         "description": "Validation error",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -552,7 +552,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.ChangePasswordRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.ChangePasswordRequest"
                         }
                     }
                 ],
@@ -560,25 +560,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Password changed",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "400": {
                         "description": "Malformed JSON body",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "401": {
                         "description": "Current password incorrect",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "422": {
                         "description": "Validation error",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -604,7 +604,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.ForgotPasswordRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.ForgotPasswordRequest"
                         }
                     }
                 ],
@@ -612,19 +612,19 @@ const docTemplate = `{
                     "200": {
                         "description": "Reset email queued (or email not registered — same response either way)",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "400": {
                         "description": "Malformed JSON body",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "422": {
                         "description": "Validation error",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -650,7 +650,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.ResetPasswordRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.ResetPasswordRequest"
                         }
                     }
                 ],
@@ -658,25 +658,25 @@ const docTemplate = `{
                     "200": {
                         "description": "Password reset",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "400": {
                         "description": "Malformed JSON body",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "401": {
                         "description": "Reset token invalid or expired",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "422": {
                         "description": "Validation error",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -702,7 +702,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.RefreshRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.RefreshRequest"
                         }
                     }
                 ],
@@ -712,13 +712,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.UserResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.UserResponse"
                                         }
                                     }
                                 }
@@ -728,19 +728,19 @@ const docTemplate = `{
                     "401": {
                         "description": "Refresh token invalid, expired, or already revoked",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "403": {
                         "description": "Account no longer active",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "422": {
                         "description": "Validation error",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -766,7 +766,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.RegisterRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.RegisterRequest"
                         }
                     }
                 ],
@@ -776,13 +776,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.UserResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.UserResponse"
                                         }
                                     }
                                 }
@@ -792,25 +792,25 @@ const docTemplate = `{
                     "400": {
                         "description": "Malformed JSON body",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "409": {
                         "description": "Email or username already in use",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "422": {
                         "description": "Validation error (per-field detail in data.errors)",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "500": {
                         "description": "Internal error",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -836,7 +836,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.SendOTPRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.SendOTPRequest"
                         }
                     }
                 ],
@@ -844,31 +844,31 @@ const docTemplate = `{
                     "200": {
                         "description": "OTP enqueued",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "400": {
                         "description": "Account already activated",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "404": {
                         "description": "Email not registered",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "422": {
                         "description": "Validation error",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "500": {
                         "description": "Failed to enqueue mail",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -894,7 +894,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.VerifyOTPRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.VerifyOTPRequest"
                         }
                     }
                 ],
@@ -902,31 +902,31 @@ const docTemplate = `{
                     "200": {
                         "description": "Account activated",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid OTP code",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "403": {
                         "description": "Locked out — too many invalid attempts",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "404": {
                         "description": "Email not registered",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "422": {
                         "description": "Validation error",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -952,7 +952,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
@@ -960,7 +960,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMFormResponse"
+                                                "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMFormResponse"
                                             }
                                         }
                                     }
@@ -993,7 +993,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.BPMSaveFormRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.BPMSaveFormRequest"
                         }
                     }
                 ],
@@ -1003,13 +1003,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMFormResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMFormResponse"
                                         }
                                     }
                                 }
@@ -1050,7 +1050,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.BPMSaveFormRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.BPMSaveFormRequest"
                         }
                     }
                 ],
@@ -1060,13 +1060,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMFormResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMFormResponse"
                                         }
                                     }
                                 }
@@ -1101,7 +1101,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -1131,7 +1131,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.BPMGenerateRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.BPMGenerateRequest"
                         }
                     }
                 ],
@@ -1141,13 +1141,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMProcessResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMProcessResponse"
                                         }
                                     }
                                 }
@@ -1157,19 +1157,19 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -1204,7 +1204,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
@@ -1212,7 +1212,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMEventResponse"
+                                                "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMEventResponse"
                                             }
                                         }
                                     }
@@ -1223,13 +1223,13 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -1264,13 +1264,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMRunResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMRunResponse"
                                         }
                                     }
                                 }
@@ -1280,13 +1280,13 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -1312,7 +1312,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
@@ -1320,7 +1320,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMProcessResponse"
+                                                "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMProcessResponse"
                                             }
                                         }
                                     }
@@ -1331,7 +1331,7 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -1359,7 +1359,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.BPMSaveProcessRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.BPMSaveProcessRequest"
                         }
                     }
                 ],
@@ -1369,13 +1369,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMProcessResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMProcessResponse"
                                         }
                                     }
                                 }
@@ -1385,13 +1385,13 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -1426,13 +1426,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMProcessResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMProcessResponse"
                                         }
                                     }
                                 }
@@ -1442,13 +1442,13 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -1483,7 +1483,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.BPMSaveProcessRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.BPMSaveProcessRequest"
                         }
                     }
                 ],
@@ -1493,13 +1493,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMProcessResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMProcessResponse"
                                         }
                                     }
                                 }
@@ -1509,19 +1509,19 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -1552,19 +1552,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -1599,7 +1599,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
@@ -1607,7 +1607,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMInstanceResponse"
+                                                "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMInstanceResponse"
                                             }
                                         }
                                     }
@@ -1618,13 +1618,13 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -1659,13 +1659,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMRunResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMRunResponse"
                                         }
                                     }
                                 }
@@ -1675,13 +1675,13 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -1718,7 +1718,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.BPMSubmitTaskRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.BPMSubmitTaskRequest"
                         }
                     }
                 ],
@@ -1728,13 +1728,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMRunResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMRunResponse"
                                         }
                                     }
                                 }
@@ -1744,25 +1744,25 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "422": {
                         "description": "Unprocessable Entity",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -1786,7 +1786,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -1808,7 +1808,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -1834,7 +1834,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
@@ -1842,7 +1842,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.FedPeerResponse"
+                                                "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.FedPeerResponse"
                                             }
                                         }
                                     }
@@ -1875,7 +1875,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.FedPeerCreateRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.FedPeerCreateRequest"
                         }
                     }
                 ],
@@ -1885,13 +1885,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.FedPeerResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.FedPeerResponse"
                                         }
                                     }
                                 }
@@ -1932,7 +1932,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.FedPeerUpdateRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.FedPeerUpdateRequest"
                         }
                     }
                 ],
@@ -1942,13 +1942,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.FedPeerResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.FedPeerResponse"
                                         }
                                     }
                                 }
@@ -1983,7 +1983,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -2016,7 +2016,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -2042,13 +2042,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.FedStatusResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.FedStatusResponse"
                                         }
                                     }
                                 }
@@ -2078,7 +2078,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
@@ -2086,7 +2086,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.OrganizationResponse"
+                                                "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.OrganizationResponse"
                                             }
                                         }
                                     }
@@ -2119,7 +2119,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.OrgCreateRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.OrgCreateRequest"
                         }
                     }
                 ],
@@ -2129,13 +2129,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.OrganizationResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.OrganizationResponse"
                                         }
                                     }
                                 }
@@ -2176,7 +2176,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.OrgUpdateRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.OrgUpdateRequest"
                         }
                     }
                 ],
@@ -2186,13 +2186,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.OrganizationResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.OrganizationResponse"
                                         }
                                     }
                                 }
@@ -2227,7 +2227,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -2253,7 +2253,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
@@ -2292,7 +2292,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
@@ -2300,7 +2300,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.PermissionResponse"
+                                                "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.PermissionResponse"
                                             }
                                         }
                                     }
@@ -2331,7 +2331,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
@@ -2339,7 +2339,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.RoleResponse"
+                                                "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.RoleResponse"
                                             }
                                         }
                                     }
@@ -2372,7 +2372,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.CreateRoleRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.CreateRoleRequest"
                         }
                     }
                 ],
@@ -2382,13 +2382,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.RoleResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.RoleResponse"
                                         }
                                     }
                                 }
@@ -2429,7 +2429,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.UpdateRoleRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.UpdateRoleRequest"
                         }
                     }
                 ],
@@ -2439,13 +2439,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.RoleResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.RoleResponse"
                                         }
                                     }
                                 }
@@ -2480,7 +2480,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -2517,7 +2517,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.SetRolePermissionsRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.SetRolePermissionsRequest"
                         }
                     }
                 ],
@@ -2525,7 +2525,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -2551,7 +2551,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
@@ -2559,7 +2559,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.UserResponse"
+                                                "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.UserResponse"
                                             }
                                         }
                                     }
@@ -2570,13 +2570,13 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "403": {
                         "description": "Forbidden",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -2604,7 +2604,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.AdminCreateUserRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.AdminCreateUserRequest"
                         }
                     }
                 ],
@@ -2614,13 +2614,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.UserResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.UserResponse"
                                         }
                                     }
                                 }
@@ -2651,13 +2651,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.UserResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.UserResponse"
                                         }
                                     }
                                 }
@@ -2667,13 +2667,13 @@ const docTemplate = `{
                     "401": {
                         "description": "Missing or invalid token",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "404": {
                         "description": "User no longer exists",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -2706,7 +2706,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -2743,7 +2743,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.AdminUpdateOrgRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.AdminUpdateOrgRequest"
                         }
                     }
                 ],
@@ -2751,7 +2751,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -2788,7 +2788,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.AdminUpdateRoleRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.AdminUpdateRoleRequest"
                         }
                     }
                 ],
@@ -2796,7 +2796,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -2822,7 +2822,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
@@ -2830,7 +2830,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.VoiceTranslationResponse"
+                                                "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.VoiceTranslationResponse"
                                             }
                                         }
                                     }
@@ -2841,7 +2841,7 @@ const docTemplate = `{
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -2872,7 +2872,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.VoiceSpeakRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.VoiceSpeakRequest"
                         }
                     }
                 ],
@@ -2882,13 +2882,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.VoiceSpeakResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.VoiceSpeakResponse"
                                         }
                                     }
                                 }
@@ -2898,19 +2898,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -2941,7 +2941,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.VoiceTranscribeRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.VoiceTranscribeRequest"
                         }
                     }
                 ],
@@ -2951,13 +2951,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.VoiceTranscribeResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.VoiceTranscribeResponse"
                                         }
                                     }
                                 }
@@ -2967,19 +2967,19 @@ const docTemplate = `{
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthorized",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "503": {
                         "description": "Service Unavailable",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -3010,7 +3010,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_requests.VoiceTranslateRequest"
+                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_requests.VoiceTranslateRequest"
                         }
                     }
                 ],
@@ -3020,13 +3020,13 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                                    "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.VoiceTranslateResponse"
+                                            "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.VoiceTranslateResponse"
                                         }
                                     }
                                 }
@@ -3036,31 +3036,31 @@ const docTemplate = `{
                     "400": {
                         "description": "Malformed body / audio",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "401": {
                         "description": "Unauthenticated",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "403": {
                         "description": "Daily limit exceeded",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "422": {
                         "description": "Validation error",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     },
                     "503": {
                         "description": "Voice service not configured",
                         "schema": {
-                            "$ref": "#/definitions/geregetemplateai_internal_http_handlers_v1.BaseResponse"
+                            "$ref": "#/definitions/govtemplateai_internal_http_handlers_v1.BaseResponse"
                         }
                     }
                 }
@@ -3068,7 +3068,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "geregetemplateai_internal_http_datatransfers_requests.AIChatRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.AIChatRequest": {
             "type": "object",
             "required": [
                 "message"
@@ -3084,7 +3084,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.AIKnowledgeRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.AIKnowledgeRequest": {
             "type": "object",
             "required": [
                 "content"
@@ -3101,7 +3101,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.AdminCreateUserRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.AdminCreateUserRequest": {
             "type": "object",
             "required": [
                 "email",
@@ -3129,7 +3129,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.AdminUpdateOrgRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.AdminUpdateOrgRequest": {
             "type": "object",
             "required": [
                 "org_id"
@@ -3140,7 +3140,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.AdminUpdateRoleRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.AdminUpdateRoleRequest": {
             "type": "object",
             "required": [
                 "role_id"
@@ -3152,7 +3152,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.BPMGenerateRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.BPMGenerateRequest": {
             "type": "object",
             "required": [
                 "description"
@@ -3165,7 +3165,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.BPMSaveFormRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.BPMSaveFormRequest": {
             "type": "object",
             "required": [
                 "name",
@@ -3185,7 +3185,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.BPMSaveProcessRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.BPMSaveProcessRequest": {
             "type": "object",
             "required": [
                 "bpmn",
@@ -3213,7 +3213,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.BPMSubmitTaskRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.BPMSubmitTaskRequest": {
             "type": "object",
             "required": [
                 "data"
@@ -3227,7 +3227,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.ChangePasswordRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.ChangePasswordRequest": {
             "type": "object",
             "required": [
                 "current_password",
@@ -3246,7 +3246,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.CreateRoleRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.CreateRoleRequest": {
             "type": "object",
             "required": [
                 "name"
@@ -3273,7 +3273,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.FedPeerCreateRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.FedPeerCreateRequest": {
             "type": "object",
             "required": [
                 "base_url",
@@ -3308,7 +3308,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.FedPeerUpdateRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.FedPeerUpdateRequest": {
             "type": "object",
             "required": [
                 "base_url",
@@ -3339,7 +3339,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.ForgotPasswordRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.ForgotPasswordRequest": {
             "type": "object",
             "required": [
                 "email"
@@ -3351,7 +3351,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.LoginRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.LoginRequest": {
             "type": "object",
             "required": [
                 "email",
@@ -3369,7 +3369,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.OrgCreateRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.OrgCreateRequest": {
             "type": "object",
             "required": [
                 "name",
@@ -3394,7 +3394,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.OrgUpdateRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.OrgUpdateRequest": {
             "type": "object",
             "required": [
                 "name"
@@ -3416,7 +3416,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.RefreshRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.RefreshRequest": {
             "type": "object",
             "required": [
                 "refresh_token"
@@ -3427,7 +3427,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.RegisterRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.RegisterRequest": {
             "type": "object",
             "required": [
                 "email",
@@ -3451,7 +3451,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.ResetPasswordRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.ResetPasswordRequest": {
             "type": "object",
             "required": [
                 "new_password",
@@ -3468,7 +3468,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.SendOTPRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.SendOTPRequest": {
             "type": "object",
             "required": [
                 "email"
@@ -3480,7 +3480,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.SetRolePermissionsRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.SetRolePermissionsRequest": {
             "type": "object",
             "properties": {
                 "permissions": {
@@ -3491,7 +3491,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.UpdateRoleRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.UpdateRoleRequest": {
             "type": "object",
             "required": [
                 "name"
@@ -3514,7 +3514,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.VerifyOTPRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.VerifyOTPRequest": {
             "type": "object",
             "required": [
                 "code",
@@ -3530,7 +3530,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.VoiceSpeakRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.VoiceSpeakRequest": {
             "type": "object",
             "required": [
                 "text"
@@ -3543,7 +3543,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.VoiceTranscribeRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.VoiceTranscribeRequest": {
             "type": "object",
             "required": [
                 "audio_base64",
@@ -3572,7 +3572,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_requests.VoiceTranslateRequest": {
+        "govtemplateai_internal_http_datatransfers_requests.VoiceTranslateRequest": {
             "type": "object",
             "required": [
                 "audio_base64",
@@ -3602,7 +3602,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_responses.AIConversationResponse": {
+        "govtemplateai_internal_http_datatransfers_responses.AIConversationResponse": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -3619,7 +3619,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse": {
+        "govtemplateai_internal_http_datatransfers_responses.AIKnowledgeResponse": {
             "type": "object",
             "properties": {
                 "content": {
@@ -3642,7 +3642,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_responses.AIMessageResponse": {
+        "govtemplateai_internal_http_datatransfers_responses.AIMessageResponse": {
             "type": "object",
             "properties": {
                 "content": {
@@ -3662,7 +3662,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_responses.BPMEventResponse": {
+        "govtemplateai_internal_http_datatransfers_responses.BPMEventResponse": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -3682,7 +3682,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_responses.BPMFormResponse": {
+        "govtemplateai_internal_http_datatransfers_responses.BPMFormResponse": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -3705,7 +3705,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_responses.BPMInstanceResponse": {
+        "govtemplateai_internal_http_datatransfers_responses.BPMInstanceResponse": {
             "type": "object",
             "properties": {
                 "completed_at": {
@@ -3734,7 +3734,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_responses.BPMProcessResponse": {
+        "govtemplateai_internal_http_datatransfers_responses.BPMProcessResponse": {
             "type": "object",
             "properties": {
                 "bpmn": {
@@ -3763,21 +3763,21 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_responses.BPMRunResponse": {
+        "govtemplateai_internal_http_datatransfers_responses.BPMRunResponse": {
             "type": "object",
             "properties": {
                 "done": {
                     "type": "boolean"
                 },
                 "instance": {
-                    "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMInstanceResponse"
+                    "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMInstanceResponse"
                 },
                 "task": {
-                    "$ref": "#/definitions/geregetemplateai_internal_http_datatransfers_responses.BPMTaskResponse"
+                    "$ref": "#/definitions/govtemplateai_internal_http_datatransfers_responses.BPMTaskResponse"
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_responses.BPMTaskResponse": {
+        "govtemplateai_internal_http_datatransfers_responses.BPMTaskResponse": {
             "type": "object",
             "properties": {
                 "form": {
@@ -3797,7 +3797,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_responses.FedPeerResponse": {
+        "govtemplateai_internal_http_datatransfers_responses.FedPeerResponse": {
             "type": "object",
             "properties": {
                 "base_url": {
@@ -3829,7 +3829,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_responses.FedStatusResponse": {
+        "govtemplateai_internal_http_datatransfers_responses.FedStatusResponse": {
             "type": "object",
             "properties": {
                 "configured": {
@@ -3840,7 +3840,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_responses.OrganizationResponse": {
+        "govtemplateai_internal_http_datatransfers_responses.OrganizationResponse": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -3866,7 +3866,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_responses.PermissionResponse": {
+        "govtemplateai_internal_http_datatransfers_responses.PermissionResponse": {
             "type": "object",
             "properties": {
                 "category": {
@@ -3880,7 +3880,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_responses.RoleResponse": {
+        "govtemplateai_internal_http_datatransfers_responses.RoleResponse": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -3912,7 +3912,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_responses.UserResponse": {
+        "govtemplateai_internal_http_datatransfers_responses.UserResponse": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -3944,7 +3944,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_responses.VoiceSpeakResponse": {
+        "govtemplateai_internal_http_datatransfers_responses.VoiceSpeakResponse": {
             "type": "object",
             "properties": {
                 "audio_base64": {
@@ -3955,7 +3955,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_responses.VoiceTranscribeResponse": {
+        "govtemplateai_internal_http_datatransfers_responses.VoiceTranscribeResponse": {
             "type": "object",
             "properties": {
                 "text": {
@@ -3963,7 +3963,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_responses.VoiceTranslateResponse": {
+        "govtemplateai_internal_http_datatransfers_responses.VoiceTranslateResponse": {
             "type": "object",
             "properties": {
                 "audio_base64": {
@@ -3992,7 +3992,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_datatransfers_responses.VoiceTranslationResponse": {
+        "govtemplateai_internal_http_datatransfers_responses.VoiceTranslationResponse": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -4015,7 +4015,7 @@ const docTemplate = `{
                 }
             }
         },
-        "geregetemplateai_internal_http_handlers_v1.BaseResponse": {
+        "govtemplateai_internal_http_handlers_v1.BaseResponse": {
             "type": "object",
             "properties": {
                 "data": {},
@@ -4047,7 +4047,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8080",
 	BasePath:         "/api/v1",
 	Schemes:          []string{"http", "https"},
-	Title:            "Gerege Template AI v1.0 API",
+	Title:            "Government AI Platform Template V1.0 API",
 	Description:      "Fiber v3 + GORM (PostgreSQL) + Redis дээр суурилсан Clean Architecture бүхий Go backend. Нээлттэй эхийн snykk/go-rest-boilerplate (MIT, зохиогч Najib Fikri)-ээс үүсэлтэй; Gin -> Fiber v3 болон sqlx -> GORM руу хөрвүүлсэн.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

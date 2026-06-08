@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package users
@@ -9,10 +9,10 @@ import (
 	"fmt"
 	"strings"
 
-	"geregetemplateai/internal/apperror"
-	"geregetemplateai/internal/business/domain"
-	repointerface "geregetemplateai/internal/datasources/repositories/interface"
-	"geregetemplateai/pkg/logger"
+	"govtemplateai/internal/apperror"
+	"govtemplateai/internal/business/domain"
+	repointerface "govtemplateai/internal/datasources/repositories/interface"
+	"govtemplateai/pkg/logger"
 )
 
 // ListUsers нь бүх хэрэглэгчдийг буцаана. Admin token-ы RLS (app.user_role =

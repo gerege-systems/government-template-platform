@@ -1,4 +1,4 @@
-module geregetemplateai
+module govtemplateai
 
 go 1.26
 

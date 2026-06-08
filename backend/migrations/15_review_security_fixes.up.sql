@@ -1,4 +1,4 @@
--- Gerege Template AI v1.0 — REVIEW.md-ийн аюулгүй байдал/бүрэн бүтэн байдлын засварууд.
+-- Government AI Platform Template V1.0 — REVIEW.md-ийн аюулгүй байдал/бүрэн бүтэн байдлын засварууд.
 -- (H6) хэрэглэгч өөрийн role_id/active-ээ өөрчлөхөөс сэргийлэх trigger,
 -- (M13) users.role_id → roles(id) FK + төрлийн уялдаа, (M15) RBAC SELECT
 -- policy-г fail-closed болгох, (M14) FK/RLS багана дээрх индексүүд.

@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Package bpm нь /bpm/* HTTP endpoint-уудыг үйлчилдэг — процессын тодорхойлолт
@@ -7,7 +7,7 @@
 package bpm
 
 import (
-	bpmuc "geregetemplateai/internal/business/usecases/bpm"
+	bpmuc "govtemplateai/internal/business/usecases/bpm"
 )
 
 // Handler нь BPM handler-ийн нэгтгэл; endpoint бүрийн method-ууд өөрсдийн

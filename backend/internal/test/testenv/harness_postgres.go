@@ -1,6 +1,6 @@
 //go:build integration
 
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Package testenv нь integration-тестийн harness-г агуулна —

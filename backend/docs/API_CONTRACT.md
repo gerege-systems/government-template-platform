@@ -2,7 +2,7 @@
 
 > 🌐 **English** · [Монгол](API_CONTRACT_MN.md)
 
-REST API reference for the **Gerege Template AI v1.0**. The live,
+REST API reference for the **Government AI Platform Template V1.0**. The live,
 auto-generated spec is served at `GET /swagger/` (source: `docs/swagger.json`).
 
 > **Origin.** Derived from the open-source
@@ -261,4 +261,4 @@ handler annotations with `make swag`.
 
 ---
 
-**Gerege Template AI v1.0** — Co-developed by the **Gerege Systems Development Team** and **Claude AI**, 2026.
+**Government AI Platform Template V1.0** — Co-developed by the **Gerege Systems Development Team** and **Claude AI**, 2026.

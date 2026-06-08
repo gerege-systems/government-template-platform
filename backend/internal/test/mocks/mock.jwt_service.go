@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	jwt "geregetemplateai/pkg/jwt"
+	jwt "govtemplateai/pkg/jwt"
 	mock "github.com/stretchr/testify/mock"
 )
 

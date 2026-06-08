@@ -2,7 +2,7 @@
 
 > 🌐 [English](ARCHITECTURE.md) · **Монгол**
 
-Энэ баримт нь **Gerege Template AI v1.0** (модуль `geregetemplateai`)-ийн ерөнхий
+Энэ баримт нь **Government AI Platform Template V1.0** (модуль `govtemplateai`)-ийн ерөнхий
 архитектурыг тайлбарлана. Технологийн стек нь **Fiber v3 + GORM + PostgreSQL +
 Redis** бөгөөд Clean Architecture зарчмаар зохион байгуулагдсан.
 
@@ -424,4 +424,4 @@ Health check: `curl http://localhost:8080/health`
 
 ---
 
-**Gerege Template AI v1.0** — **Gerege Systems Development Team** болон **Claude AI** хамтран бүтээв, 2026.
+**Government AI Platform Template V1.0** — **Gerege Systems Development Team** болон **Claude AI** хамтран бүтээв, 2026.

@@ -1,6 +1,6 @@
 //go:build integration
 
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package postgres_test
@@ -11,12 +11,12 @@ import (
 	"testing"
 	"time"
 
-	"geregetemplateai/internal/apperror"
-	"geregetemplateai/internal/business/domain"
-	repointerface "geregetemplateai/internal/datasources/repositories/interface"
-	postgresrepo "geregetemplateai/internal/datasources/repositories/postgres/users"
-	"geregetemplateai/internal/datasources/rls"
-	"geregetemplateai/internal/test/testenv"
+	"govtemplateai/internal/apperror"
+	"govtemplateai/internal/business/domain"
+	repointerface "govtemplateai/internal/datasources/repositories/interface"
+	postgresrepo "govtemplateai/internal/datasources/repositories/postgres/users"
+	"govtemplateai/internal/datasources/rls"
+	"govtemplateai/internal/test/testenv"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

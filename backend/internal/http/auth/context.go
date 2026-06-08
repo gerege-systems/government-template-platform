@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Package auth нь Fiber хүсэлтийн Locals-д агуулагдсан JWT claim-г
@@ -8,8 +8,8 @@ package auth
 import (
 	"errors"
 
-	"geregetemplateai/internal/constants"
-	"geregetemplateai/pkg/jwt"
+	"govtemplateai/internal/constants"
+	"govtemplateai/pkg/jwt"
 	"github.com/gofiber/fiber/v3"
 )
 

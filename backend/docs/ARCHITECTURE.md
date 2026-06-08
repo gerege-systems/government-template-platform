@@ -2,8 +2,8 @@
 
 > 🌐 **English** · [Монгол](ARCHITECTURE_MN.md)
 
-This document describes the high-level architecture of **Gerege Template AI
-v1.0** (module `geregetemplateai`). The stack is **Fiber v3 + GORM +
+This document describes the high-level architecture of **Government AI Platform Template
+v1.0** (module `govtemplateai`). The stack is **Fiber v3 + GORM +
 PostgreSQL + Redis**, organized along Clean Architecture lines.
 
 > **Origin & credits.** This template is **derived from the open-source project
@@ -426,4 +426,4 @@ itself distributed under the MIT License (see `LICENSE`).
 
 ---
 
-**Gerege Template AI v1.0** — Co-developed by the **Gerege Systems Development Team** and **Claude AI**, 2026.
+**Government AI Platform Template V1.0** — Co-developed by the **Gerege Systems Development Team** and **Claude AI**, 2026.

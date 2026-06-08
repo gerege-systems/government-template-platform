@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package auth_test
@@ -8,9 +8,9 @@ import (
 	"errors"
 	"testing"
 
-	"geregetemplateai/internal/apperror"
-	"geregetemplateai/internal/business/usecases/auth"
-	"geregetemplateai/internal/business/usecases/users"
+	"govtemplateai/internal/apperror"
+	"govtemplateai/internal/business/usecases/auth"
+	"govtemplateai/internal/business/usecases/users"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"

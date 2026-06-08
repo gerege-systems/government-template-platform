@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package mailer
@@ -37,7 +37,7 @@ type otpTemplateData struct {
 }
 
 const (
-	defaultAppName      = "Gerege Template AI"
+	defaultAppName      = "Government AI Platform Template"
 	defaultRegion       = "Ulaanbaatar, Mongolia"
 	defaultValidMinutes = 5
 )

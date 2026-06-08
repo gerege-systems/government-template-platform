@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Package voice нь /voice/* HTTP endpoint-уудыг үйлчилдэг — дуу хоолойн
@@ -7,7 +7,7 @@
 package voice
 
 import (
-	voiceuc "geregetemplateai/internal/business/usecases/voice"
+	voiceuc "govtemplateai/internal/business/usecases/voice"
 )
 
 // Handler нь voice handler-ийн нэгтгэл; endpoint бүрийн method-ууд өөрсдийн

@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package voice
@@ -6,10 +6,10 @@ package voice
 import (
 	"net/http"
 
-	voiceuc "geregetemplateai/internal/business/usecases/voice"
-	"geregetemplateai/internal/http/auth"
-	"geregetemplateai/internal/http/datatransfers/responses"
-	v1 "geregetemplateai/internal/http/handlers/v1"
+	voiceuc "govtemplateai/internal/business/usecases/voice"
+	"govtemplateai/internal/http/auth"
+	"govtemplateai/internal/http/datatransfers/responses"
+	v1 "govtemplateai/internal/http/handlers/v1"
 	"github.com/gofiber/fiber/v3"
 )
 

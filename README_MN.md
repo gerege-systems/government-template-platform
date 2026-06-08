@@ -1,4 +1,4 @@
-# Gerege Template AI
+# Government AI Platform Template
 
 > 🌐 [English](README.md) · **Монгол**
 
@@ -71,8 +71,8 @@ Anthropic + Gemini API түлхүүр (тохируулаагүй бол AI/voic
 
 ### 0) Go module-ийн нэрийг солих (нэг удаа)
 
-Template нь `geregetemplateai` module замаар ирдэг. Өргөтгөхөөсөө өмнө өөрийн
-module зам болгон солино уу — бүх .go файл `geregetemplateai/...`-г import хийдэг.
+Template нь `govtemplateai` module замаар ирдэг. Өргөтгөхөөсөө өмнө өөрийн
+module зам болгон солино уу — бүх .go файл `govtemplateai/...`-г import хийдэг.
 
 ```bash
 ./scripts/rename-module.sh github.com/myorg/my-api
@@ -123,5 +123,5 @@ npm run dev
 
 ---
 
-**Gerege Template AI v1.0** — **Gerege Systems Development Team** болон
+**Government AI Platform Template V1.0** — **Gerege Systems Development Team** болон
 **Claude AI** хамтран бүтээв, 2026.

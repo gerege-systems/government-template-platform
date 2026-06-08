@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Package _interface нь repositories давхарга дахь домэйн бүрийн
@@ -18,7 +18,7 @@ package _interface
 import (
 	"context"
 
-	"geregetemplateai/internal/business/domain"
+	"govtemplateai/internal/business/domain"
 )
 
 // UserListFilter нь UserRepository.List() үр дүнг нарийсгана. Талбар

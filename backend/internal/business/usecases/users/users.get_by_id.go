@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package users
@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"time"
 
-	"geregetemplateai/pkg/logger"
+	"govtemplateai/pkg/logger"
 )
 
 // GetByID нь өгөгдсөн primary key-тэй хэрэглэгчийг буцаана. ID-аар хайх нь

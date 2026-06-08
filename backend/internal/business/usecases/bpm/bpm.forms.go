@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package bpm
@@ -7,8 +7,8 @@ import (
 	"context"
 	"strings"
 
-	"geregetemplateai/internal/apperror"
-	"geregetemplateai/internal/business/domain"
+	"govtemplateai/internal/apperror"
+	"govtemplateai/internal/business/domain"
 )
 
 // CreateForm нь хуваалцсан форм сан руу шинэ форм нэмнэ.

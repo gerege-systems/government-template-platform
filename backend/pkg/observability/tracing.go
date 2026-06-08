@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package observability
@@ -21,7 +21,7 @@ import (
 // TracerName нь дуудагчид глобал provider-ээс tracer авахдаа ашиглах ёстой
 // import зам бөгөөд ингэснээр энэ төслөөс ялгарах span бүр ижил
 // instrumentation library шошготой болно.
-const TracerName = "geregetemplateai"
+const TracerName = "govtemplateai"
 
 // TracingConfig нь tracer-provider байгуулалтыг удирдана. Тэг утга нь no-op
 // tracer (sampler=never, exporter байхгүй)-ийг өгдөг бөгөөд тест болон OTel

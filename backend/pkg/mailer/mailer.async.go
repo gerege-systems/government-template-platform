@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package mailer
@@ -9,9 +9,9 @@ import (
 	"sync"
 	"time"
 
-	"geregetemplateai/internal/constants"
-	"geregetemplateai/pkg/logger"
-	"geregetemplateai/pkg/observability"
+	"govtemplateai/internal/constants"
+	"govtemplateai/pkg/logger"
+	"govtemplateai/pkg/observability"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/trace"

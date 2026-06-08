@@ -2,7 +2,7 @@
 
 > 🌐 **English** · [Монгол](DEVELOPMENT_MN.md)
 
-This guide helps developers set up and work with the **Gerege Template AI
+This guide helps developers set up and work with the **Government AI Platform Template
 v1.0** codebase.
 
 > **Origin.** Derived from the open-source
@@ -337,4 +337,4 @@ Before deploying, ensure:
 
 ---
 
-**Gerege Template AI v1.0** — Co-developed by the **Gerege Systems Development Team** and **Claude AI**, 2026.
+**Government AI Platform Template V1.0** — Co-developed by the **Gerege Systems Development Team** and **Claude AI**, 2026.

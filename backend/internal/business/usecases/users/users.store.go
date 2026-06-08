@@ -1,4 +1,4 @@
-// Gerege Template AI v1.0
+// Government AI Platform Template V1.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package users
@@ -9,9 +9,9 @@ import (
 	"fmt"
 	"time"
 
-	"geregetemplateai/internal/apperror"
-	"geregetemplateai/internal/business/domain"
-	"geregetemplateai/pkg/logger"
+	"govtemplateai/internal/apperror"
+	"govtemplateai/internal/business/domain"
+	"govtemplateai/pkg/logger"
 )
 
 // Store нь шинэ domain.User (email-ийг нормчилж, нууц үгийг hash хийж,
