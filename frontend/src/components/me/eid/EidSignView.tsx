@@ -25,7 +25,7 @@ interface OrgRep {
 }
 
 // Иргэний PDF гарын үсэг (PIN2): файл сонгох → (сонголтоор) байгууллага сонгох →
-// баталгаажуулах код → Gerege App-аас PIN2 → poll → гарын үсэгтэй PDF татах.
+// баталгаажуулах код → eID Mongolia App-аас PIN2 → poll → гарын үсэгтэй PDF татах.
 // Байгууллагын нэрийн өмнөөс зурвал (onBehalfOf) гарын үсэг иргэний PIN2 cert-ээр
 // зурагдах ба eidmongolia төлөөллийн эрхийг шалгана (тамга биш).
 export default function EidSignView() {
@@ -186,7 +186,7 @@ export default function EidSignView() {
             </>
           )}
           <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 18, maxWidth: 360, marginInline: 'auto', lineHeight: 1.6 }}>
-            Gerege App-даа энэ кодыг шалгаад <strong>PIN2</strong>-оор гарын үсэг зурна уу.
+            eID Mongolia App-даа энэ кодыг шалгаад <strong>PIN2</strong>-оор гарын үсэг зурна уу.
           </p>
           <button type="button" className="btn btn--secondary" onClick={reset} style={{ marginTop: 18 }}>
             <RotateCcw size={15} style={{ marginRight: 6 }} /> Болих

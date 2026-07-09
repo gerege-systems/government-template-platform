@@ -1310,7 +1310,7 @@ html[lang="en"] .i18n-banner { display: block; }
 .profile-grid > .card { margin-top: 0; }
 @media (max-width: 860px) { .profile-grid { grid-template-columns: 1fr; } }
 
-/* Login card — target дизайн (Gerege App нэвтрэлт) */
+/* Login card — target дизайн (eID Mongolia App нэвтрэлт) */
 .login-instruction {
   text-align: center;
   color: var(--dan-blue-text);

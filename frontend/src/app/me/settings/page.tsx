@@ -4,7 +4,7 @@ import SettingsView from '@/components/me/SettingsView';
 import { fetchMe } from '@/lib/api';
 
 export const dynamic = 'force-dynamic';
-export const metadata = { title: 'Тохиргоо — Gerege' };
+export const metadata = { title: 'Тохиргоо — Government Template v3.0' };
 
 export default async function MeSettingsPage() {
   const me = await fetchMe();

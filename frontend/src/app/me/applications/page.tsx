@@ -5,7 +5,7 @@ import GovApplicationsView from '@/components/gov/GovApplicationsView';
 import { fetchMe } from '@/lib/api';
 
 export const dynamic = 'force-dynamic';
-export const metadata = { title: 'Миний хүсэлт — Gerege' };
+export const metadata = { title: 'Миний хүсэлт — Government Template v3.0' };
 
 export default async function MeApplicationsPage() {
   const me = await fetchMe();

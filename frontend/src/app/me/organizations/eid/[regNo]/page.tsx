@@ -5,7 +5,7 @@ import OrgManageView from '@/components/me/OrgManageView';
 import { fetchMe } from '@/lib/api';
 
 export const dynamic = 'force-dynamic';
-export const metadata = { title: 'Байгууллага — Gerege' };
+export const metadata = { title: 'Байгууллага — Government Template v3.0' };
 
 // eID-д бүртгэлтэй, төлөөлдөг байгууллагын удирдах дэлгэц (гарын үсэг зурагч + салгах).
 export default async function MeEidOrgManagePage(props: { params: Promise<{ regNo: string }> }) {

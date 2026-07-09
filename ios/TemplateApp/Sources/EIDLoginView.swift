@@ -9,7 +9,7 @@ extension Notification.Name { static let eidReturn = Notification.Name("eidRetur
 
 // eID нэвтрэлт:
 //  • РД — утас руу push, зөвшөөрөхөд буцна.
-//  • "Энэ утсаар" (App2App) — Gerege eID апп-ыг geregesmartid://-ээр нээж, approve
+//  • "Энэ утсаар" (App2App) — eID Mongolia App-ыг geregesmartid://-ээр нээж, approve
 //    хийсний дараа RP апп-ын өөрийн deeplink (geregetemp://eid/callback) руу ЯГ
 //    буцна (ерөнхий App2App загвар — callbackUrl-ийг start-д дамжуулна).
 // Хоёул backend session үүсгэж ~2.5с тутам poll хийж COMPLETE-ийг хүлээнэ.
@@ -70,7 +70,7 @@ struct EIDLoginView: View {
 
     private var idForm: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("РД эсвэл иргэний бүртгэлийн дугаараа оруулна уу. Утсан дээрх Gerege App-д мэдэгдэл ирнэ.")
+            Text("РД эсвэл иргэний бүртгэлийн дугаараа оруулна уу. Утсан дээрх eID Mongolia App-д мэдэгдэл ирнэ.")
                 .font(.footnote).foregroundStyle(.secondary)
             TextField("АА00000000", text: $nationalID)
                 .textFieldStyle(.roundedBorder)
@@ -94,19 +94,19 @@ struct EIDLoginView: View {
                 .font(.system(size: 40)).foregroundStyle(.blue)
             Text("Утсаараа баталгаажуулна уу").font(.headline)
 
-            // App2App нээгдээгүй (Gerege апп суугаагүй) бол QR-аар өөр төхөөрөмжөөс.
+            // App2App нээгдээгүй (eID Mongolia App суугаагүй) бол QR-аар өөр төхөөрөмжөөс.
             if method == .app && !appOpened, let link = s.deviceLinkUrl, let img = Self.qr(link) {
                 Image(uiImage: img)
                     .interpolation(.none).resizable().scaledToFit()
                     .frame(width: 200, height: 200)
                     .padding(8).background(Color.white).cornerRadius(12)
-                Text("Gerege апп олдсонгүй — QR кодыг өөр утасны eID апп-аар уншуулна уу.")
+                Text("eID Mongolia App олдсонгүй — QR кодыг өөр утасны eID апп-аар уншуулна уу.")
                     .font(.footnote).foregroundStyle(.secondary).multilineTextAlignment(.center)
             } else if method == .app {
                 Button {
-                    if let s = start { openGeregeApp(sessionID: s.sessionId) }
+                    if let s = start { openEidMongoliaApp(sessionID: s.sessionId) }
                 } label: {
-                    Label("Gerege апп нээх", systemImage: "arrow.up.forward.app")
+                    Label("eID Mongolia App нээх", systemImage: "arrow.up.forward.app")
                 }
                 .buttonStyle(.bordered)
             }
@@ -162,14 +162,14 @@ struct EIDLoginView: View {
             do {
                 let s = try await APIClient.shared.eidStartQR(callbackUrl: APIClient.callbackURL)
                 start = s; phase = .waiting
-                openGeregeApp(sessionID: s.sessionId)
+                openEidMongoliaApp(sessionID: s.sessionId)
                 poll(s.sessionId)
             } catch { phase = .error }
         }
     }
 
-    // Gerege eID апп-ыг App2App-аар нээнэ. Суугаагүй бол QR fallback.
-    private func openGeregeApp(sessionID: String) {
+    // eID Mongolia App-ыг App2App-аар нээнэ. Суугаагүй бол QR fallback.
+    private func openEidMongoliaApp(sessionID: String) {
         guard let url = URL(string: "geregesmartid://approve?sessionId=\(sessionID)") else { return }
         UIApplication.shared.open(url, options: [:]) { ok in
             Task { @MainActor in appOpened = ok }

@@ -4,7 +4,7 @@ import AiChatView from '@/components/me/AiChatView';
 import { fetchMe } from '@/lib/api';
 
 export const dynamic = 'force-dynamic';
-export const metadata = { title: 'AI туслах — Gerege' };
+export const metadata = { title: 'AI туслах — Government Template v3.0' };
 
 export default async function MeAiPage() {
   const me = await fetchMe();
