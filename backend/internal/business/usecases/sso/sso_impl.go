@@ -39,7 +39,7 @@ type usecase struct {
 }
 
 // NewUsecase нь SSO usecase угсарна. nativeClientID нь mobile (PKCE, public
-// client) урсгалын Hydra client_id (жишээ template-gerege-mn-ios) — хоосон бол
+// client) урсгалын Hydra client_id (жишээ template-dgov-mn-ios) — хоосон бол
 // native code-exchange идэвхгүй.
 func NewUsecase(oidcClient *oidc.Client, store UserStore, jwtSvc jwt.JWTService, redis caches.RedisCache, nativeClientID string) Usecase {
 	return &usecase{oidc: oidcClient, store: store, jwt: jwtSvc, redis: redis, nativeClientID: nativeClientID}

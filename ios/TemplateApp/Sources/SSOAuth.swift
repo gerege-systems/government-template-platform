@@ -13,7 +13,7 @@ import CryptoKit
 @MainActor
 final class SSOAuth: NSObject, ObservableObject, ASWebAuthenticationPresentationContextProviding {
     static let issuer = "https://sso.dgov.mn"
-    static let clientID = "template-gerege-mn-ios"
+    static let clientID = "template-dgov-mn-ios"
     static let redirectURI = "geregetemp://oauth2/callback"
     static let callbackScheme = "geregetemp"
     static let scope = "openid profile email nationalid"
