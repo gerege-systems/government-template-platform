@@ -44,5 +44,5 @@ We follow coordinated disclosure: we will work with you on a fix and credit you
 
 ---
 
-**eID based AI enabled Government Template Platform V3.0** — Co-developed by the Gerege Systems
+**Government Template Platform V3.0** — Co-developed by the Gerege Systems
 Development Team and Claude AI, 2026.

@@ -1,4 +1,4 @@
-# eID based AI enabled Government Template Platform V3.0 — iOS App (TemplateApp)
+# Government Template Platform V3.0 — iOS App (TemplateApp)
 
 Энэ template платформын **iOS хувилбар**. eID эсвэл dgov SSO-гоор нэвтэрч,
 хэрэглэгчийн профайл + eID PKI мэдээллийг харуулна. Native SwiftUI, гуравдагч

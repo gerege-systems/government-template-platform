@@ -1,4 +1,4 @@
-// eID based AI enabled Government Template Platform V3.0
+// Government Template Platform V3.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 import SwiftUI
@@ -17,7 +17,7 @@ struct LoginView: View {
                     Image(systemName: "shield.checkerboard")
                         .font(.system(size: 56))
                         .foregroundStyle(.blue)
-                    Text("eID based AI enabled Government Template Platform V3.0")
+                    Text("Government Template Platform V3.0")
                         .font(.largeTitle.bold())
                     Text("eID эсвэл dgov SSO-гоор нэвтэрнэ үү")
                         .font(.subheadline)

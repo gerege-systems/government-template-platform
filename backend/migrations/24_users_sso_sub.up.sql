@@ -1,4 +1,4 @@
--- eID based AI enabled Government Template Platform V3.0
+-- Government Template Platform V3.0
 -- dgov SSO (sso.dgov.mn, OIDC) нэвтрэлт — pairwise subject (sub)-ээр
 -- хэрэглэгчийг таньж холбоно. sso.dgov.mn нь scope "openid profile email"
 -- дор national_id/civil_id буцаадаггүй (pairwise sub) тул eID хэрэглэгчтэй

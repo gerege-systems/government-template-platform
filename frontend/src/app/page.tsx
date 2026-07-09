@@ -23,9 +23,12 @@ function Landing() {
         <img className="signin-card__crest" src="/brand.webp" alt="" aria-hidden="true" />
 
         <div>
-          <h1 id="landing-title">eID based AI enabled Government Template Platform V3.0</h1>
+          <h1 id="landing-title">Government Template Platform V3.0</h1>
+          <p className="signin-card__tagline" style={{ marginTop: 6, color: 'var(--dan-blue-text)', fontWeight: 600, letterSpacing: '.02em' }}>
+            eID based · AI enabled
+          </p>
           <p className="signin-card__lede" style={{ marginTop: 12 }}>
-            <strong style={{ color: 'var(--fg)', fontWeight: 600 }}>eID based AI enabled Government Template Platform V3.0</strong>{' '}
+            <strong style={{ color: 'var(--fg)', fontWeight: 600 }}>Government Template Platform V3.0</strong>{' '}
             (chi + pgx) дээр суурилсан жишээ апп.{' '}
             <strong style={{ color: 'var(--fg)', fontWeight: 600 }}>eID</strong> апп-аараа QR кодыг
             уншуулан нэвтэрч, профайл болон аюулгүй байдлын тохиргоогоо нэг дороос удирдана.

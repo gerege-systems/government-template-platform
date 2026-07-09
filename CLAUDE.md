@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-eID based AI enabled Government Template Platform V3.0 — production-ready full-stack template: Go backend (chi ·
+Government Template Platform V3.0 (eID based, AI enabled) — production-ready full-stack template: Go backend (chi ·
 net/http + pgx + PostgreSQL + Redis) + Next.js 15 BFF frontend + Gemini AI
 pipeline. Docs index is in [README.md](README.md#documentation); deep dives in
 `backend/docs/` (EN/MN pairs) and `docs/DEPLOYMENT.md`.
@@ -35,7 +35,7 @@ docker compose up -d --build   # db + redis + migrate (one-off) + api + web
 
 - **Language:** code identifiers and commit messages in English; comments and
   UI strings in Mongolian. Every source file starts with the two-line
-  `eID based AI enabled Government Template Platform V3.0` header (copy from any existing file).
+  `Government Template Platform V3.0` header (copy from any existing file).
 - **Commits:** conventional commits (`feat:`, `fix:`, `chore:`, `docs:`…).
 - **EN/MN doc pairs:** when you touch `backend/docs/X.md`, update `X_MN.md`
   too (same for READMEs and `frontend/src/lib/i18n.ts` — every key exists in

@@ -28,9 +28,9 @@ const jbMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  title: 'eID based AI enabled Government Template Platform V3.0',
+  title: 'Government Template Platform V3.0',
   description:
-    'eID based AI enabled Government Template Platform V3.0 — chi (net/http) + pgx дээр суурилсан жишээ апп: нэвтрэх, бүртгүүлэх, профайл болон аюулгүй байдлын тохиргоог нэг дороос.',
+    'eID based, AI enabled. Government Template Platform V3.0 — chi (net/http) + pgx дээр суурилсан жишээ апп: нэвтрэх, бүртгүүлэх, профайл болон аюулгүй байдлын тохиргоог нэг дороос.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

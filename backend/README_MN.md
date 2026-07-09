@@ -1,4 +1,4 @@
-# eID based AI enabled Government Template Platform V3.0
+# Government Template Platform V3.0
 
 > 🌐 [English](README.md) · **Монгол**
 
@@ -264,5 +264,5 @@ curl http://localhost:8080/health
 
 ---
 
-**eID based AI enabled Government Template Platform V3.0** — **Gerege Systems Development Team** болон
+**Government Template Platform V3.0** — **Gerege Systems Development Team** болон
 **Claude AI** хамтран бүтээв, 2026.

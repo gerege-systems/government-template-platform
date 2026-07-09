@@ -1,4 +1,6 @@
-# eID based AI enabled Government Template Platform V3.0
+# Government Template Platform V3.0
+
+> **eID-д суурилсан · AI-аар хүчирхэгжсэн** засгийн газрын үйлчилгээний платформ
 
 > 🌐 [English](../README.md) · **Монгол**
 
@@ -90,5 +92,5 @@ attribution-г [AUTHORS](../AUTHORS)-д хадгалсан.
 
 ---
 
-**eID based AI enabled Government Template Platform V3.0** — **Gerege Systems Development Team** болон
+**Government Template Platform V3.0** — **Gerege Systems Development Team** болон
 **Claude AI** хамтран бүтээв, 2026.

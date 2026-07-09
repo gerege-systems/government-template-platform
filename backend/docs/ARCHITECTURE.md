@@ -381,4 +381,4 @@ itself distributed under the MIT License (see `LICENSE`).
 
 ---
 
-**eID based AI enabled Government Template Platform V3.0** — Co-developed by the **Gerege Systems Development Team** and **Claude AI**, 2026.
+**Government Template Platform V3.0** — Co-developed by the **Gerege Systems Development Team** and **Claude AI**, 2026.

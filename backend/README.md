@@ -1,4 +1,4 @@
-# eID based AI enabled Government Template Platform V3.0
+# Government Template Platform V3.0
 
 > 🌐 **English** · [Монгол](README_MN.md)
 
@@ -245,5 +245,5 @@ template is itself **MIT-licensed** (see the `LICENSE` file).
 
 ---
 
-**eID based AI enabled Government Template Platform V3.0** — Co-developed by the **Gerege Systems
+**Government Template Platform V3.0** — Co-developed by the **Gerege Systems
 Development Team** and **Claude AI**, 2026.

@@ -1,4 +1,4 @@
--- eID based AI enabled Government Template Platform V3.0
+-- Government Template Platform V3.0
 -- API Gateway: upstream services, routes, consumers + API keys, per-route
 -- policies (rate-limit / auth / cors …) and a request-log table for the admin
 -- "API Gateway" system. These are gateway CONFIG/telemetry tables — not

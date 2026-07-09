@@ -29,7 +29,7 @@ targets:
     info:
       path: Sources/Info.plist
       properties:
-        CFBundleDisplayName: eID based AI enabled Government Template Platform V3.0
+        CFBundleDisplayName: Government Template Platform V3.0
         UILaunchScreen: {}
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         # Portrait-only апп — iPad multitasking-д бүх orientation шаардахгүйн тулд

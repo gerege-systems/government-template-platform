@@ -198,4 +198,4 @@ docker compose build && docker compose up -d
 
 ---
 
-**eID based AI enabled Government Template Platform V3.0** — **Gerege Systems Development Team** болон **Claude AI** хамтран бүтээв, 2026.
+**Government Template Platform V3.0** — **Gerege Systems Development Team** болон **Claude AI** хамтран бүтээв, 2026.

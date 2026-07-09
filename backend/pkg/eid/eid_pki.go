@@ -1,4 +1,4 @@
-// eID based AI enabled Government Template Platform V3.0
+// Government Template Platform V3.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Иргэн өөрийн PKI самбарыг RP-ээр харах endpoint-уудын client (eid-platform-mn

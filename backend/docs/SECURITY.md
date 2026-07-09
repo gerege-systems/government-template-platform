@@ -1,4 +1,4 @@
-# Security Posture — eID based AI enabled Government Template Platform V3.0
+# Security Posture — Government Template Platform V3.0
 
 > 🌐 **English** · Монгол тайлбарыг кодын комментуудаас үзнэ үү. Эмзэг байдлыг
 > мэдээлэх журмыг [`/SECURITY.md`](../../SECURITY.md)-аас үз.
@@ -126,5 +126,5 @@ what remains for later phases. To report a vulnerability, see the repository
 
 ---
 
-**eID based AI enabled Government Template Platform V3.0** — Co-developed by the **Gerege Systems
+**Government Template Platform V3.0** — Co-developed by the **Gerege Systems
 Development Team** and **Claude AI**, 2026.

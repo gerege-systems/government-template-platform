@@ -1,4 +1,4 @@
--- eID based AI enabled Government Template Platform V3.0
+-- Government Template Platform V3.0
 -- Google профайл: холбогдсон Google account-аас ирсэн бүх мэдээллийг хадгална
 -- (email, баталгаажсан эсэх, нэр, зураг, холбосон огноо). Dashboard дээр харуулна.
 

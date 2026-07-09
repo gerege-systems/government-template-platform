@@ -2,7 +2,7 @@
 
 > 🌐 [English](DEVELOPMENT.md) · **Монгол**
 
-Энэ заавар нь хөгжүүлэгчдэд **eID based AI enabled Government Template Platform V3.0** кодын бааз дээр тохиргоо
+Энэ заавар нь хөгжүүлэгчдэд **Government Template Platform V3.0** кодын бааз дээр тохиргоо
 хийж, ажиллахад туслана.
 
 > **Эх сурвалж.** Najib Fikri-ийн нээлттэй эх
@@ -384,4 +384,4 @@ Deploy хийхээс өмнө дараахыг баталгаажуул:
 
 ---
 
-**eID based AI enabled Government Template Platform V3.0** — **Gerege Systems Development Team** болон **Claude AI** хамтран бүтээв, 2026.
+**Government Template Platform V3.0** — **Gerege Systems Development Team** болон **Claude AI** хамтран бүтээв, 2026.

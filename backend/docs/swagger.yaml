@@ -1068,7 +1068,7 @@ definitions:
 host: localhost:8080
 info:
   contact:
-    name: eID based AI enabled Government Template Platform V3.0
+    name: Government Template Platform V3.0
     url: https://github.com/snykk/go-rest-boilerplate
   description: chi (net/http) + pgx (PostgreSQL) + Redis дээр суурилсан Clean Architecture
     бүхий Go backend. Нээлттэй эхийн snykk/go-rest-boilerplate (MIT, зохиогч Najib
@@ -1077,7 +1077,7 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
   termsOfService: https://github.com/snykk/go-rest-boilerplate
-  title: eID based AI enabled Government Template Platform V3.0 API
+  title: Government Template Platform V3.0 API
   version: "1.0"
 paths:
   /admin/ai/prompts:

@@ -2,7 +2,7 @@
 
 > 🌐 **English** · [Монгол](API_CONTRACT_MN.md)
 
-REST API reference for the **eID based AI enabled Government Template Platform V3.0**. The live,
+REST API reference for the **Government Template Platform V3.0**. The live,
 auto-generated spec is served at `GET /swagger/` (source: `docs/swagger.json`).
 
 > **Origin.** Derived from the open-source
@@ -262,4 +262,4 @@ handler annotations with `make swag`.
 
 ---
 
-**eID based AI enabled Government Template Platform V3.0** — Co-developed by the **Gerege Systems Development Team** and **Claude AI**, 2026.
+**Government Template Platform V3.0** — Co-developed by the **Gerege Systems Development Team** and **Claude AI**, 2026.

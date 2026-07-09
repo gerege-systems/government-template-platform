@@ -1,4 +1,4 @@
-# ROADMAP — eID based AI enabled Government Template Platform V3.0
+# ROADMAP — Government Template Platform V3.0
 
 > Төслийн phase-уудын явц, төлөвлөгөө. Phase бүр дуусахад энэ файлыг шинэчилж
 > commit хийнэ. Дэлгэрэнгүй баримтууд: [README.md](README.md#documentation).
