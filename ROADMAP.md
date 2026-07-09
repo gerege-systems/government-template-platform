@@ -50,35 +50,6 @@
 - Бүх док шинэчлэгдсэн + шинэ: AI_PIPELINE(_MN).md, DEPLOYMENT(_MN).md, CLAUDE.md
 - Бүх relative .md холбоос скриптээр шалгагдаж засагдсан
 
-### Phase 9 — Wallet микросервис импорт (2026-06-12)
-- gerege-platform repo-оос `wallet-gerege-mn/` сервисийг бүхэлд нь оруулж ирсэн
-  (бие даасан Go module `eidtemplate`, өөрийн Postgres схем + RLS + ledger)
-- Багц: api / admin / worker / migrate / client binaries, Next.js admin UI,
-  EMVCo QR, OAuth2 client_credentials, webhooks, өөрийн docker-compose
-- `go build ./...` + бүх unit test локалд ногоон; root CI-д хараахан
-  холбогдоогүй (доорх Phase 10-г үз)
-
-### Phase 10 — Wallet интеграц + template deploy (2026-06-12)
-- Root CI-д 2 шинэ job: wallet Go (gofmt/vet/race test/5 binary) + admin
-  Next.js (lint/build)
-- Admin UI subpath дэмжлэг: Next.js `basePath` build arg
-  (`ADMIN_BASE_PATH`), клиент талын fetch-үүд `lib/basepath`-аар prefix-тэй
-- Compose collision-safe: `WALLET_IMAGE`/`WALLET_PG_VOLUME`/`WALLET_NETWORK`
-  параметрууд — нэг хост дээр хоёр wallet stack зэрэг ажиллана
-- **template.dgov.mn дээр амьд**: `https://template.dgov.mn/wallet/`
-  (API, prefix хусна) + `/wallet-admin` (super-admin UI); stack =
-  `temp-wallet` (порт 8094/8095/3012, өөрийн PG17 volume). OAuth
-  client_credentials flow + admin login end-to-end шалгагдсан.
-
-### Phase 10.5 — Wallet-ийг тусдаа repo болгож салгав (2026-07-04)
-- `wallet-gerege-mn/`-ийг `git subtree split`-ээр түүхтэй нь
-  [gerege-systems/wallet-service-gerege-mn](https://github.com/gerege-systems/wallet-service-gerege-mn)
-  repo руу салгасан (өөрийн CI: Go gofmt/vet/race test/binaries + admin
-  lint/build + gitleaks)
-- Root CI-ээс wallet/wallet-admin job-ууд хасагдсан; docs шинэчлэгдсэн
-- Wallet-ийн үлдэгдэл ажлууд (module нэр `eidtemplate` → `wallet`,
-  template backend-тэй холбох жишээ) шинэ repo-д хамаарна
-
 ---
 
 ## 🔜 Дараагийн phase-ууд (ач холбогдлоор)

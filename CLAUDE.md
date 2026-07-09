@@ -89,15 +89,6 @@ docker compose up -d --build   # db + redis + migrate (one-off) + api + web
   writability first because refresh **rotates** the token (see `lib/api.ts`).
 - UI strings via `useT()` + `lib/i18n.ts` keys (mn + en).
 
-## Wallet microservice
-
-- Extracted to its own repo:
-  [gerege-systems/wallet-service-gerege-mn](https://github.com/gerege-systems/wallet-service-gerege-mn)
-  (standalone Go module, own Postgres/compose/CI — independent of this
-  template). Reference deploy on this host stays at
-  `https://template.dgov.mn/wallet/` + `/wallet-admin`; runbook in
-  docs/DEPLOYMENT.md §Wallet.
-
 ## Gotchas
 
 - `backend/internal/config/.env*` and root `.env`/`backend.env` are
