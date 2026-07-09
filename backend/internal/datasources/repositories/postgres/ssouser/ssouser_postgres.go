@@ -57,20 +57,22 @@ func (r *ssoUserRepository) UpsertBySSOSub(ctx context.Context, ssoSub string, i
 	var stored records.Users
 	err := r.withRLS(ctx, func(tx pgx.Tx) error {
 		rows, qErr := tx.Query(ctx, `
-			INSERT INTO users(id, username, first_name, last_name, first_name_en, last_name_en, email, password, active, role_id, sso_sub, created_at)
-			VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, NULL, true, $7, $8, now())
+			INSERT INTO users(id, username, first_name, last_name, first_name_en, last_name_en, email, password, active, role_id, sso_sub, google_sub, google_email, created_at)
+			VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6, NULL, true, $7, $8, NULLIF($9,''), NULLIF($10,''), now())
 			ON CONFLICT (sso_sub) WHERE sso_sub IS NOT NULL
 			DO UPDATE SET
 				first_name    = EXCLUDED.first_name,
 				last_name     = EXCLUDED.last_name,
 				first_name_en = EXCLUDED.first_name_en,
 				last_name_en  = EXCLUDED.last_name_en,
+				google_sub    = COALESCE(EXCLUDED.google_sub, users.google_sub),
+				google_email  = COALESCE(EXCLUDED.google_email, users.google_email),
 				active        = true,
 				updated_at    = now()
 			RETURNING `+records.UserColumns+`
 		`,
 			in.Username, in.FirstName, in.LastName, in.FirstNameEn, in.LastNameEn,
-			in.Email, in.RoleID, ssoSub,
+			in.Email, in.RoleID, ssoSub, in.GoogleSub, in.GoogleEmail,
 		)
 		if qErr != nil {
 			return qErr
@@ -97,19 +99,21 @@ func (r *ssoUserRepository) UpsertByCivilID(ctx context.Context, civilID, nation
 	var stored records.Users
 	err := r.withRLS(ctx, func(tx pgx.Tx) error {
 		rows, qErr := tx.Query(ctx, `
-			INSERT INTO users(id, username, first_name, last_name, first_name_en, last_name_en, email, password, active, role_id, national_id, civil_id, sso_sub, created_at)
-			VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, NULL, NULL, true, $6, $7, $8, $9, now())
+			INSERT INTO users(id, username, first_name, last_name, first_name_en, last_name_en, email, password, active, role_id, national_id, civil_id, sso_sub, google_sub, google_email, created_at)
+			VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, NULL, NULL, true, $6, $7, $8, $9, NULLIF($10,''), NULLIF($11,''), now())
 			ON CONFLICT (lower(civil_id)) WHERE civil_id IS NOT NULL
 			DO UPDATE SET
-				sso_sub    = EXCLUDED.sso_sub,
-				first_name = COALESCE(NULLIF(EXCLUDED.first_name, ''), users.first_name),
-				last_name  = COALESCE(NULLIF(EXCLUDED.last_name, ''), users.last_name),
-				active     = true,
-				updated_at = now()
+				sso_sub      = EXCLUDED.sso_sub,
+				first_name   = COALESCE(NULLIF(EXCLUDED.first_name, ''), users.first_name),
+				last_name    = COALESCE(NULLIF(EXCLUDED.last_name, ''), users.last_name),
+				google_sub   = COALESCE(EXCLUDED.google_sub, users.google_sub),
+				google_email = COALESCE(EXCLUDED.google_email, users.google_email),
+				active       = true,
+				updated_at   = now()
 			RETURNING `+records.UserColumns+`
 		`,
 			in.Username, in.FirstName, in.LastName, in.FirstNameEn, in.LastNameEn,
-			in.RoleID, nationalID, civilID, ssoSub,
+			in.RoleID, nationalID, civilID, ssoSub, in.GoogleSub, in.GoogleEmail,
 		)
 		if qErr != nil {
 			return qErr
