@@ -2741,7 +2741,7 @@ const docTemplate = `{
                 "tags": [
                     "sso"
                 ],
-                "summary": "Gerege SSO callback",
+                "summary": "dgov SSO callback",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -2764,7 +2764,7 @@ const docTemplate = `{
                 "tags": [
                     "sso"
                 ],
-                "summary": "Gerege SSO logout URL",
+                "summary": "dgov SSO logout URL",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -2787,7 +2787,7 @@ const docTemplate = `{
                 "tags": [
                     "sso"
                 ],
-                "summary": "Gerege SSO native (mobile PKCE) нэвтрэлт",
+                "summary": "dgov SSO native (mobile PKCE) нэвтрэлт",
                 "parameters": [
                     {
                         "description": "Native PKCE code exchange",
@@ -2830,7 +2830,7 @@ const docTemplate = `{
                 "tags": [
                     "sso"
                 ],
-                "summary": "Gerege SSO нэвтрэлт эхлүүлэх",
+                "summary": "dgov SSO нэвтрэлт эхлүүлэх",
                 "responses": {
                     "200": {
                         "description": "OK",

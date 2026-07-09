@@ -37,11 +37,11 @@ function Landing() {
           <span>eID-ээр нэвтрэх</span>
         </Link>
 
-        {/* 2 дахь нэвтрэлт — Gerege SSO (sso.dgov.mn, OIDC). BFF route handler
+        {/* 2 дахь нэвтрэлт — dgov SSO (sso.dgov.mn, OIDC). BFF route handler
             руу шууд заана (redirect эхлүүлэх тул Link биш <a>). */}
-        <a className="btn btn--secondary btn--lg btn--block" href="/api/auth/sso/start" aria-label="Gerege SSO-гоор нэвтрэх" style={{ marginTop: 10 }}>
+        <a className="btn btn--secondary btn--lg btn--block" href="/api/auth/sso/start" aria-label="dgov SSO-гоор нэвтрэх" style={{ marginTop: 10 }}>
           <ShieldCheck size={18} strokeWidth={2} />
-          <span>Gerege SSO-гоор нэвтрэх</span>
+          <span>dgov SSO-гоор нэвтрэх</span>
         </a>
 
         <p className="signin-card__helper">

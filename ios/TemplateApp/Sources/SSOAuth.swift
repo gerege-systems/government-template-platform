@@ -5,7 +5,7 @@ import UIKit
 import AuthenticationServices
 import CryptoKit
 
-// Native Gerege SSO (OIDC + PKCE) — ASWebAuthenticationSession. RP-ийн стандарт
+// Native dgov SSO (OIDC + PKCE) — ASWebAuthenticationSession. RP-ийн стандарт
 // native урсгал: public client (secret-гүй) + PKCE + custom-scheme redirect. eID
 // баталгаажуулалт AS session дотор явж, дуусахад Hydra нь geregetemp://oauth2/
 // callback?code=… руу буцаж, session хаагдаад код гарна. Код → BFF

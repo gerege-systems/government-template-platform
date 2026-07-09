@@ -2833,7 +2833,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/template_internal_http_handlers_v1.BaseResponse'
-      summary: Gerege SSO callback
+      summary: dgov SSO callback
       tags:
       - sso
   /sso/logout:
@@ -2849,7 +2849,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/template_internal_http_handlers_v1.BaseResponse'
-      summary: Gerege SSO logout URL
+      summary: dgov SSO logout URL
       tags:
       - sso
   /sso/native:
@@ -2882,7 +2882,7 @@ paths:
           description: Validation error
           schema:
             $ref: '#/definitions/template_internal_http_handlers_v1.BaseResponse'
-      summary: Gerege SSO native (mobile PKCE) нэвтрэлт
+      summary: dgov SSO native (mobile PKCE) нэвтрэлт
       tags:
       - sso
   /sso/start:
@@ -2896,7 +2896,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/template_internal_http_handlers_v1.BaseResponse'
-      summary: Gerege SSO нэвтрэлт эхлүүлэх
+      summary: dgov SSO нэвтрэлт эхлүүлэх
       tags:
       - sso
   /users/me:

@@ -211,7 +211,7 @@ func NewApp() (*App, error) {
 	// Gerege Core (core.dgov.mn) — USER FIND / ORG FIND хайлтын wrap.
 	coreUC := core.NewUsecase(config.AppConfig.CoreAPIBase, config.AppConfig.CoreAPIToken)
 
-	// Gerege SSO (sso.dgov.mn, OIDC) — eID-ийн зэрэгцээ 2 дахь нэвтрэлт.
+	// dgov SSO (sso.dgov.mn, OIDC) — eID-ийн зэрэгцээ 2 дахь нэвтрэлт.
 	ssoClient := oidc.NewClient(config.AppConfig.SSOIssuer, config.AppConfig.SSOClientID, config.AppConfig.SSOClientSecret, config.AppConfig.SSORedirectURI, config.AppConfig.SSOScope)
 	ssoRepo := ssouserpostgres.NewSSOUserRepository(pool)
 	ssoUC := sso.NewUsecase(ssoClient, ssoRepo, jwtService, redisCache, config.AppConfig.SSONativeClientID)

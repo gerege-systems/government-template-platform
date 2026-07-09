@@ -1,7 +1,7 @@
 // eID based AI enabled Government Template Platform V3.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
-// Package oidc нь Gerege SSO (sso.dgov.mn, Ory Hydra) OIDC Authorization Code
+// Package oidc нь dgov SSO (sso.dgov.mn, Ory Hydra) OIDC Authorization Code
 // урсгалын минимал client. Endpoint-ууд issuer-ээс (discovery-тэй ижил) гарна:
 //
 //	{issuer}/oauth2/auth   — authorization endpoint (browser redirect)

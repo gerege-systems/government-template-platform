@@ -1,7 +1,7 @@
 // eID based AI enabled Government Template Platform V3.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
-// Package ssouser нь Gerege SSO (OIDC)-ээр нэвтэрсэн иргэнийг pairwise subject
+// Package ssouser нь dgov SSO (OIDC)-ээр нэвтэрсэн иргэнийг pairwise subject
 // (sso_sub)-ээр users хүснэгтэд upsert хийнэ. eID upsert-ийн адил RLS "service"
 // context дор ажиллана (SSO callback нь /v1/sso бүлгийн ServiceRLSContext-тэй).
 package ssouser

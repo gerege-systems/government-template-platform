@@ -1,6 +1,6 @@
 # eID based AI enabled Government Template Platform V3.0 — iOS App (TemplateApp)
 
-Энэ template платформын **iOS хувилбар**. eID эсвэл Gerege SSO-гоор нэвтэрч,
+Энэ template платформын **iOS хувилбар**. eID эсвэл dgov SSO-гоор нэвтэрч,
 хэрэглэгчийн профайл + eID PKI мэдээллийг харуулна. Native SwiftUI, гуравдагч
 хамааралгүй (SPM пакеж ашигладаггүй).
 
@@ -18,7 +18,7 @@
 ### Нэвтрэлт
 - **eID** — `POST /api/auth/eid/start` (QR) эсвэл `/start-id` (РД→push) →
   `/api/auth/eid/poll` ~2.5с тутам → `COMPLETE` болоход cookie суулгана.
-- **Gerege SSO** — `WKWebView`-д `/api/auth/sso/start` ачаалж, sso.dgov.mn дээр
+- **dgov SSO** — `WKWebView`-д `/api/auth/sso/start` ачаалж, sso.dgov.mn дээр
   баталгаажуулна. `/me*` руу буцахад WKWebView-ийн cookie-г `HTTPCookieStorage`
   руу хуулж, `URLSession`-д ашиглана.
 - **Профайл** — `GET /api/me` + `GET /api/me/eid/summary`.

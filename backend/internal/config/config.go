@@ -141,7 +141,7 @@ type Config struct {
 	// томилно (API-аар үүсгэдэггүй). Хэрэглэгч эхлээд бүртгүүлсэн байх ёстой.
 	SuperAdminEmail string `mapstructure:"SUPERADMIN_EMAIL"`
 
-	// Gerege SSO (sso.dgov.mn, OIDC) — eID-ийн зэрэгцээ 2 дахь нэвтрэлт.
+	// dgov SSO (sso.dgov.mn, OIDC) — eID-ийн зэрэгцээ 2 дахь нэвтрэлт.
 	// ClientID/Secret хоосон бол SSO урсгал inert (Landing дээр товч харагдахгүй).
 	// RedirectURI нь SSO client-д бүртгэгдсэн callback (жишээ
 	// https://template.dgov.mn/sso/callback) байх ёстой.
