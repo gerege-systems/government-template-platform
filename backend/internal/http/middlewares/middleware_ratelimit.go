@@ -11,8 +11,9 @@ import (
 	"sync"
 	"time"
 
-	"golang.org/x/time/rate"
 	"template/pkg/logger"
+
+	"golang.org/x/time/rate"
 )
 
 type ipLimiter struct {

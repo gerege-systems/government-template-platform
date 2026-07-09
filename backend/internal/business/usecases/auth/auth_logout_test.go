@@ -9,13 +9,14 @@ import (
 	"testing"
 	"time"
 
+	"template/internal/apperror"
+	"template/internal/business/usecases/auth"
+	"template/pkg/jwt"
+
 	golangJWT "github.com/golang-jwt/jwt/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	"template/internal/apperror"
-	"template/internal/business/usecases/auth"
-	"template/pkg/jwt"
 )
 
 func TestLogout(t *testing.T) {

@@ -62,7 +62,7 @@ func (r *orgRepository) runTx(ctx context.Context, userID, role string, fn func(
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback(ctx) //nolint:errcheck
+	defer tx.Rollback(ctx) //nolint:errcheck // rollback after a successful commit returns ErrTxClosed — expected, nothing to handle
 
 	if _, err := tx.Exec(ctx,
 		`SELECT set_config('app.user_id',$1,true), set_config('app.user_role',$2,true)`,

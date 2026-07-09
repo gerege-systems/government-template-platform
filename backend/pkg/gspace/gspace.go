@@ -98,7 +98,7 @@ func (c *Client) List(userID string) ([]FileInfo, error) {
 		entries, rdErr := sc.ReadDir(dir)
 		if rdErr != nil {
 			// Хавтас хараахан үүсээгүй бол хоосон жагсаалт (алдаа биш).
-			return nil //nolint:nilerr
+			return nil //nolint:nilerr // missing user dir = empty list, not a failure; rdErr intentionally dropped
 		}
 		for _, e := range entries {
 			if e.IsDir() {

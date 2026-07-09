@@ -6,10 +6,11 @@ package routes
 import (
 	"net/http"
 
-	"github.com/go-chi/chi/v5"
 	"template/internal/business/usecases/users"
 	v1 "template/internal/http/handlers/v1"
 	usershandler "template/internal/http/handlers/v1/users"
+
+	"github.com/go-chi/chi/v5"
 )
 
 // usersRoute нь /users/* бүлгийг холбоно — хэрэглэгчийн өөрийнх нь

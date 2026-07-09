@@ -11,9 +11,6 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 	"template/internal/apperror"
 	authuc "template/internal/business/usecases/auth"
 	"template/internal/constants"
@@ -22,6 +19,10 @@ import (
 	"template/internal/test/mocks"
 	jwtpkg "template/pkg/jwt"
 	"template/pkg/validators"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 )
 
 func init() {

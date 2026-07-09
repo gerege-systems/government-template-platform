@@ -124,7 +124,7 @@ func (c *Client) Lookup(ctx context.Context, regNo string) (*Organization, error
 	return out.Organization, nil
 }
 
-func (c *Client) post(ctx context.Context, path string, body any) ([]byte, int, error) {
+func (c *Client) post(ctx context.Context, path string, body any) (respBody []byte, status int, err error) {
 	buf, _ := json.Marshal(body)
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.base+path, bytes.NewReader(buf))
 	if err != nil {

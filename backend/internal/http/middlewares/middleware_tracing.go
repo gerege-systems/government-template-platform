@@ -6,10 +6,11 @@ package middlewares
 import (
 	"net/http"
 
+	"template/pkg/observability"
+
 	"github.com/go-chi/chi/v5/middleware"
 	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
 	"go.opentelemetry.io/otel/trace"
-	"template/pkg/observability"
 )
 
 // TracingMiddleware нь net/http-д зориулсан гар хийцийн OpenTelemetry

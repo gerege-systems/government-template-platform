@@ -8,14 +8,15 @@ import (
 	"errors"
 	"testing"
 
-	golangJWT "github.com/golang-jwt/jwt/v5"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 	"template/internal/apperror"
 	"template/internal/business/usecases/auth"
 	"template/internal/business/usecases/users"
 	"template/pkg/jwt"
+
+	golangJWT "github.com/golang-jwt/jwt/v5"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 )
 
 func refreshClaims(jti, email string) jwt.JwtCustomClaim {

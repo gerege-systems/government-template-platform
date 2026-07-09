@@ -7,12 +7,13 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 	"template/internal/business/domain"
 	"template/internal/business/usecases/auth"
 	"template/internal/business/usecases/users"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 )
 
 func TestRegister(t *testing.T) {

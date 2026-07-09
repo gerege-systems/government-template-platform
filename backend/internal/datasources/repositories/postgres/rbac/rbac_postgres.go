@@ -105,7 +105,7 @@ func (r *rbacRepository) CountUsersWithRole(ctx context.Context, roleID int) (in
 	if err != nil {
 		return 0, err
 	}
-	defer tx.Rollback(ctx) //nolint:errcheck
+	defer tx.Rollback(ctx) //nolint:errcheck // rollback after a successful commit returns ErrTxClosed — expected, nothing to handle
 	if _, err := tx.Exec(ctx, `SELECT set_config('app.user_role','service',true)`); err != nil {
 		return 0, err
 	}
@@ -159,7 +159,7 @@ func (r *rbacRepository) SetRolePermissions(ctx context.Context, roleID int, key
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback(ctx) //nolint:errcheck
+	defer tx.Rollback(ctx) //nolint:errcheck // rollback after a successful commit returns ErrTxClosed — expected, nothing to handle
 
 	if _, err := tx.Exec(ctx, `DELETE FROM role_permissions WHERE role_id = $1`, roleID); err != nil {
 		return err

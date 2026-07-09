@@ -11,8 +11,9 @@ package mocks
 import (
 	"context"
 
-	mock "github.com/stretchr/testify/mock"
 	"template/pkg/eid"
+
+	mock "github.com/stretchr/testify/mock"
 )
 
 // EIDClient нь eid.Client-ийн mock юм.

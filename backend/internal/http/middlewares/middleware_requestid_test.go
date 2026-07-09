@@ -8,9 +8,10 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"template/internal/http/middlewares"
 	"template/pkg/logger"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestRequestIDMiddleware_BridgesIDsToContext(t *testing.T) {

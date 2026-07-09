@@ -7,10 +7,11 @@ import (
 	"testing"
 	"time"
 
-	"golang.org/x/crypto/bcrypt"
 	"template/internal/business/domain"
 	"template/internal/business/usecases/users"
 	"template/internal/test/mocks"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 // fixture нь тест тус бүрийн холболт юм. Тест бүр цэвэр mock-уудын багц авахын

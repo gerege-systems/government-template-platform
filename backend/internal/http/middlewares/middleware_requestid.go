@@ -7,9 +7,10 @@ import (
 	"context"
 	"net/http"
 
+	"template/pkg/logger"
+
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/trace"
-	"template/pkg/logger"
 )
 
 const RequestIDHeader = "X-Request-ID"
@@ -21,7 +22,7 @@ const maxRequestIDLen = 128
 // log-flooding / log-injection (terminal escape, parser хуурах)-аас
 // сэргийлж урт болон тэмдэгтийн багцыг хязгаарлана.
 func validRequestID(s string) bool {
-	if len(s) == 0 || len(s) > maxRequestIDLen {
+	if s == "" || len(s) > maxRequestIDLen {
 		return false
 	}
 	for _, c := range s {

@@ -8,10 +8,11 @@ import (
 	"fmt"
 	"time"
 
-	golangJWT "github.com/golang-jwt/jwt/v5"
-	"github.com/google/uuid"
 	"template/pkg/clock"
 	"template/pkg/logger"
+
+	golangJWT "github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 // ErrInvalidToken нь токен задлан унших эсвэл баталгаажуулахад амжилтгүй болоход буцаагдана.

@@ -11,9 +11,10 @@ package mocks
 import (
 	"context"
 
-	mock "github.com/stretchr/testify/mock"
 	"template/internal/business/usecases/auth"
 	"template/pkg/eid"
+
+	mock "github.com/stretchr/testify/mock"
 )
 
 type AuthUsecase struct {

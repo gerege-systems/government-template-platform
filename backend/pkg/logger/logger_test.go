@@ -151,7 +151,7 @@ func ExampleLogger() {
 		"amount":  99.99,
 	})
 
-	// Гинжлэх (chaining)
+	// Гинжилсэн хэлбэрээр ашиглах жишээ
 	log := logger.WithContext(ctx).WithFields(logger.Fields{
 		"component": "payment",
 	})

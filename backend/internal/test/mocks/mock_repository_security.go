@@ -41,7 +41,7 @@ type mockConstructorTestingTNewSecurityEventRepository interface {
 // үүсгэж, testing interface болон cleanup-ийг бүртгэнэ.
 func NewSecurityEventRepository(t mockConstructorTestingTNewSecurityEventRepository) *SecurityEventRepository {
 	m := &SecurityEventRepository{}
-	m.Mock.Test(t)
+	m.Test(t)
 	t.Cleanup(func() { m.AssertExpectations(t) })
 	return m
 }

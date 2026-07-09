@@ -9,8 +9,6 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"template/internal/apperror"
 	"template/internal/business/domain"
 	usersuc "template/internal/business/usecases/users"
@@ -19,6 +17,9 @@ import (
 	usershandler "template/internal/http/handlers/v1/users"
 	"template/internal/test/mocks"
 	jwtpkg "template/pkg/jwt"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 // injectClaims нь auth middleware-ийн оронд баталгаажуулагдсан claim-г

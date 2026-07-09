@@ -117,7 +117,7 @@ func (c *Client) Check(ctx context.Context, requestID, code string) error {
 	return ErrNotApproved
 }
 
-func (c *Client) post(ctx context.Context, path string, body any) ([]byte, int, error) {
+func (c *Client) post(ctx context.Context, path string, body any) (respBody []byte, status int, err error) {
 	buf, _ := json.Marshal(body)
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.base+path, bytes.NewReader(buf))
 	if err != nil {

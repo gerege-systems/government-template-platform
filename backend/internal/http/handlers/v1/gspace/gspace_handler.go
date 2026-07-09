@@ -110,8 +110,9 @@ func (h Handler) Download(w http.ResponseWriter, r *http.Request) error {
 	}
 	w.Header().Set("Content-Type", "application/octet-stream")
 	w.Header().Set("Content-Disposition", contentDisposition(name))
+	w.Header().Set("X-Content-Type-Options", "nosniff")
 	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write(data)
+	_, _ = w.Write(data) //nolint:gosec // octet-stream + attachment + nosniff: bytes are downloaded, never rendered as HTML
 	return nil
 }
 

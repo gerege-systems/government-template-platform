@@ -8,10 +8,11 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"template/internal/config"
 	"template/internal/constants"
 	"template/internal/http/middlewares"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func serveSec(t *testing.T) *httptest.ResponseRecorder {

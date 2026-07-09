@@ -7,8 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
 	"template/pkg/clock"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestRealClock_NowIsRecent(t *testing.T) {

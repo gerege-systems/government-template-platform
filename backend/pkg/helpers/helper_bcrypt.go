@@ -6,8 +6,9 @@ package helpers
 import (
 	"errors"
 
-	"golang.org/x/crypto/bcrypt"
 	"template/internal/config"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 // bcryptCost нь тохируулсан cost-г буцаах бөгөөд config эхлүүлэгдээгүй үед

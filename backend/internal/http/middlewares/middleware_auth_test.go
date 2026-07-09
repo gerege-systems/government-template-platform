@@ -11,13 +11,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/redis/go-redis/v9"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"template/internal/constants"
 	"template/internal/http/middlewares"
 	"template/internal/test/mocks"
 	"template/pkg/jwt"
+
+	"github.com/redis/go-redis/v9"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 var (

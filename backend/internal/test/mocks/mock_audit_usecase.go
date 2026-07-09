@@ -45,7 +45,7 @@ type mockConstructorTestingTNewAuditUsecase interface {
 // NewAuditUsecase нь AuditUsecase mock-ийн шинэ instance үүсгэнэ.
 func NewAuditUsecase(t mockConstructorTestingTNewAuditUsecase) *AuditUsecase {
 	m := &AuditUsecase{}
-	m.Mock.Test(t)
+	m.Test(t)
 	t.Cleanup(func() { m.AssertExpectations(t) })
 	return m
 }

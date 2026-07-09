@@ -84,11 +84,7 @@ func currentDBStats() dbStatsSnapshot {
 		return dbStatsSnapshot{}
 	}
 	s := dbStatsProvider()
-	return dbStatsSnapshot{
-		OpenConnections: s.OpenConnections,
-		InUse:           s.InUse,
-		WaitCount:       s.WaitCount,
-	}
+	return dbStatsSnapshot(s)
 }
 
 // RegisterDBStatsProvider-г эхлэх үед pgxpool.Stat()-аас снапшот гаргаж

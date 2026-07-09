@@ -18,7 +18,7 @@ import (
 )
 
 func reqWith(ctxVal any) *http.Request {
-	r := httptest.NewRequest(http.MethodGet, "/", nil)
+	r := httptest.NewRequest(http.MethodGet, "/", http.NoBody)
 	if ctxVal != nil {
 		r = r.WithContext(context.WithValue(r.Context(), constants.CtxAuthenticatedUserKey, ctxVal))
 	}

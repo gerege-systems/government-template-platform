@@ -6,12 +6,13 @@ package routes
 import (
 	"net/http"
 
-	"github.com/go-chi/chi/v5"
 	"template/internal/business/usecases/audit"
 	"template/internal/business/usecases/auth"
 	v1 "template/internal/http/handlers/v1"
 	authhandler "template/internal/http/handlers/v1/auth"
 	"template/internal/http/middlewares"
+
+	"github.com/go-chi/chi/v5"
 )
 
 // authRoute нь /auth/* бүлгийг холбоно. "Login with eID" нь цорын ганц

@@ -100,7 +100,7 @@ func TestRequirePermission(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			req := httptest.NewRequest(http.MethodGet, "/protected", nil)
+			req := httptest.NewRequest(http.MethodGet, "/protected", http.NoBody)
 			if tc.setClaim {
 				req = withClaim(req, tc.claim)
 			}

@@ -310,7 +310,7 @@ func (u *usecase) fetchAssetImage(ctx context.Context, imgURL string) []byte {
 	if strings.TrimSpace(imgURL) == "" {
 		return nil
 	}
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, imgURL, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, imgURL, http.NoBody)
 	if err != nil {
 		return nil
 	}
@@ -440,14 +440,14 @@ func (u *usecase) Download(ctx context.Context, ownerRegNo, sessionID string) (D
 // stampV3 — дууссан /v3 session-ий эх PDF-ийг eidmongolia-д stamp хийлгэж, албан
 // ёсны PAdES-T (timestamp + verify хуудас) шингээсэн PDF-ийг буцаана.
 // POST /v3/signature/stamp/<sessionID>?fileName=<name>, body = эх PDF, Bearer = RP secret.
-func (u *usecase) stampV3(ctx context.Context, v3SessionID, filename string, pdf []byte) ([]byte, error) {
+func (u *usecase) stampV3(ctx context.Context, v3SessionID, filename string, pdfBytes []byte) ([]byte, error) {
 	if v3SessionID == "" {
 		return nil, fmt.Errorf("v3 session id хоосон")
 	}
 	q := url.Values{}
 	q.Set("fileName", filename)
 	reqURL := strings.TrimRight(u.cfg.V3BaseURL, "/") + "/v3/signature/stamp/" + url.PathEscape(v3SessionID) + "?" + q.Encode()
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, reqURL, bytes.NewReader(pdf))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, reqURL, bytes.NewReader(pdfBytes))
 	if err != nil {
 		return nil, err
 	}

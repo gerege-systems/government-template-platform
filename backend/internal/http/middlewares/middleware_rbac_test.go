@@ -38,7 +38,7 @@ func TestRequireAdmin(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			req := httptest.NewRequest(http.MethodGet, "/admin/users", nil)
+			req := httptest.NewRequest(http.MethodGet, "/admin/users", http.NoBody)
 			if tc.setClaim {
 				req = withClaim(req, jwt.JwtCustomClaim{UserID: "u1", Email: "a@b.mn", IsAdmin: tc.isAdmin})
 			}

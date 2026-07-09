@@ -12,9 +12,10 @@ package mocks
 import (
 	"context"
 
-	mock "github.com/stretchr/testify/mock"
 	"template/internal/business/domain"
 	"template/internal/business/usecases/users"
+
+	mock "github.com/stretchr/testify/mock"
 )
 
 // UsersUsecase нь users.Usecase-ийн mock юм.

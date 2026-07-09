@@ -8,8 +8,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/go-chi/chi/v5/middleware"
 	"template/pkg/logger"
+
+	"github.com/go-chi/chi/v5/middleware"
 )
 
 // access-log өнгөний кодууд (xterm SGR background).

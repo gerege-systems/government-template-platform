@@ -176,8 +176,8 @@ func FromEIDPollResponse(r auth.EIDPollResponse) EIDPollResponse {
 	out := EIDPollResponse{State: r.State}
 	if r.State == "COMPLETE" {
 		out.UserResponse = FromV1Domain(r.User)
-		out.UserResponse.Token = r.AccessToken
-		out.UserResponse.RefreshToken = r.RefreshToken
+		out.Token = r.AccessToken
+		out.RefreshToken = r.RefreshToken
 	}
 	return out
 }

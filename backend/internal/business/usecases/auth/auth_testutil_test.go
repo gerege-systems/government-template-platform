@@ -8,12 +8,13 @@ import (
 	"testing"
 	"time"
 
-	"golang.org/x/crypto/bcrypt"
 	"template/internal/business/domain"
 	"template/internal/business/usecases/auth"
 	"template/internal/test/mocks"
 	"template/pkg/google"
 	"template/pkg/helpers"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 // fixture нь auth багцын тест тус бүрийн холболт юм. Тест бүр newFixture()-ээр

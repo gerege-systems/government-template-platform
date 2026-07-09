@@ -9,8 +9,9 @@ package mocks
 import (
 	context "context"
 
-	mock "github.com/stretchr/testify/mock"
 	"template/internal/business/domain"
+
+	mock "github.com/stretchr/testify/mock"
 )
 
 // RBACRepository нь repointerface.RBACRepository-ийн mock юм.
@@ -82,7 +83,7 @@ type mockConstructorTestingTNewRBACRepository interface {
 // interface болон cleanup-ийг бүртгэнэ (хүлээлтийг батална).
 func NewRBACRepository(t mockConstructorTestingTNewRBACRepository) *RBACRepository {
 	m := &RBACRepository{}
-	m.Mock.Test(t)
+	m.Test(t)
 	t.Cleanup(func() { m.AssertExpectations(t) })
 	return m
 }

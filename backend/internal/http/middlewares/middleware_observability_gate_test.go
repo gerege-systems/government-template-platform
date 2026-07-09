@@ -39,7 +39,7 @@ func TestObservabilityGate(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			gate := ObservabilityGate(tc.isProduction, tc.token)
-			req := httptest.NewRequest(http.MethodGet, "/metrics", nil)
+			req := httptest.NewRequest(http.MethodGet, "/metrics", http.NoBody)
 			if tc.authHeader != "" {
 				req.Header.Set("Authorization", tc.authHeader)
 			}

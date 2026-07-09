@@ -522,7 +522,7 @@ func (c *client) AddRepresentation(ctx context.Context, personEtsi string, in Ad
 		Affiliates  []affiliate `json:"affiliates"`
 	}{OrgRegister: strings.TrimSpace(in.OrgRegister), OrgName: strings.TrimSpace(in.OrgName), OrgNameEn: strings.TrimSpace(in.OrgNameEn)}
 	for _, a := range in.Affiliates {
-		body.Affiliates = append(body.Affiliates, affiliate{RegNo: a.RegNo, Role: a.Role, Kind: a.Kind})
+		body.Affiliates = append(body.Affiliates, affiliate(a))
 	}
 	path := "/organization/representations/etsi/" + url.PathEscape(strings.TrimSpace(personEtsi))
 	raw, status, err := c.post(ctx, path, body)
@@ -731,7 +731,7 @@ func (c *client) ResendSigner(ctx context.Context, orgRegister, actingPersonEtsi
 
 // signersReq нь /organization/signers/{orgRegister}/etsi/{actingPersonEtsi} руу
 // GET/POST/DELETE хүсэлт бүтээнэ. signer хоосон биш бол ?signer= query нэмнэ.
-func (c *client) signersReq(ctx context.Context, method, orgRegister, actingPersonEtsi, signer string, body any) ([]byte, int, error) {
+func (c *client) signersReq(ctx context.Context, method, orgRegister, actingPersonEtsi, signer string, body any) (respBody []byte, status int, err error) {
 	if strings.TrimSpace(orgRegister) == "" || strings.TrimSpace(actingPersonEtsi) == "" {
 		return nil, 0, errors.New("eid: empty orgRegister/actingPersonEtsi")
 	}
@@ -815,7 +815,7 @@ func checkInitiateStatus(raw []byte, status int) error {
 	return nil
 }
 
-func (c *client) post(ctx context.Context, path string, body any) ([]byte, int, error) {
+func (c *client) post(ctx context.Context, path string, body any) (respBody []byte, status int, err error) {
 	buf, _ := json.Marshal(body)
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.base+path, bytes.NewReader(buf))
 	if err != nil {
@@ -825,8 +825,8 @@ func (c *client) post(ctx context.Context, path string, body any) ([]byte, int, 
 	return c.do(req)
 }
 
-func (c *client) get(ctx context.Context, path string) ([]byte, int, error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.base+path, nil)
+func (c *client) get(ctx context.Context, path string) (respBody []byte, status int, err error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.base+path, http.NoBody)
 	if err != nil {
 		return nil, 0, fmt.Errorf("eid: build request: %w", err)
 	}
@@ -834,8 +834,8 @@ func (c *client) get(ctx context.Context, path string) ([]byte, int, error) {
 	return c.do(req)
 }
 
-func (c *client) del(ctx context.Context, path string) ([]byte, int, error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, c.base+path, nil)
+func (c *client) del(ctx context.Context, path string) (respBody []byte, status int, err error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, c.base+path, http.NoBody)
 	if err != nil {
 		return nil, 0, fmt.Errorf("eid: build request: %w", err)
 	}
@@ -843,7 +843,7 @@ func (c *client) del(ctx context.Context, path string) ([]byte, int, error) {
 	return c.do(req)
 }
 
-func (c *client) put(ctx context.Context, path string, body any) ([]byte, int, error) {
+func (c *client) put(ctx context.Context, path string, body any) (respBody []byte, status int, err error) {
 	buf, _ := json.Marshal(body)
 	req, err := http.NewRequestWithContext(ctx, http.MethodPut, c.base+path, bytes.NewReader(buf))
 	if err != nil {
@@ -879,7 +879,7 @@ func (c *client) setHeaders(req *http.Request) {
 	req.Header.Set("Content-Type", "application/json")
 }
 
-func (c *client) do(req *http.Request) ([]byte, int, error) {
+func (c *client) do(req *http.Request) (respBody []byte, status int, err error) {
 	resp, err := c.http.Do(req)
 	if err != nil {
 		return nil, 0, fmt.Errorf("eid: http: %w", err)

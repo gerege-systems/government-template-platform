@@ -8,8 +8,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"template/internal/http/middlewares"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCORSMiddleware(t *testing.T) {

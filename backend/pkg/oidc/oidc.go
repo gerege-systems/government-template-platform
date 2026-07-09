@@ -213,7 +213,7 @@ type UserInfo struct {
 
 // UserInfo нь access token-оор /userinfo дуудна.
 func (c *Client) UserInfo(ctx context.Context, accessToken string) (UserInfo, error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.issuer+"/userinfo", nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.issuer+"/userinfo", http.NoBody)
 	if err != nil {
 		return UserInfo{}, err
 	}

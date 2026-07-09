@@ -10,8 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
 	"template/pkg/audit"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestRecord_EmitsJSONLine(t *testing.T) {

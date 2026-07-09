@@ -10,8 +10,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/go-playground/validator/v10"
 	"template/pkg/helpers"
+
+	"github.com/go-playground/validator/v10"
 )
 
 // FieldError нь бүтэлгүй болсон нэг баталгаажуулалтын дүрмийг тодорхойлно. API

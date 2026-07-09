@@ -7,10 +7,11 @@ import (
 	"errors"
 	"testing"
 
+	"template/internal/business/domain"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"golang.org/x/crypto/bcrypt"
-	"template/internal/business/domain"
 )
 
 func TestNewUser(t *testing.T) {

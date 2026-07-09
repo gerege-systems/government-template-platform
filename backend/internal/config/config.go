@@ -9,8 +9,9 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/spf13/viper"
 	"template/internal/constants"
+
+	"github.com/spf13/viper"
 )
 
 var AppConfig Config

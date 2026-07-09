@@ -11,8 +11,9 @@ package mocks
 import (
 	context "context"
 
-	mock "github.com/stretchr/testify/mock"
 	"template/internal/business/domain"
+
+	mock "github.com/stretchr/testify/mock"
 )
 
 // OrgRepository нь repointerface.OrgRepository-ийн mock юм.
@@ -80,7 +81,7 @@ type mockConstructorTestingTNewOrgRepository interface {
 // interface болон cleanup-ийг бүртгэнэ (хүлээлтийг батална).
 func NewOrgRepository(t mockConstructorTestingTNewOrgRepository) *OrgRepository {
 	m := &OrgRepository{}
-	m.Mock.Test(t)
+	m.Test(t)
 	t.Cleanup(func() { m.AssertExpectations(t) })
 	return m
 }
