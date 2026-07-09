@@ -6,12 +6,14 @@ import { getProviderAccessToken, uploadImageToDrive } from '@/lib/driveClient';
 export const dynamic = 'force-dynamic';
 
 // GET /api/me/eid/organizations/{regNo}/stamp — байгууллагын тамганы зургийн URL.
-export async function GET(_req: Request, { params }: { params: { regNo: string } }) {
+export async function GET(_req: Request, props: { params: Promise<{ regNo: string }> }) {
+  const params = await props.params;
   return proxyResult(await authedFetch(`/me/orgstamp/${encodeURIComponent(params.regNo)}`, { method: 'GET' }));
 }
 
 // POST — тамганы зургийг Drive-д байршуулж URL хадгална (backend талд ADMIN шалгана).
-export async function POST(req: Request, { params }: { params: { regNo: string } }) {
+export async function POST(req: Request, props: { params: Promise<{ regNo: string }> }) {
+  const params = await props.params;
   const bad = checkOrigin(req);
   if (bad) return bad;
   const body = await readJson<{ data?: string; mime?: string; name?: string }>(req);
@@ -32,7 +34,8 @@ export async function POST(req: Request, { params }: { params: { regNo: string }
 }
 
 // DELETE — тамгыг устгах (ADMIN).
-export async function DELETE(req: Request, { params }: { params: { regNo: string } }) {
+export async function DELETE(req: Request, props: { params: Promise<{ regNo: string }> }) {
+  const params = await props.params;
   const bad = checkOrigin(req);
   if (bad) return bad;
   return proxyResult(await authedFetch(`/me/orgstamp/${encodeURIComponent(params.regNo)}`, { method: 'DELETE' }));

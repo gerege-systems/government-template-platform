@@ -24,8 +24,8 @@ export async function GET(req: Request) {
   const origin = process.env.APP_ORIGIN ?? url.origin;
   const code = url.searchParams.get('code');
   const state = url.searchParams.get('state');
-  const savedState = cookies().get('g_oauth_state')?.value;
-  cookies().delete('g_oauth_state');
+  const savedState = (await cookies()).get('g_oauth_state')?.value;
+  (await cookies()).delete('g_oauth_state');
 
   if (url.searchParams.get('error') || !code) {
     return NextResponse.redirect(`${origin}/login?gerror=google_cancelled`);
@@ -48,13 +48,13 @@ export async function GET(req: Request) {
 
   // Аль хэдийн холбогдсон → шууд нэвтрүүлнэ.
   if (data.linked && data.user?.token && data.user?.refresh_token) {
-    setSession(data.user.token, data.user.refresh_token);
+    await setSession(data.user.token, data.user.refresh_token);
     return NextResponse.redirect(`${origin}/me/dashboard`);
   }
 
   // Эхний удаа → link_token-ийг богино хугацааны cookie-д хадгалаад eID алхам руу.
   if (data.link_token) {
-    cookies().set('g_link', data.link_token, { ...cookieOptions(900), maxAge: 900 }); // 15 мин
+    (await cookies()).set('g_link', data.link_token, { ...cookieOptions(900), maxAge: 900 }); // 15 мин
     return NextResponse.redirect(`${origin}/login?glink=1`);
   }
 

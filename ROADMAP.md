@@ -15,7 +15,7 @@
 - Auth: JWT access+refresh (rotation), OTP бүртгэл (GeregeCloud Verify), bcrypt, lockout
 - RBAC: динамик role/permission + каталог; Postgres RLS (ENABLE+FORCE, non-superuser app role)
 - Observability: OTel tracing + Prometheus + Zap; security headers, CORS, rate limiting
-- Next.js 14 BFF frontend: httpOnly cookie session, admin/manager/me системүүд, mn/en i18n
+- Next.js 15 BFF frontend: httpOnly cookie session, admin/manager/me системүүд, mn/en i18n
 - CI: gofmt + vet + race tests + swag drift + frontend lint/build + gitleaks
 
 ### Phase 2 — Хэрэглэгчийн нэр (2026-06-10)

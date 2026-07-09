@@ -10,7 +10,8 @@ export const dynamic = 'force-dynamic';
 // callback дээр CSRF-ийн эсрэг тулгахаар богино настай httpOnly cookie-д
 // хадгална. Client ID env тохируулаагүй бол integrations хуудас руу
 // not_configured алдаатай буцаана (OAuth арматур бэлэн, secret нэмэхэд ажиллана).
-export async function GET(req: Request, { params }: { params: { provider: string } }) {
+export async function GET(req: Request, props: { params: Promise<{ provider: string }> }) {
+  const params = await props.params;
   const provider = getIntegration(params.provider);
   const origin = appOrigin(req);
 

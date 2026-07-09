@@ -16,18 +16,18 @@ export async function POST(req: Request) {
   const bad = checkOrigin(req);
   if (bad) return bad;
 
-  const refresh = getRefreshToken();
+  const refresh = await getRefreshToken();
   if (refresh) {
     await backendFetch('/auth/logout', {
       method: 'POST',
-      body: JSON.stringify({ refresh_token: refresh, access_token: getAccessToken() ?? '' }),
+      body: JSON.stringify({ refresh_token: refresh, access_token: (await getAccessToken()) ?? '' }),
     });
   }
 
   // SSO-ээр нэвтэрсэн бол (logout ref cookie байвал) backend-ээс SSO дээр session
   // дуусгах RP-initiated logout URL-ийг авна. Ref нэг удаагийн (Redis GetDel).
   let ssoLogoutURL: string | undefined;
-  const ref = cookies().get(SSO_LOGOUT_COOKIE)?.value;
+  const ref = (await cookies()).get(SSO_LOGOUT_COOKIE)?.value;
   if (ref) {
     const lr = await backendFetch<{ sso_logout_url?: string }>('/sso/logout', {
       method: 'POST',

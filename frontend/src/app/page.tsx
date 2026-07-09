@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic';
 export default async function Home() {
   // Нэвтэрсэн хэрэглэгчийг /me домэйн руу (admin/manager-тэй адил) шилжүүлнэ;
   // нэвтрээгүй зочдод нийтийн Landing.
-  if (hasSession()) redirect('/me/dashboard');
+  if (await hasSession()) redirect('/me/dashboard');
   return <Landing />;
 }
 

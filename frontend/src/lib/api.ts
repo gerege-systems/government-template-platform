@@ -16,9 +16,9 @@ const BASE = (process.env.BACKEND_URL ?? 'http://localhost:8080').replace(/\/$/,
 // нэг bucket-д уначихна. api-ийн clientIP() нь TRUSTED_PROXIES-ийн дор XFF-г
 // баруунаас нь (сүүлийн итгэмжгүй hop) уншдаг тул spoofing-д тэсвэртэй хэвээр —
 // nginx client-ийн жинхэнэ RemoteAddr-г мөрийн төгсгөлд залгасан байдаг.
-function forwardedForHeaders(): Record<string, string> {
+async function forwardedForHeaders(): Promise<Record<string, string>> {
   try {
-    const h = headers();
+    const h = await headers();
     const xff = h.get('x-forwarded-for');
     if (xff) return { 'x-forwarded-for': xff };
     const xrip = h.get('x-real-ip');
@@ -40,7 +40,7 @@ export async function backendFetch<T>(path: string, init?: RequestInit): Promise
     res = await fetch(BASE + path, {
       ...init,
       cache: 'no-store',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json', ...forwardedForHeaders(), ...init?.headers },
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json', ...(await forwardedForHeaders()), ...init?.headers },
     });
   } catch {
     return {
@@ -87,20 +87,20 @@ export async function backendFetch<T>(path: string, init?: RequestInit): Promise
 
 /** Refresh токеноор шинэ access токен авах. Амжилттай бол шинэ токенг буцаана. */
 async function tryRefresh(): Promise<string | null> {
-  const refresh = getRefreshToken();
+  const refresh = await getRefreshToken();
   if (!refresh) return null;
   // Backend refresh нь rotation хийдэг — хуучин refresh jti нэг удаад
   // хэрэглэгдээд устдаг. RSC render үед cookie бичих боломжгүй тул шинэ
   // хосыг хадгалж чадахгүй — тэгвэл хүчинтэй сессиэ шатаах байсан тул
   // refresh-ийг ОГТ дуудахгүй (дараагийн route handler хүсэлт refresh
   // хийгээд cookie-г зөв шинэчилнэ).
-  if (!canPersistSession()) return null;
+  if (!(await canPersistSession())) return null;
   const r = await backendFetch<BackendUser>('/auth/refresh', {
     method: 'POST',
     body: JSON.stringify({ refresh_token: refresh }),
   });
   if (r.ok && r.data?.token && r.data?.refresh_token) {
-    setSession(r.data.token, r.data.refresh_token);
+    await setSession(r.data.token, r.data.refresh_token);
     return r.data.token;
   }
   return null;
@@ -117,7 +117,7 @@ export async function authedFetch<T>(path: string, init?: RequestInit): Promise<
       headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...init?.headers },
     });
 
-  const res = await withAuth(getAccessToken());
+  const res = await withAuth(await getAccessToken());
   if (res.ok || res.status !== 401) return res;
 
   const newToken = await tryRefresh();
@@ -130,14 +130,14 @@ export async function authedFetch<T>(path: string, init?: RequestInit): Promise<
  * Файл татах зэрэг binary хариунд ашиглана. 401 ирвэл нэг удаа refresh оролдоно.
  */
 export async function authedRaw(path: string, init?: RequestInit): Promise<Response> {
-  const withAuth = (token?: string) =>
+  const withAuth = async (token?: string) =>
     fetch(BASE + path, {
       ...init,
       cache: 'no-store',
-      headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...forwardedForHeaders(), ...init?.headers },
+      headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(await forwardedForHeaders()), ...init?.headers },
     });
 
-  const res = await withAuth(getAccessToken());
+  const res = await withAuth(await getAccessToken());
   if (res.status !== 401) return res;
   const newToken = await tryRefresh();
   if (!newToken) return res;

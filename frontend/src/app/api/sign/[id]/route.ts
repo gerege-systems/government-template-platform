@@ -14,7 +14,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const { id } = await params;
   if (!SIGN_ID_RE.test(id)) return NextResponse.json({ error: 'invalid id' }, { status: 400 });
 
-  const tok = getAccessToken();
+  const tok = await getAccessToken();
   if (!tok) return NextResponse.json({ error: 'unauthenticated' }, { status: 401 });
 
   try {

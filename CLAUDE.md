@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 Gerege Template — production-ready full-stack template: Go backend (chi ·
-net/http + pgx + PostgreSQL + Redis) + Next.js 14 BFF frontend + Gemini AI
+net/http + pgx + PostgreSQL + Redis) + Next.js 15 BFF frontend + Gemini AI
 pipeline. Docs index is in [README.md](README.md#documentation); deep dives in
 `backend/docs/` (EN/MN pairs) and `docs/DEPLOYMENT.md`.
 

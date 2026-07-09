@@ -4,7 +4,8 @@ import { proxyResult, readJson, checkOrigin, checkUUID } from '@/lib/bff';
 export const dynamic = 'force-dynamic';
 
 // PUT /api/gateway/consumers/{id} — consumer шинэчлэх.
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const bad = checkOrigin(req) ?? checkUUID(params.id);
   if (bad) return bad;
   const body = await readJson(req);
@@ -12,7 +13,8 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 }
 
 // DELETE /api/gateway/consumers/{id} — consumer устгах.
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const bad = checkOrigin(req) ?? checkUUID(params.id);
   if (bad) return bad;
   return proxyResult(await authedFetch(`/gateway/consumers/${params.id}`, { method: 'DELETE' }));

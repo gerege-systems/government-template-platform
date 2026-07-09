@@ -11,7 +11,8 @@ async function token() {
 }
 
 // PUT /api/integrations/google-drive/files/{id} — файлын нэр солих (засах).
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const bad = checkOrigin(req);
   if (bad) return bad;
   if (!FILE_ID_RE.test(params.id)) {
@@ -37,7 +38,8 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 }
 
 // DELETE /api/integrations/google-drive/files/{id} — файл устгах.
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const bad = checkOrigin(req);
   if (bad) return bad;
   if (!FILE_ID_RE.test(params.id)) {

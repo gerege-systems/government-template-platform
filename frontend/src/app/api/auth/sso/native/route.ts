@@ -38,6 +38,6 @@ export async function POST(req: Request) {
     );
   }
 
-  setSession(r.data.token, r.data.refresh_token);
+  await setSession(r.data.token, r.data.refresh_token);
   return NextResponse.json({ ok: true });
 }

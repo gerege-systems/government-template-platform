@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
   const bad = checkOrigin(req);
   if (bad) return bad;
 
-  const tok = getAccessToken();
+  const tok = await getAccessToken();
   if (!tok) return NextResponse.json({ error: 'unauthenticated' }, { status: 401 });
 
   const form = await req.formData();

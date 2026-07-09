@@ -7,7 +7,8 @@ import { fetchMe } from '@/lib/api';
 export const dynamic = 'force-dynamic';
 export const metadata = { title: 'Байгууллага — Gerege' };
 
-export default async function MeOrganizationDetailPage({ params }: { params: { id: string } }) {
+export default async function MeOrganizationDetailPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const me = await fetchMe();
   if (!me) redirect(`/login?next=/me/organizations/${params.id}`);
 

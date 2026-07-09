@@ -11,11 +11,12 @@ export const metadata = { title: 'eID баталгаажуулалт — Gerege'
 // eID апп-аас App2App буцалтын callback (IdP-д бүртгэгдсэн
 // https://template.gerege.mn/login/verify). eID апп буцахдаа session id-г
 // нэмдэг — нийтлэг нэрсийг (sessionToken / session_id / sid) хүлээж авна.
-export default function EidVerifyPage({
-  searchParams,
-}: {
-  searchParams: { sessionToken?: string; session_id?: string; sid?: string; next?: string };
-}) {
+export default async function EidVerifyPage(
+  props: {
+    searchParams: Promise<{ sessionToken?: string; session_id?: string; sid?: string; next?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const sessionId = searchParams.sessionToken || searchParams.session_id || searchParams.sid || '';
   if (!sessionId) redirect('/login');
 

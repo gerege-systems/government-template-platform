@@ -7,11 +7,12 @@ export const dynamic = 'force-dynamic';
 
 export const metadata = { title: 'Нэвтрэх — Gerege' };
 
-export default function LoginPage({
-  searchParams,
-}: {
-  searchParams: { next?: string; notice?: string; glink?: string; gerror?: string };
-}) {
+export default async function LoginPage(
+  props: {
+    searchParams: Promise<{ next?: string; notice?: string; glink?: string; gerror?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const next = safeNext(searchParams.next);
 
   return (

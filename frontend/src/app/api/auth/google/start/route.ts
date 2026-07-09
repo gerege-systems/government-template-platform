@@ -16,7 +16,7 @@ export async function GET(req: Request) {
   }
 
   const state = crypto.randomUUID();
-  cookies().set('g_oauth_state', state, { ...cookieOptions(600), maxAge: 600 }); // 10 мин
+  (await cookies()).set('g_oauth_state', state, { ...cookieOptions(600), maxAge: 600 }); // 10 мин
 
   const redirectUri = `${origin}/api/auth/google/callback`;
   const params = new URLSearchParams({

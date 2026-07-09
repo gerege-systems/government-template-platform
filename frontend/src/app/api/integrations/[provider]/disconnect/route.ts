@@ -9,7 +9,8 @@ export const dynamic = 'force-dynamic';
 // Backend-аас хадгалсан токеныг (хэрэглэгчийн session-тэйгээр) устгаж холболтыг
 // салгана. Mutating тул checkOrigin (x-gerege-csrf header + Origin)-ийг эхэлж
 // шалгана — postJSON-оор дуудна.
-export async function POST(req: Request, { params }: { params: { provider: string } }) {
+export async function POST(req: Request, props: { params: Promise<{ provider: string }> }) {
+  const params = await props.params;
   const bad = checkOrigin(req);
   if (bad) return bad;
 

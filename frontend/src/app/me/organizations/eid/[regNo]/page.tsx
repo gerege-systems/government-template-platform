@@ -8,7 +8,8 @@ export const dynamic = 'force-dynamic';
 export const metadata = { title: 'Байгууллага — Gerege' };
 
 // eID-д бүртгэлтэй, төлөөлдөг байгууллагын удирдах дэлгэц (гарын үсэг зурагч + салгах).
-export default async function MeEidOrgManagePage({ params }: { params: { regNo: string } }) {
+export default async function MeEidOrgManagePage(props: { params: Promise<{ regNo: string }> }) {
+  const params = await props.params;
   const me = await fetchMe();
   if (!me) redirect(`/login?next=/me/organizations/eid/${params.regNo}`);
 

@@ -8,7 +8,8 @@ export const dynamic = 'force-dynamic';
 const PROMPT_KEYS = new Set(['scope', 'instructions']);
 
 // PUT /api/admin/ai/prompts/{key} — нэг prompt давхаргын агуулгыг солих.
-export async function PUT(req: Request, { params }: { params: { key: string } }) {
+export async function PUT(req: Request, props: { params: Promise<{ key: string }> }) {
+  const params = await props.params;
   const bad = checkOrigin(req);
   if (bad) return bad;
   if (!PROMPT_KEYS.has(params.key)) {

@@ -10,7 +10,8 @@ export const dynamic = 'force-dynamic';
 // сэргийлээд, authorization code-ийг access/refresh токен болгон солилцоод,
 // токеныг хэрэглэгчийн session-тэйгээр Go backend руу (шифрлэн хадгалуулахаар)
 // илгээнэ — токен browser-т хэзээ ч хадгалагдахгүй.
-export async function GET(req: Request, { params }: { params: { provider: string } }) {
+export async function GET(req: Request, props: { params: Promise<{ provider: string }> }) {
+  const params = await props.params;
   const provider = getIntegration(params.provider);
   const url = new URL(req.url);
   const origin = appOrigin(req);
