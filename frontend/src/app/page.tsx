@@ -1,7 +1,6 @@
 import React from 'react';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { KeyRound, Info, LogIn, ShieldCheck } from 'lucide-react';
+import { KeyRound, Info, LogIn } from 'lucide-react';
 import SigninShell from '@/components/SigninShell';
 import { hasSession } from '@/lib/session';
 
@@ -35,16 +34,12 @@ function Landing() {
           </p>
         </div>
 
-        <Link className="btn btn--primary btn--lg btn--block" href="/login" aria-label="eID-ээр нэвтрэх">
+        {/* DAN (dan.dgov.mn) SSO-гоор нэвтрэх — нэвтрэлт dan.dgov.mn дээр eID-ээр
+            баталгаажина. BFF route handler руу шууд заана (redirect эхлүүлэх тул
+            Link биш <a>). */}
+        <a className="btn btn--primary btn--lg btn--block" href="/api/auth/sso/start" aria-label="DAN-аар нэвтрэх">
           <LogIn size={18} strokeWidth={2} />
-          <span>eID-ээр нэвтрэх</span>
-        </Link>
-
-        {/* 2 дахь нэвтрэлт — dgov SSO (sso.dgov.mn, OIDC). BFF route handler
-            руу шууд заана (redirect эхлүүлэх тул Link биш <a>). */}
-        <a className="btn btn--secondary btn--lg btn--block" href="/api/auth/sso/start" aria-label="dgov SSO-гоор нэвтрэх" style={{ marginTop: 10 }}>
-          <ShieldCheck size={18} strokeWidth={2} />
-          <span>dgov SSO-гоор нэвтрэх</span>
+          <span>DAN-аар нэвтрэх</span>
         </a>
 
         <p className="signin-card__helper">
