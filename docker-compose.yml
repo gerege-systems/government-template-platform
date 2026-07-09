@@ -28,10 +28,18 @@ services:
       # initdb scripts run once, on an empty data volume, as the superuser.
       - ./backend/deploy/initdb:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      # -h 127.0.0.1 forces a TCP probe. On a first boot (empty volume) postgres
+      # runs a temporary socket-only server to execute the initdb role scripts
+      # (deploy/initdb creates app_user) before it opens the real TCP listener. A
+      # socket-only `pg_isready` flips to "healthy" during that window, so migrate
+      # (depends_on: db healthy, connects over TCP) races in and dies on a refused
+      # connection — a first-deploy-only `exit 1`. A TCP probe stays unhealthy
+      # until the real server accepts connections, i.e. after initdb completes.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 10
+      start_period: 20s
     restart: unless-stopped
 
   redis:
