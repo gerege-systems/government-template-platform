@@ -92,3 +92,5 @@ attribution is retained in [AUTHORS](AUTHORS).
 
 **eID based AI enabled Government Template Platform V3.0** — Co-developed by the **Gerege Systems
 Development Team** and **Claude AI**, 2026.
+
+<!-- submodule sync test: dgov-mn-projects -->
