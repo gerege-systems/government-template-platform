@@ -134,16 +134,20 @@ func (u *usecase) finish(ctx context.Context, accessToken, idToken string) (Comp
 	// "Google холбогдсон" гэж тусгана.
 	googleSub := strings.TrimSpace(info.GoogleSub)
 	googleEmail := strings.TrimSpace(info.GoogleEmail)
+	googleName := strings.TrimSpace(info.GoogleName)
+	googlePicture := strings.TrimSpace(info.GooglePicture)
 
 	var stored domain.User
 	if civilID != "" {
 		user := &domain.User{
-			Username:    "eid_" + civilID,
-			FirstName:   firstName,
-			LastName:    lastName,
-			GoogleSub:   googleSub,
-			GoogleEmail: googleEmail,
-			RoleID:      domain.RoleUser, // зөвхөн ШИНЭ мөрд; байгаа хэрэглэгчийн эрхийг хөндөхгүй
+			Username:      "eid_" + civilID,
+			FirstName:     firstName,
+			LastName:      lastName,
+			GoogleSub:     googleSub,
+			GoogleEmail:   googleEmail,
+			GoogleName:    googleName,
+			GooglePicture: googlePicture,
+			RoleID:        domain.RoleUser, // зөвхөн ШИНЭ мөрд; байгаа хэрэглэгчийн эрхийг хөндөхгүй
 		}
 		stored, err = u.store.UpsertByCivilID(ctx, civilID, nationalID, info.Sub, user)
 	} else {
@@ -151,14 +155,16 @@ func (u *usecase) finish(ctx context.Context, accessToken, idToken string) (Comp
 		// sub-ээр. Refresh нь email-ээр хайдаг тул синтетик email хадгална.
 		slug := subSlug(info.Sub)
 		user := &domain.User{
-			Username:    "sso_" + slug,
-			FirstName:   firstName,
-			LastName:    lastName,
-			Email:       "sso_" + slug + "@sso.local",
-			GoogleSub:   googleSub,
-			GoogleEmail: googleEmail,
-			Active:      true,
-			RoleID:      domain.RoleUser,
+			Username:      "sso_" + slug,
+			FirstName:     firstName,
+			LastName:      lastName,
+			Email:         "sso_" + slug + "@sso.local",
+			GoogleSub:     googleSub,
+			GoogleEmail:   googleEmail,
+			GoogleName:    googleName,
+			GooglePicture: googlePicture,
+			Active:        true,
+			RoleID:        domain.RoleUser,
 		}
 		stored, err = u.store.UpsertBySSOSub(ctx, info.Sub, user)
 	}

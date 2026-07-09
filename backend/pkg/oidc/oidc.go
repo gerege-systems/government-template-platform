@@ -211,8 +211,10 @@ type UserInfo struct {
 	RegisterNumber string `json:"register_number"`
 	// Google холболт — provider (dan) дээр иргэн Google-ээр нэвтэрсэн/холбосон бол
 	// буцаана. Эдгээрээр энэ апп дээр "Google холбогдсон" төлөвийг тусгана.
-	GoogleSub   string `json:"google_sub"`
-	GoogleEmail string `json:"google_email"`
+	GoogleSub     string `json:"google_sub"`
+	GoogleEmail   string `json:"google_email"`
+	GoogleName    string `json:"google_name"`
+	GooglePicture string `json:"google_picture"`
 }
 
 // UserInfo нь access token-оор /userinfo дуудна.
