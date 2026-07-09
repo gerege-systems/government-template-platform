@@ -8,7 +8,7 @@ export const maxDuration = 60;
 // PDF гарын үсэг эхлүүлэх — multipart body-г шууд Go backend руу дамжуулна.
 // authedFetch/proxyResult нь JSON-only + дугтуй задалдаг тул multipart-д
 // тохирохгүй; иймд getAccessToken-оор raw fetch хийнэ. checkOrigin (CSRF)
-// заавал — EidSignView x-gerege-csrf header тавьж илгээдэг.
+// заавал — EidSignView x-dgov-csrf header тавьж илгээдэг.
 const BASE = (process.env.BACKEND_URL ?? 'http://localhost:8080').replace(/\/$/, '') + '/api/v1';
 
 export async function POST(req: NextRequest) {

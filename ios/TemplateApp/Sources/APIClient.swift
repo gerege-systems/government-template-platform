@@ -1,12 +1,12 @@
-// Gerege Template Version 27.0
+// eID based AI enabled Government Template Platform V3.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 import Foundation
 
-// APIClient нь template-ийн BFF (https://template.gerege.mn/api/*)-тай харьцана.
-// Нэвтрэлт нь httpOnly cookie (gerege_access/refresh)-д хадгалагдана; URLSession
+// APIClient нь template-ийн BFF (https://template.dgov.mn/api/*)-тай харьцана.
+// Нэвтрэлт нь httpOnly cookie (dgov_access/refresh)-д хадгалагдана; URLSession
 // нь HTTPCookieStorage.shared-д cookie-г автоматаар хадгалж, дараагийн хүсэлтэд
-// илгээдэг. BFF-ийн mutating route нь `x-gerege-csrf: 1` header шаарддаг (Origin
+// илгээдэг. BFF-ийн mutating route нь `x-dgov-csrf: 1` header шаарддаг (Origin
 // header байхгүй тул энэ л хангалттай — checkOrigin-ыг хар). Токен клиент рүү
 // хэзээ ч гарахгүй — session бүхэлдээ cookie дээр суурилна.
 enum APIError: Error, LocalizedError {
@@ -26,7 +26,7 @@ final class APIClient {
     static let shared = APIClient()
 
     // Production BFF. Локал туршилтад http://localhost:3000 болгож болно.
-    static let baseURL = URL(string: "https://template.gerege.mn")!
+    static let baseURL = URL(string: "https://template.dgov.mn")!
 
     private let session: URLSession
 
@@ -46,7 +46,7 @@ final class APIClient {
         req.httpMethod = method
         req.setValue("application/json", forHTTPHeaderField: "Accept")
         if method != "GET" {
-            req.setValue("1", forHTTPHeaderField: "x-gerege-csrf") // checkOrigin шаардлага
+            req.setValue("1", forHTTPHeaderField: "x-dgov-csrf") // checkOrigin шаардлага
             req.setValue("application/json", forHTTPHeaderField: "Content-Type")
             req.httpBody = try JSONSerialization.data(withJSONObject: body ?? [:])
         }
@@ -136,7 +136,7 @@ final class APIClient {
         _ = try? await request("/api/auth/logout", method: "POST", body: [:])
         // Локал cookie-г цэвэрлэнэ.
         if let cookies = HTTPCookieStorage.shared.cookies {
-            for c in cookies where c.domain.contains("gerege.mn") { HTTPCookieStorage.shared.deleteCookie(c) }
+            for c in cookies where c.domain.contains("dgov.mn") { HTTPCookieStorage.shared.deleteCookie(c) }
         }
     }
 }

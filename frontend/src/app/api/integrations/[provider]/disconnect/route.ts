@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 // POST /api/integrations/:provider/disconnect
 // Backend-аас хадгалсан токеныг (хэрэглэгчийн session-тэйгээр) устгаж холболтыг
-// салгана. Mutating тул checkOrigin (x-gerege-csrf header + Origin)-ийг эхэлж
+// салгана. Mutating тул checkOrigin (x-dgov-csrf header + Origin)-ийг эхэлж
 // шалгана — postJSON-оор дуудна.
 export async function POST(req: Request, props: { params: Promise<{ provider: string }> }) {
   const params = await props.params;

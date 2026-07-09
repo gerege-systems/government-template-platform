@@ -1,4 +1,4 @@
-// Gerege Template Version 27.0
+// eID based AI enabled Government Template Platform V3.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package config
@@ -42,7 +42,7 @@ type Config struct {
 	VerifyAPIKey  string `mapstructure:"VERIFY_API_KEY"`
 	VerifyChannel string `mapstructure:"VERIFY_CHANNEL"`
 
-	// Gerege Verify / XYP (xyp.gerege.mn) — улсын бүртгэлээс байгууллагын мэдээлэл
+	// Gerege Verify / XYP (xyp.dgov.mn) — улсын бүртгэлээс байгууллагын мэдээлэл
 	// авах лавлагаа API. HTTP Basic Auth (client_id:client_secret). Креденшлгүй бол
 	// eID байгууллага холбох функц идэвхгүй болно (boot-ыг эвдэхгүй; сонголттой).
 	XYPAPIBase      string `mapstructure:"XYP_API_BASE"`
@@ -130,8 +130,8 @@ type Config struct {
 	// болно. Хоосон бол сул default — production-д заавал тохируулна.
 	IntegrationEncKey string `mapstructure:"INTEGRATION_ENC_KEY"`
 
-	// Gerege Core (core.gerege.mn) — user/organization find. CoreAPIToken нь
-	// core.gerege.mn-д хандах урт настай service bearer (server-тал л ашиглана).
+	// Gerege Core (core.dgov.mn) — user/organization find. CoreAPIToken нь
+	// core.dgov.mn-д хандах урт настай service bearer (server-тал л ашиглана).
 	CoreAPIBase  string `mapstructure:"CORE_API_BASE"`
 	CoreAPIToken string `mapstructure:"CORE_API_TOKEN"`
 
@@ -141,10 +141,10 @@ type Config struct {
 	// томилно (API-аар үүсгэдэггүй). Хэрэглэгч эхлээд бүртгүүлсэн байх ёстой.
 	SuperAdminEmail string `mapstructure:"SUPERADMIN_EMAIL"`
 
-	// Gerege SSO (sso.gerege.mn, OIDC) — eID-ийн зэрэгцээ 2 дахь нэвтрэлт.
+	// Gerege SSO (sso.dgov.mn, OIDC) — eID-ийн зэрэгцээ 2 дахь нэвтрэлт.
 	// ClientID/Secret хоосон бол SSO урсгал inert (Landing дээр товч харагдахгүй).
 	// RedirectURI нь SSO client-д бүртгэгдсэн callback (жишээ
-	// https://template.gerege.mn/sso/callback) байх ёстой.
+	// https://template.dgov.mn/sso/callback) байх ёстой.
 	SSOIssuer       string `mapstructure:"SSO_ISSUER"`
 	SSOClientID     string `mapstructure:"SSO_CLIENT_ID"`
 	SSOClientSecret string `mapstructure:"SSO_CLIENT_SECRET"`
@@ -359,16 +359,16 @@ func applyDefaults() {
 		AppConfig.EIDCertLevel = "ADVANCED"
 	}
 	if AppConfig.EIDCallbackURL == "" {
-		AppConfig.EIDCallbackURL = "https://template.gerege.mn/login/verify"
+		AppConfig.EIDCallbackURL = "https://template.dgov.mn/login/verify"
 	}
 	if AppConfig.EIDDisplayText == "" {
-		AppConfig.EIDDisplayText = "template.gerege.mn"
+		AppConfig.EIDDisplayText = "template.dgov.mn"
 	}
 	if AppConfig.CoreAPIBase == "" {
-		AppConfig.CoreAPIBase = "https://core.gerege.mn"
+		AppConfig.CoreAPIBase = "https://core.dgov.mn"
 	}
 	if AppConfig.XYPAPIBase == "" {
-		AppConfig.XYPAPIBase = "https://xyp.gerege.mn"
+		AppConfig.XYPAPIBase = "https://xyp.dgov.mn"
 	}
 	if AppConfig.GSpacePort == 0 {
 		AppConfig.GSpacePort = 22
@@ -380,7 +380,7 @@ func applyDefaults() {
 		AppConfig.GSpaceQuota = 2 << 20 // 2 MB
 	}
 	if AppConfig.SSOIssuer == "" {
-		AppConfig.SSOIssuer = "https://sso.gerege.mn"
+		AppConfig.SSOIssuer = "https://sso.dgov.mn"
 	}
 	if AppConfig.SSOScope == "" {
 		AppConfig.SSOScope = "openid profile email"

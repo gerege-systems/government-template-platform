@@ -1,4 +1,4 @@
-# Gerege Backend Template v27
+# eID based AI enabled Government Template Platform V3.0
 
 > 🌐 [English](README.md) · **Монгол**
 
@@ -144,7 +144,7 @@ EID_RP_UUID=                     # оператороос олгосон RP UUID
 EID_RP_NAME=template-web         # бүртгэлтэй relyingPartyName
 EID_RP_SECRET=rp_sk_...          # RP API secret (Authorization: Bearer); gitignored нууц
 EID_CERT_LEVEL=ADVANCED          # нэвтрэлтэд шаардах гэрчилгээний ДООД түвшин (ADVANCED нь бүгдийг хүлээн авна)
-EID_DISPLAY_TEXT=template.gerege.mn  # eID апп-ийн баталгаажуулах дэлгэцэнд харагдах текст
+EID_DISPLAY_TEXT=template.dgov.mn  # eID апп-ийн баталгаажуулах дэлгэцэнд харагдах текст
 GOOGLE_CLIENT_ID=...apps.googleusercontent.com  # Google OAuth client_id (нууц биш)
 GOOGLE_CLIENT_SECRET=...          # Google OAuth client secret (server-only, gitignored)
 ```
@@ -264,5 +264,5 @@ curl http://localhost:8080/health
 
 ---
 
-**Gerege Template Version 27.0** — **Gerege Systems Development Team** болон
+**eID based AI enabled Government Template Platform V3.0** — **Gerege Systems Development Team** болон
 **Claude AI** хамтран бүтээв, 2026.

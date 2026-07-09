@@ -386,4 +386,4 @@ Before deploying, ensure:
 
 ---
 
-**Gerege Template Version 27.0** — Co-developed by the **Gerege Systems Development Team** and **Claude AI**, 2026.
+**eID based AI enabled Government Template Platform V3.0** — Co-developed by the **Gerege Systems Development Team** and **Claude AI**, 2026.

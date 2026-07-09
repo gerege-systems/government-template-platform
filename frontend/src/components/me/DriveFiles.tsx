@@ -65,7 +65,7 @@ export default function DriveFiles() {
       fd.append('file', file);
       const res = await fetch('/api/integrations/google-drive/upload', {
         method: 'POST',
-        headers: { 'x-gerege-csrf': '1' },
+        headers: { 'x-dgov-csrf': '1' },
         body: fd,
       });
       const body = await res.json().catch(() => null);

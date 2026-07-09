@@ -1,11 +1,11 @@
 // Cookie тогтмолууд ба сонголтууд. BFF загварт токенуудыг httpOnly cookie-д
 // хадгалдаг тул browser-ийн JS тэдгээрийг хэзээ ч уншихгүй (XSS-д тэсвэртэй).
 
-export const ACCESS_COOKIE = 'gerege_access';
-export const REFRESH_COOKIE = 'gerege_refresh';
+export const ACCESS_COOKIE = 'dgov_access';
+export const REFRESH_COOKIE = 'dgov_refresh';
 // SSO-ээр нэвтэрсэн session-ий RP-initiated logout URL (id_token_hint-тэй).
 // Гарах үед энэ байвал browser-ийг тийш чиглүүлж SSO дээр session-ийг дуусгана.
-export const SSO_LOGOUT_COOKIE = 'gerege_sso_logout';
+export const SSO_LOGOUT_COOKIE = 'dgov_sso_logout';
 
 // Cookie-ийн насжилт. Backend-ийн анхдагч: JWT_EXPIRED=5 цаг, JWT_REFRESH_EXPIRED=7 хоног.
 // Эдгээрийг backend-ийн тохиргоотой ойролцоо барина — хэтэрсэн access cookie-г

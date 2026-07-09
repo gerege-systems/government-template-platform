@@ -1,4 +1,4 @@
-// Gerege Template Version 27.0
+// eID based AI enabled Government Template Platform V3.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package auth
@@ -85,7 +85,7 @@ func (uc *usecase) EIDStart(ctx context.Context, callbackURL string) (resp EIDSt
 }
 
 // EIDStartByNationalID нь иргэний РД (national_id)-аар нэвтрэлтийг IdP дээр
-// эхлүүлнэ (gerege.mn-ийн "РД оруулах → утас руу push" урсгал). IdP нь тухайн
+// эхлүүлнэ (dgov.mn-ийн "РД оруулах → утас руу push" урсгал). IdP нь тухайн
 // РД-тэй холбоотой бүртгэлтэй төхөөрөмж(үүд) рүү баталгаажуулах prompt шууд push
 // хийдэг тул device_link / QR шаардлагагүй — зөвхөн session_id, verification_code,
 // expires_at буцна. Дуусгахдаа QR урсгалтай ижил EIDPoll-ийг ашиглана.

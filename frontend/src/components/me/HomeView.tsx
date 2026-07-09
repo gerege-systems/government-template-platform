@@ -113,7 +113,7 @@ export default function HomeView({ me }: { me: SessionUser }) {
       </div>
 
       <footer className="footer" style={{ justifyContent: 'center', textAlign: 'center', marginTop: 12 }}>
-        <span>© 2026 Gerege Systems · <span className="mono">Gerege Template</span></span>
+        <span>© 2026 Gerege Systems · <span className="mono">eID based AI enabled Government Template Platform V3.0</span></span>
       </footer>
     </>
   );

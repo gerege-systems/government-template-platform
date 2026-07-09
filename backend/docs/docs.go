@@ -11,7 +11,7 @@ const docTemplate = `{
         "title": "{{.Title}}",
         "termsOfService": "https://github.com/snykk/go-rest-boilerplate",
         "contact": {
-            "name": "Gerege Backend Template v27",
+            "name": "eID based AI enabled Government Template Platform V3.0",
             "url": "https://github.com/snykk/go-rest-boilerplate"
         },
         "license": {
@@ -1209,7 +1209,7 @@ const docTemplate = `{
         },
         "/core/organizations": {
             "get": {
-                "description": "core.gerege.mn /api/organization/find — search_text (регистр г.м.). Хариуг дамжуулна.",
+                "description": "core.dgov.mn /api/organization/find — search_text (регистр г.м.). Хариуг дамжуулна.",
                 "produces": [
                     "application/json"
                 ],
@@ -1237,7 +1237,7 @@ const docTemplate = `{
         },
         "/core/users": {
             "get": {
-                "description": "core.gerege.mn /api/user/find — search_text (core_id эсвэл регистр). Хариуг дамжуулна.",
+                "description": "core.dgov.mn /api/user/find — search_text (core_id эсвэл регистр). Хариуг дамжуулна.",
                 "produces": [
                     "application/json"
                 ],
@@ -2823,7 +2823,7 @@ const docTemplate = `{
         },
         "/sso/start": {
             "post": {
-                "description": "sso.gerege.mn (OIDC) authorize URL-ийг state-тэй буцаана. BFF browser-ийг тийш чиглүүлнэ.",
+                "description": "sso.dgov.mn (OIDC) authorize URL-ийг state-тэй буцаана. BFF browser-ийг тийш чиглүүлнэ.",
                 "produces": [
                     "application/json"
                 ],
@@ -6253,7 +6253,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8080",
 	BasePath:         "/api/v1",
 	Schemes:          []string{"http", "https"},
-	Title:            "Gerege Backend Template v27 API",
+	Title:            "eID based AI enabled Government Template Platform V3.0 API",
 	Description:      "chi (net/http) + pgx (PostgreSQL) + Redis дээр суурилсан Clean Architecture бүхий Go backend. Нээлттэй эхийн snykk/go-rest-boilerplate (MIT, зохиогч Najib Fikri)-ээс үүсэлтэй; HTTP давхаргыг chi, өгөгдлийн давхаргыг pgx руу хөрвүүлсэн.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,

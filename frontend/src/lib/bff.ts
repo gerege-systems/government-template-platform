@@ -16,7 +16,7 @@ export async function readJson<T = Record<string, unknown>>(req: Request): Promi
 /**
  * CSRF-ийн эсрэг хоёр давхар хамгаалалт. State-changing route-ууд дээр:
  *
- *  1. Custom header (`x-gerege-csrf: 1`) шаардана — cross-site form POST
+ *  1. Custom header (`x-dgov-csrf: 1`) шаардана — cross-site form POST
  *     custom header тавьж чаддаггүй, cross-origin fetch нь preflight-д
  *     CORS-оор хаагддаг тул энэ header нь хүсэлт өөрийн JS-ээс
  *     (lib/client.ts sendJSON) гарсныг баталдаг. SameSite=Lax-ийн
@@ -27,7 +27,7 @@ export async function readJson<T = Record<string, unknown>>(req: Request): Promi
  * Зөрвөл 403 буцаах NextResponse-г, тааралцвал `null`-г буцаана.
  */
 export function checkOrigin(req: Request): NextResponse | null {
-  if (req.headers.get('x-gerege-csrf') !== '1') {
+  if (req.headers.get('x-dgov-csrf') !== '1') {
     return NextResponse.json(
       { ok: false, status: 403, message: 'CSRF header дутуу байна.' },
       { status: 403 },

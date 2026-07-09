@@ -1,4 +1,4 @@
-// Gerege Template Version 27.0
+// eID based AI enabled Government Template Platform V3.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package server
@@ -208,10 +208,10 @@ func NewApp() (*App, error) {
 	gatewayRepo := gatewaypostgres.NewGatewayRepository(pool)
 	gatewayUC := gateway.NewUsecase(gatewayRepo)
 
-	// Gerege Core (core.gerege.mn) — USER FIND / ORG FIND хайлтын wrap.
+	// Gerege Core (core.dgov.mn) — USER FIND / ORG FIND хайлтын wrap.
 	coreUC := core.NewUsecase(config.AppConfig.CoreAPIBase, config.AppConfig.CoreAPIToken)
 
-	// Gerege SSO (sso.gerege.mn, OIDC) — eID-ийн зэрэгцээ 2 дахь нэвтрэлт.
+	// Gerege SSO (sso.dgov.mn, OIDC) — eID-ийн зэрэгцээ 2 дахь нэвтрэлт.
 	ssoClient := oidc.NewClient(config.AppConfig.SSOIssuer, config.AppConfig.SSOClientID, config.AppConfig.SSOClientSecret, config.AppConfig.SSORedirectURI, config.AppConfig.SSOScope)
 	ssoRepo := ssouserpostgres.NewSSOUserRepository(pool)
 	ssoUC := sso.NewUsecase(ssoClient, ssoRepo, jwtService, redisCache, config.AppConfig.SSONativeClientID)

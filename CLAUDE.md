@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Gerege Template — production-ready full-stack template: Go backend (chi ·
+eID based AI enabled Government Template Platform V3.0 — production-ready full-stack template: Go backend (chi ·
 net/http + pgx + PostgreSQL + Redis) + Next.js 15 BFF frontend + Gemini AI
 pipeline. Docs index is in [README.md](README.md#documentation); deep dives in
 `backend/docs/` (EN/MN pairs) and `docs/DEPLOYMENT.md`.
@@ -35,7 +35,7 @@ docker compose up -d --build   # db + redis + migrate (one-off) + api + web
 
 - **Language:** code identifiers and commit messages in English; comments and
   UI strings in Mongolian. Every source file starts with the two-line
-  `Gerege Template Version 27.0` header (copy from any existing file).
+  `eID based AI enabled Government Template Platform V3.0` header (copy from any existing file).
 - **Commits:** conventional commits (`feat:`, `fix:`, `chore:`, `docs:`…).
 - **EN/MN doc pairs:** when you touch `backend/docs/X.md`, update `X_MN.md`
   too (same for READMEs and `frontend/src/lib/i18n.ts` — every key exists in
@@ -80,7 +80,7 @@ docker compose up -d --build   # db + redis + migrate (one-off) + api + web
   in httpOnly cookies and never reach client JS. Backend errors are proxied
   via `proxyResult`/`toClientResponse` (never leak tokens).
 - All mutating browser calls go through `lib/client.ts` `sendJSON`/`postJSON`
-  (adds the `x-gerege-csrf` header that `lib/bff.ts checkOrigin` requires).
+  (adds the `x-dgov-csrf` header that `lib/bff.ts checkOrigin` requires).
   New mutating BFF routes must call `checkOrigin` first.
 - Server data fetching in components uses TanStack Query (`getJSON` +
   `useQuery`, invalidate on mutations); provider is in
@@ -95,7 +95,7 @@ docker compose up -d --build   # db + redis + migrate (one-off) + api + web
   [gerege-systems/wallet-service-gerege-mn](https://github.com/gerege-systems/wallet-service-gerege-mn)
   (standalone Go module, own Postgres/compose/CI — independent of this
   template). Reference deploy on this host stays at
-  `https://template.gerege.mn/wallet/` + `/wallet-admin`; runbook in
+  `https://template.dgov.mn/wallet/` + `/wallet-admin`; runbook in
   docs/DEPLOYMENT.md §Wallet.
 
 ## Gotchas

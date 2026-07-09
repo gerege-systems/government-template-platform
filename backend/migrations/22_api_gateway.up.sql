@@ -1,4 +1,4 @@
--- Gerege Template Version 27.0
+-- eID based AI enabled Government Template Platform V3.0
 -- API Gateway: upstream services, routes, consumers + API keys, per-route
 -- policies (rate-limit / auth / cors …) and a request-log table for the admin
 -- "API Gateway" system. These are gateway CONFIG/telemetry tables — not
@@ -100,9 +100,9 @@ ON CONFLICT (key) DO NOTHING;
 -- ── Demo seed (only when empty) so the admin screens render meaningfully.
 INSERT INTO gateway_services(name, protocol, host, port, path, tags)
 SELECT * FROM (VALUES
-    ('eid-core',   'https', 'api.eidgerege.mn', 443, '/gerege/v1', ARRAY['eid','core']),
-    ('payments',   'https', 'pay.gerege.mn',    443, '/v2',         ARRAY['billing']),
-    ('ai-gateway', 'https', 'ai.gerege.mn',     443, '/v1',         ARRAY['ai'])
+    ('eid-core',   'https', 'api.eiddgov.mn', 443, '/gerege/v1', ARRAY['eid','core']),
+    ('payments',   'https', 'pay.dgov.mn',    443, '/v2',         ARRAY['billing']),
+    ('ai-gateway', 'https', 'ai.dgov.mn',     443, '/v1',         ARRAY['ai'])
 ) AS v(name, protocol, host, port, path, tags)
 WHERE NOT EXISTS (SELECT 1 FROM gateway_services);
 
@@ -142,7 +142,7 @@ FROM (VALUES
     ('eid-me',     'rate-limit', '{"limit":60,"window":"minute"}'),
     ('eid-sign',   'key-auth',   '{"key_in":"header","header_name":"x-api-key"}'),
     ('pay-charge', 'rate-limit', '{"limit":30,"window":"minute"}'),
-    ('ai-chat',    'cors',       '{"origins":["https://web.gerege.mn"],"methods":["GET","POST"]}')
+    ('ai-chat',    'cors',       '{"origins":["https://web.dgov.mn"],"methods":["GET","POST"]}')
 ) AS p(route, type, config)
 JOIN gateway_routes r ON r.name = p.route
 WHERE NOT EXISTS (SELECT 1 FROM gateway_policies);

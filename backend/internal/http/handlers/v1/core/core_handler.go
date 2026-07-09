@@ -1,7 +1,7 @@
-// Gerege Template Version 27.0
+// eID based AI enabled Government Template Platform V3.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
-// Package core нь /core/* endpoint-уудыг үйлчилнэ — Gerege Core (core.gerege.mn)
+// Package core нь /core/* endpoint-уудыг үйлчилнэ — Gerege Core (core.dgov.mn)
 // USER FIND / ORG FIND-г wrap хийнэ. Бүгд нэвтэрсэн хэрэглэгч шаардана.
 package core
 
@@ -22,7 +22,7 @@ func NewHandler(usecase coreuc.Usecase) Handler {
 
 // FindUsers godoc
 // @Summary      Gerege Core хэрэглэгч хайх
-// @Description  core.gerege.mn /api/user/find — search_text (core_id эсвэл регистр). Хариуг дамжуулна.
+// @Description  core.dgov.mn /api/user/find — search_text (core_id эсвэл регистр). Хариуг дамжуулна.
 // @Tags         core
 // @Produce      json
 // @Param        search_text  query  string  false  "core_id / regno"
@@ -38,7 +38,7 @@ func (h Handler) FindUsers(w http.ResponseWriter, r *http.Request) error {
 
 // FindOrganizations godoc
 // @Summary      Gerege Core байгууллага хайх
-// @Description  core.gerege.mn /api/organization/find — search_text (регистр г.м.). Хариуг дамжуулна.
+// @Description  core.dgov.mn /api/organization/find — search_text (регистр г.м.). Хариуг дамжуулна.
 // @Tags         core
 // @Produce      json
 // @Param        search_text  query  string  false  "regno / нэр"

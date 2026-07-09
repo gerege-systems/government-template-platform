@@ -40,7 +40,7 @@ const applyLang = (value: LangPref) => {
 
 /**
  * gerege theme-ийн тохиргоог (загвар + хэл) localStorage-д уншиж/бичээд <html>
- * дээр тусгана. me.gerege.mn-ийн site.js-тэй ижил зарчмаар ажиллана.
+ * дээр тусгана. me.dgov.mn-ийн site.js-тэй ижил зарчмаар ажиллана.
  */
 export function usePreferences() {
   // Inline-bootstrap утгаас эхэлснээр SSR markup эхний client render-тэй тохирно

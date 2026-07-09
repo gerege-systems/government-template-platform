@@ -1,4 +1,4 @@
-# Contributing to Gerege Template
+# Contributing to eID based AI enabled Government Template Platform V3.0
 
 The full contribution guide lives in [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) —
 local setup, branch/commit conventions, the `make pre-push` quality gate (lint +

@@ -2,7 +2,7 @@
 
 > 🌐 [English](API_CONTRACT.md) · **Монгол**
 
-**Gerege Backend Template v27**-ийн REST API лавлагаа. Шууд, автоматаар үүсэх
+**eID based AI enabled Government Template Platform V3.0**-ийн REST API лавлагаа. Шууд, автоматаар үүсэх
 бүрэн тодорхойлолтыг `GET /swagger/` дээр үзнэ (эх: `docs/swagger.json`).
 Англи хувилбар: [API_CONTRACT.md](./API_CONTRACT.md).
 
@@ -116,4 +116,4 @@ annotation-аас `make swag`-аар дахин үүсгэнэ.
 
 ---
 
-**Gerege Template Version 27.0** — **Gerege Systems Development Team** болон **Claude AI** хамтран бүтээв, 2026.
+**eID based AI enabled Government Template Platform V3.0** — **Gerege Systems Development Team** болон **Claude AI** хамтран бүтээв, 2026.

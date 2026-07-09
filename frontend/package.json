@@ -2,7 +2,7 @@
   "name": "gerege-web",
   "version": "27.0.0",
   "private": true,
-  "description": "gerege-backend-template-v27-д тохирсон Next.js frontend — me.gerege.mn-ийн gerege theme дээр суурилсан.",
+  "description": "gerege-backend-template-v27-д тохирсон Next.js frontend — me.dgov.mn-ийн gerege theme дээр суурилсан.",
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",

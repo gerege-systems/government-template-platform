@@ -1,7 +1,7 @@
-// Gerege Template Version 27.0
+// eID based AI enabled Government Template Platform V3.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
-// Package oidc нь Gerege SSO (sso.gerege.mn, Ory Hydra) OIDC Authorization Code
+// Package oidc нь Gerege SSO (sso.dgov.mn, Ory Hydra) OIDC Authorization Code
 // урсгалын минимал client. Endpoint-ууд issuer-ээс (discovery-тэй ижил) гарна:
 //
 //	{issuer}/oauth2/auth   — authorization endpoint (browser redirect)
@@ -36,7 +36,7 @@ type Client struct {
 	http         *http.Client
 }
 
-// NewClient нь issuer (жишээ https://sso.gerege.mn) болон client creds-ээр OIDC
+// NewClient нь issuer (жишээ https://sso.dgov.mn) болон client creds-ээр OIDC
 // client үүсгэнэ. scope хоосон бол "openid profile email" default.
 func NewClient(issuer, clientID, clientSecret, redirectURI, scope string) *Client {
 	if strings.TrimSpace(scope) == "" {
@@ -194,7 +194,7 @@ func (c *Client) LogoutURLFor(idTokenHint string) string {
 	return c.LogoutURL(idTokenHint, post)
 }
 
-// UserInfo нь /userinfo-оос иргэний claims-ыг буцаана. sso.gerege.mn нь eID-ээр
+// UserInfo нь /userinfo-оос иргэний claims-ыг буцаана. sso.dgov.mn нь eID-ээр
 // нэвтэрсэн иргэнд name/given_name/family_name-г (кирилл) буцаадаг; email/
 // national_id нь тухайн scope/урсгалд байхгүй байж болзошгүй.
 type UserInfo struct {

@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
-# Gerege Template Version 27.0
+# eID based AI enabled Government Template Platform V3.0
 # Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 #
-# Live smoke test — template.gerege.mn (эсвэл BASE=... өөр хост).
+# Live smoke test — template.dgov.mn (эсвэл BASE=... өөр хост).
 # Production дээр deploy хийсний дараа гол зам ажиллаж байгааг гаднаас нь
 # (black-box) шалгана: TLS + HTTPS redirect, security header-ууд, eID QR/РД
 # нэвтрэлт эхлүүлэлт, CSRF хамгаалалт, нэвтрэлт шаардсан endpoint-ийн хамгаалалт.
 #
-# Хэрэглээ:  BASE=https://template.gerege.mn scripts/smoke-test.sh
+# Хэрэглээ:  BASE=https://template.dgov.mn scripts/smoke-test.sh
 # Гаралт: PASS/FAIL мөрүүд; ямар нэг FAIL байвал exit code 1.
 
 set -uo pipefail
 
-BASE="${BASE:-https://template.gerege.mn}"
+BASE="${BASE:-https://template.dgov.mn}"
 ORIGIN="${BASE}"
 PASS=0
 FAIL=0
@@ -32,7 +32,7 @@ echo "── TLS + HTTPS ──"
 root_code=$(curl -s -m 15 -o /dev/null -w '%{http_code}' "$BASE/")
 assert_status "root HTTPS 200" 200 "$root_code"
 
-redirect_code=$(curl -s -m 15 -o /dev/null -w '%{http_code}' "http://template.gerege.mn/")
+redirect_code=$(curl -s -m 15 -o /dev/null -w '%{http_code}' "http://template.dgov.mn/")
 if [ "$redirect_code" = "301" ] || [ "$redirect_code" = "308" ]; then
   pass "HTTP→HTTPS redirect ($redirect_code)"
 else
@@ -54,7 +54,7 @@ check_header "x-content-type-options"
 echo
 echo "── eID нэвтрэлт эхлүүлэлт (BFF) ──"
 qr=$(curl -s -m 20 -X POST "$BASE/api/auth/eid/start" \
-  -H "Content-Type: application/json" -H "Origin: $ORIGIN" -H "x-gerege-csrf: 1" -d '{}')
+  -H "Content-Type: application/json" -H "Origin: $ORIGIN" -H "x-dgov-csrf: 1" -d '{}')
 if echo "$qr" | grep -q '"session_id"' && echo "$qr" | grep -q '"verification_code"'; then
   pass "QR start → session_id + verification_code"
 else
@@ -62,7 +62,7 @@ else
 fi
 
 push=$(curl -s -m 20 -X POST "$BASE/api/auth/eid/start-id" \
-  -H "Content-Type: application/json" -H "Origin: $ORIGIN" -H "x-gerege-csrf: 1" \
+  -H "Content-Type: application/json" -H "Origin: $ORIGIN" -H "x-dgov-csrf: 1" \
   -d '{"national_id":"УБ99887766"}')
 if echo "$push" | grep -q '"session_id"'; then
   pass "РД push start → session_id"
@@ -79,7 +79,7 @@ assert_status "CSRF header-гүй POST → 403" 403 "$no_csrf"
 
 # Өөр origin-оос ирсэн хүсэлт → 403.
 bad_origin=$(curl -s -m 15 -o /dev/null -w '%{http_code}' -X POST "$BASE/api/auth/eid/start" \
-  -H "Content-Type: application/json" -H "Origin: https://evil.example" -H "x-gerege-csrf: 1" -d '{}')
+  -H "Content-Type: application/json" -H "Origin: https://evil.example" -H "x-dgov-csrf: 1" -d '{}')
 assert_status "буруу Origin → 403" 403 "$bad_origin"
 
 echo

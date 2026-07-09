@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 
 // POST /api/integrations/google-login/disconnect — нэвтэрсэн хэрэглэгчийн Google
 // холболтыг (users.google_sub + профайл) арилгана. Mutating тул checkOrigin
-// (x-gerege-csrf + Origin) эхэлж шалгана; postJSON-оор дуудна.
+// (x-dgov-csrf + Origin) эхэлж шалгана; postJSON-оор дуудна.
 export async function POST(req: Request) {
   const bad = checkOrigin(req);
   if (bad) return bad;

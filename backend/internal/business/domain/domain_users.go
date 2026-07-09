@@ -1,4 +1,4 @@
-// Gerege Template Version 27.0
+// eID based AI enabled Government Template Platform V3.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Package domain нь enterprise entity-үүдийг агуулдаг — Clean Architecture-ийн
@@ -169,7 +169,7 @@ var ErrEmptyCivilID = errors.New("civil_id cannot be empty")
 // (Email="") тул enumeration-аас ангид; давтагдашгүй байдлыг civil_id-ээр
 // хангана. Username нь "eid_"+civil_id (жижиг үсэг) хэлбэрийн нийлэг утга.
 //
-// АНХААР: IdP нь зөвхөн эрх бүхий auth.gerege.mn RP-д national_id (reg_no)-г
+// АНХААР: IdP нь зөвхөн эрх бүхий auth.dgov.mn RP-д national_id (reg_no)-г
 // илчилдэг; public RP (энэ template) зөвхөн civil_id хүлээн авдаг. Тиймээс
 // түлхүүр нь civil_id. national_id хоосон бол DB-д NULL болж хадгалагдана
 // (хоосон string биш) — эс бөгөөс lower(national_id) WHERE national_id IS NOT

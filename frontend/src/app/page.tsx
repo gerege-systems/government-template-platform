@@ -23,9 +23,9 @@ function Landing() {
         <img className="signin-card__crest" src="/brand.webp" alt="" aria-hidden="true" />
 
         <div>
-          <h1 id="landing-title">Gerege Template</h1>
+          <h1 id="landing-title">eID based AI enabled Government Template Platform V3.0</h1>
           <p className="signin-card__lede" style={{ marginTop: 12 }}>
-            <strong style={{ color: 'var(--fg)', fontWeight: 600 }}>Gerege Template</strong>{' '}
+            <strong style={{ color: 'var(--fg)', fontWeight: 600 }}>eID based AI enabled Government Template Platform V3.0</strong>{' '}
             (chi + pgx) дээр суурилсан жишээ апп.{' '}
             <strong style={{ color: 'var(--fg)', fontWeight: 600 }}>eID</strong> апп-аараа QR кодыг
             уншуулан нэвтэрч, профайл болон аюулгүй байдлын тохиргоогоо нэг дороос удирдана.
@@ -37,7 +37,7 @@ function Landing() {
           <span>eID-ээр нэвтрэх</span>
         </Link>
 
-        {/* 2 дахь нэвтрэлт — Gerege SSO (sso.gerege.mn, OIDC). BFF route handler
+        {/* 2 дахь нэвтрэлт — Gerege SSO (sso.dgov.mn, OIDC). BFF route handler
             руу шууд заана (redirect эхлүүлэх тул Link биш <a>). */}
         <a className="btn btn--secondary btn--lg btn--block" href="/api/auth/sso/start" aria-label="Gerege SSO-гоор нэвтрэх" style={{ marginTop: 10 }}>
           <ShieldCheck size={18} strokeWidth={2} />

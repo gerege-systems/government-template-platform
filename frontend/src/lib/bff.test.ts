@@ -1,4 +1,4 @@
-// Gerege Template Version 27.0
+// eID based AI enabled Government Template Platform V3.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // BFF хамгаалалтын unit тест: checkOrigin (double-submit CSRF header + Origin
@@ -22,26 +22,26 @@ describe('checkOrigin', () => {
   });
 
   it('passes when CSRF header present and no Origin (non-browser)', () => {
-    const res = checkOrigin(req('https://app.mn/api/x', { 'x-gerege-csrf': '1' }));
+    const res = checkOrigin(req('https://app.mn/api/x', { 'x-dgov-csrf': '1' }));
     expect(res).toBeNull();
   });
 
   it('passes when Origin matches APP_ORIGIN', () => {
-    process.env.APP_ORIGIN = 'https://template.gerege.mn';
+    process.env.APP_ORIGIN = 'https://template.dgov.mn';
     const res = checkOrigin(
-      req('https://template.gerege.mn/api/x', {
-        'x-gerege-csrf': '1',
-        origin: 'https://template.gerege.mn',
+      req('https://template.dgov.mn/api/x', {
+        'x-dgov-csrf': '1',
+        origin: 'https://template.dgov.mn',
       }),
     );
     expect(res).toBeNull();
   });
 
   it('rejects a mismatched Origin → 403', () => {
-    process.env.APP_ORIGIN = 'https://template.gerege.mn';
+    process.env.APP_ORIGIN = 'https://template.dgov.mn';
     const res = checkOrigin(
-      req('https://template.gerege.mn/api/x', {
-        'x-gerege-csrf': '1',
+      req('https://template.dgov.mn/api/x', {
+        'x-dgov-csrf': '1',
         origin: 'https://evil.example',
       }),
     );
@@ -50,7 +50,7 @@ describe('checkOrigin', () => {
 
   it('falls back to request origin when APP_ORIGIN unset', () => {
     const res = checkOrigin(
-      req('https://self.mn/api/x', { 'x-gerege-csrf': '1', origin: 'https://self.mn' }),
+      req('https://self.mn/api/x', { 'x-dgov-csrf': '1', origin: 'https://self.mn' }),
     );
     expect(res).toBeNull();
   });

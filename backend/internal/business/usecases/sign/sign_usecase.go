@@ -1,4 +1,4 @@
-// Gerege Template Version 27.0
+// eID based AI enabled Government Template Platform V3.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Package sign — PDF гарын үсэг (PAdES) eidmongolia.mn /v3-ээр. Хувь хүн, эсвэл
@@ -62,7 +62,7 @@ type cache interface {
 type Config struct {
 	V3BaseURL string // .well-known rp_api_base: https://eidmongolia.mn
 	RPUUID    string // gerege RP UUID
-	RPName    string // "gerege.mn"
+	RPName    string // "dgov.mn"
 	APISecret string // Bearer <api_secret> (хоосон бол илгээхгүй; registry унтраалттай үед хэрэггүй)
 
 	// SignerCertPEM / SignerKeyPEM — серверийн БАЙНГЫН Document-Signer-ийн

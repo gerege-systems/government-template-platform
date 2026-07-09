@@ -138,7 +138,7 @@ export default function UserMenu({ username, email, initials, picture }: Props) 
 
           <div className="user-menu__divider" role="separator" />
 
-          <a className="user-menu__item" role="menuitem" href="https://gerege.mn/help" target="_blank" rel="noreferrer">
+          <a className="user-menu__item" role="menuitem" href="https://dgov.mn/help" target="_blank" rel="noreferrer">
             <HelpCircle size={16} strokeWidth={2} />
             <span>{lang === 'en' ? 'Help & support' : 'Тусламж'}</span>
           </a>

@@ -1,6 +1,6 @@
 # eID Mongolia — RP-facing endpoint нэмэх хүсэлт
 
-> Хүсэгч: **template.gerege.mn** (RP UUID `c4f371c3-20bd-462e-8d97-5bc4a20fde08`)
+> Хүсэгч: **template.dgov.mn** (RP UUID `c4f371c3-20bd-462e-8d97-5bc4a20fde08`)
 > Хүлээн авагч: **eID Mongolia platform** (`gerege-systems/eid-platform-mn`)
 > Огноо: 2026-07-04 · API суурь: `https://eidmongolia.mn/v3`
 
@@ -125,7 +125,7 @@ RP-Bearer хувилбар хэрэгтэй (бусад RP-ийн мэдээлэ
 
 ## D. Хамаарал (RP тал дээр аль хэдийн бэлэн)
 
-template.gerege.mn нь дээрх өгөгдлийг хүлээн авмагц харуулах бэлэн:
+template.dgov.mn нь дээрх өгөгдлийг хүлээн авмагц харуулах бэлэн:
 Profile дээр eID identity + гэрчилгээ (хэрэгжсэн), цаашид гэрчилгээний тоо,
 auth/sign тоолуур, холбоотой төхөөрөмж, байгууллагын секцүүд. Endpoint нээгдэх
 тусам бид өөрийн `pkg/eid` client-д нэмж, хуудсуудыг баяжуулна.

@@ -1,4 +1,4 @@
-// Gerege Template Version 27.0
+// eID based AI enabled Government Template Platform V3.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package routes
@@ -13,7 +13,7 @@ import (
 	corehandler "template/internal/http/handlers/v1/core"
 )
 
-// coreRoute нь Gerege Core (core.gerege.mn)-ийн хайлтын /core/* бүлгийг холбоно.
+// coreRoute нь Gerege Core (core.dgov.mn)-ийн хайлтын /core/* бүлгийг холбоно.
 // Нэвтэрсэн хэрэглэгч шаардана (service token нь backend-д нуугдсан).
 type coreRoute struct {
 	handler        corehandler.Handler

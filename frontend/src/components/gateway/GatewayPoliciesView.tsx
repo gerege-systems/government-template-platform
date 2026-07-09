@@ -10,7 +10,7 @@ import { Loading, EnabledChip } from './gwShared';
 const TYPES: { value: GwPolicyType; label: string; sample: string }[] = [
   { value: 'rate-limit', label: 'Rate limit', sample: '{"limit":60,"window":"minute"}' },
   { value: 'key-auth', label: 'Key auth', sample: '{"key_in":"header","header_name":"x-api-key"}' },
-  { value: 'cors', label: 'CORS', sample: '{"origins":["https://web.gerege.mn"],"methods":["GET","POST"]}' },
+  { value: 'cors', label: 'CORS', sample: '{"origins":["https://web.dgov.mn"],"methods":["GET","POST"]}' },
   { value: 'ip-restriction', label: 'IP restriction', sample: '{"allow":["10.0.0.0/8"]}' },
   { value: 'request-transform', label: 'Request transform', sample: '{"add_headers":{"x-env":"prod"}}' },
 ];

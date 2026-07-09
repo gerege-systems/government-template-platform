@@ -17,8 +17,8 @@ targets:
       path: Sources/TemplateApp.entitlements
       properties:
         com.apple.developer.associated-domains:
-          - applinks:template.gerege.mn
-          - applinks:sso.gerege.mn
+          - applinks:template.dgov.mn
+          - applinks:sso.dgov.mn
     # Info.plist — xcodegen үүсгэнэ. Scheme-ууд:
     #  • geregetemp    — SSO OAuth callback (ASWebAuthenticationSession) + eID App2App
     #                    (geregetemp://eid/callback) шууд нэвтрэлт.
@@ -29,7 +29,7 @@ targets:
     info:
       path: Sources/Info.plist
       properties:
-        CFBundleDisplayName: Gerege Template
+        CFBundleDisplayName: eID based AI enabled Government Template Platform V3.0
         UILaunchScreen: {}
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         # Portrait-only апп — iPad multitasking-д бүх orientation шаардахгүйн тулд

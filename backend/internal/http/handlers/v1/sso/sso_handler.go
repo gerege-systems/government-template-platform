@@ -1,7 +1,7 @@
-// Gerege Template Version 27.0
+// eID based AI enabled Government Template Platform V3.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
-// Package sso нь /sso/* endpoint-уудыг үйлчилнэ — Gerege SSO (sso.gerege.mn,
+// Package sso нь /sso/* endpoint-уудыг үйлчилнэ — Gerege SSO (sso.dgov.mn,
 // OIDC) нэвтрэлтийн 2 дахь урсгал. Start нь authorize URL буцаана, Callback нь
 // code-ийг солиж токен олгоно. Бүгд нэвтрэхээс өмнөх (ServiceRLSContext) урсгал.
 package sso
@@ -66,7 +66,7 @@ type logoutResponse struct {
 
 // Start godoc
 // @Summary      Gerege SSO нэвтрэлт эхлүүлэх
-// @Description  sso.gerege.mn (OIDC) authorize URL-ийг state-тэй буцаана. BFF browser-ийг тийш чиглүүлнэ.
+// @Description  sso.dgov.mn (OIDC) authorize URL-ийг state-тэй буцаана. BFF browser-ийг тийш чиглүүлнэ.
 // @Tags         sso
 // @Produce      json
 // @Success      200  {object}  v1.BaseResponse

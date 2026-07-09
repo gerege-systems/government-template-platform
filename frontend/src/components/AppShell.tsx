@@ -263,7 +263,7 @@ export default function AppShell({ user, children }: Props) {
           })}
         </nav>
         <div className="iconrail__bottom">
-          <a className="iconrail__btn" href="https://gerege.mn/help" target="_blank" rel="noreferrer" title={T('nav.help')} aria-label={T('nav.help')}>
+          <a className="iconrail__btn" href="https://dgov.mn/help" target="_blank" rel="noreferrer" title={T('nav.help')} aria-label={T('nav.help')}>
             <HelpCircle size={20} strokeWidth={2} />
           </a>
           <button className="iconrail__btn iconrail__signout" type="button" title={T('nav.signout')} aria-label={T('nav.signout')} onClick={() => signOut()}>

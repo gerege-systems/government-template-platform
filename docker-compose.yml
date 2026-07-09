@@ -1,4 +1,4 @@
-# Full-stack deployment for Gerege Template (backend API + Next.js BFF web,
+# Full-stack deployment for eID based AI enabled Government Template Platform V3.0 (backend API + Next.js BFF web,
 # Postgres, Redis). The browser only reaches `web` (behind a reverse proxy);
 # api/db/redis stay on the internal compose network (no public host ports).
 #

@@ -1,4 +1,4 @@
--- Gerege Template Version 27.0
+-- eID based AI enabled Government Template Platform V3.0
 -- Reverse 14_api_gateway.up.sql. Drop in FK-dependency order; child tables
 -- cascade, but explicit drops keep the intent clear.
 DROP TABLE IF EXISTS gateway_request_logs;

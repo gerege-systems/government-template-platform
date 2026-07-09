@@ -1,4 +1,4 @@
-// Gerege Template Version 27.0
+// eID based AI enabled Government Template Platform V3.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package core
@@ -51,7 +51,7 @@ func (u *usecase) call(ctx context.Context, method, path, query string, body io.
 		// CORE_API_TOKEN тохируулаагүй бол Core инерт — 500 биш, UI-д ойлгомжтой
 		// мессежээр (илэрцгүй шалтгаан) буцаана. CoreSearchView нь энэ data.message-
 		// ийг харуулдаг тул оператор Core-г идэвхжүүлэхэд юу дутууг шууд ойлгоно.
-		return json.RawMessage(`{"message":"Core үйлчилгээ (core.gerege.mn) тохируулаагүй байна. CORE_API_TOKEN-ыг backend.env-д тохируулна уу."}`), nil
+		return json.RawMessage(`{"message":"Core үйлчилгээ (core.dgov.mn) тохируулаагүй байна. CORE_API_TOKEN-ыг backend.env-д тохируулна уу."}`), nil
 	}
 	endpoint := u.base + path
 	if query != "" {

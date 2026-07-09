@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 
 // POST /api/auth/logout — refresh токенг backend-ийн blacklist руу, access
 // токенг deny-list руу илгээж, cookie-г заавал цэвэрлэнэ. SSO-ээр нэвтэрсэн бол
-// (gerege_sso_logout cookie байвал) хариунд sso_logout_url буцаана — клиент тийш
+// (dgov_sso_logout cookie байвал) хариунд sso_logout_url буцаана — клиент тийш
 // чиглүүлж, SSO (Hydra) дээрх session-ийг мөн дуусгана. Backend амжилтгүй ч
 // client тал нэвтрэлтгүй болж, дахин нэвтрэхийг шаардана.
 export async function POST(req: Request) {

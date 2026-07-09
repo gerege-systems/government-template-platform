@@ -1,4 +1,4 @@
-# Gerege Template
+# eID based AI enabled Government Template Platform V3.0
 
 > 🌐 **English** · [Монгол](docs/README_MN.md)
 
@@ -95,5 +95,5 @@ attribution is retained in [AUTHORS](AUTHORS).
 
 ---
 
-**Gerege Template Version 27.0** — Co-developed by the **Gerege Systems
+**eID based AI enabled Government Template Platform V3.0** — Co-developed by the **Gerege Systems
 Development Team** and **Claude AI**, 2026.

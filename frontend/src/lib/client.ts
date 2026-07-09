@@ -7,7 +7,7 @@
  * хаагддаг тул энэ header байгаа нь хүсэлт өөрийн JS-ээс гарсныг баталдаг.
  * BFF-ийн бүх state-changing route үүнийг шаарддаг (lib/bff.ts checkOrigin).
  */
-export const CSRF_HEADER = 'x-gerege-csrf';
+export const CSRF_HEADER = 'x-dgov-csrf';
 
 export interface ClientResult<T = unknown> {
   ok: boolean;

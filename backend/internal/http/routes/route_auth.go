@@ -1,4 +1,4 @@
-// Gerege Template Version 27.0
+// eID based AI enabled Government Template Platform V3.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package routes
@@ -61,7 +61,7 @@ func (rt *authRoute) Routes() {
 			// eID нэвтрэлт эхлүүлэх. /eid/start QR/deep-link эхлүүлнэ.
 			rl.Post("/eid/start", v1.Wrap(rt.handler.EIDStart))
 			// /eid/start-id — иргэний РД-аар нэвтрэлт эхлүүлж, бүртгэлтэй
-			// төхөөрөмж рүү push хийлгэнэ (gerege.mn-ийн "РД оруулах → push").
+			// төхөөрөмж рүү push хийлгэнэ (dgov.mn-ийн "РД оруулах → push").
 			rl.Post("/eid/start-id", v1.Wrap(rt.handler.EIDStartByNationalID))
 			// Google OAuth callback — code exchange + eID холболт/шууд нэвтрэлт.
 			rl.Post("/google", v1.Wrap(rt.handler.GoogleLogin))

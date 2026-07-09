@@ -21,7 +21,7 @@ function redirectTo(path: string, session?: { token: string; refresh: string; ss
   return res;
 }
 
-// GET /sso/callback — Gerege SSO-д бүртгэгдсэн redirect_uri. sso.gerege.mn
+// GET /sso/callback — Gerege SSO-д бүртгэгдсэн redirect_uri. sso.dgov.mn
 // нэвтрэлтийн дараа browser-ийг ?code&state-тэй энд буцаана. Backend /sso/callback
 // нь state-ийг шалгаж, code-ийг токен болгож солин, иргэнийг upsert хийж JWT хос
 // олгоно; токен хосыг httpOnly cookie-д суулгаад /me/dashboard руу шилжүүлнэ.

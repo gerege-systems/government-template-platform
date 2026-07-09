@@ -1,4 +1,4 @@
-# Gerege Template — iOS App (TemplateApp)
+# eID based AI enabled Government Template Platform V3.0 — iOS App (TemplateApp)
 
 Энэ template платформын **iOS хувилбар**. eID эсвэл Gerege SSO-гоор нэвтэрч,
 хэрэглэгчийн профайл + eID PKI мэдээллийг харуулна. Native SwiftUI, гуравдагч
@@ -9,16 +9,16 @@
 
 ## Архитектур
 
-- Апп → `https://template.gerege.mn/api/*` (BFF) — backend-тэй шууд харьцахгүй.
-- Session нь httpOnly cookie (`gerege_access`/`refresh`)-д. `URLSession` +
+- Апп → `https://template.dgov.mn/api/*` (BFF) — backend-тэй шууд харьцахгүй.
+- Session нь httpOnly cookie (`dgov_access`/`refresh`)-д. `URLSession` +
   `HTTPCookieStorage.shared` нь cookie-г автоматаар хадгалж/илгээнэ.
-- BFF-ийн mutating route `x-gerege-csrf: 1` header шаарддаг (Origin header
+- BFF-ийн mutating route `x-dgov-csrf: 1` header шаарддаг (Origin header
   байхгүй тул энэ л хангалттай). Токен клиент рүү хэзээ ч гарахгүй.
 
 ### Нэвтрэлт
 - **eID** — `POST /api/auth/eid/start` (QR) эсвэл `/start-id` (РД→push) →
   `/api/auth/eid/poll` ~2.5с тутам → `COMPLETE` болоход cookie суулгана.
-- **Gerege SSO** — `WKWebView`-д `/api/auth/sso/start` ачаалж, sso.gerege.mn дээр
+- **Gerege SSO** — `WKWebView`-д `/api/auth/sso/start` ачаалж, sso.dgov.mn дээр
   баталгаажуулна. `/me*` руу буцахад WKWebView-ийн cookie-г `HTTPCookieStorage`
   руу хуулж, `URLSession`-д ашиглана.
 - **Профайл** — `GET /api/me` + `GET /api/me/eid/summary`.
@@ -59,5 +59,5 @@ Xcode дотор:
 
 ## Тохиргоо
 
-- Backend хаяг: `APIClient.baseURL` (default `https://template.gerege.mn`).
+- Backend хаяг: `APIClient.baseURL` (default `https://template.dgov.mn`).
   Локал BFF-д туршихад `http://localhost:3000` болгож, ATS exception нэмнэ.

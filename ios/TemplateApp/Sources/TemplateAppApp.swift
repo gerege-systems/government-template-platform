@@ -1,4 +1,4 @@
-// Gerege Template Version 27.0
+// eID based AI enabled Government Template Platform V3.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 import SwiftUI
@@ -59,7 +59,7 @@ final class AppState: ObservableObject {
 
     func signOut() async {
         await APIClient.shared.logout()
-        // WKWebView (SSO)-ийн cookie-г цэвэрлэнэ — эс бөгөөс sso.gerege.mn-ий
+        // WKWebView (SSO)-ийн cookie-г цэвэрлэнэ — эс бөгөөс sso.dgov.mn-ий
         // Hydra session cookie үлдэж, дараагийн SSO login дахин баталгаажуулалгүй
         // шууд ордог. Цэвэр logout → дараагийн SSO login дахин eID шаардана.
         await Self.clearWebData()

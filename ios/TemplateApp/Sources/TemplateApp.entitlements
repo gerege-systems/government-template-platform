@@ -4,8 +4,8 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:template.gerege.mn</string>
-		<string>applinks:sso.gerege.mn</string>
+		<string>applinks:template.dgov.mn</string>
+		<string>applinks:sso.dgov.mn</string>
 	</array>
 </dict>
 </plist>

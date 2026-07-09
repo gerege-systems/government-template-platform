@@ -58,7 +58,7 @@ export default function DropboxFiles() {
     try {
       const fd = new FormData();
       fd.append('file', file);
-      const res = await fetch('/api/integrations/dropbox/upload', { method: 'POST', headers: { 'x-gerege-csrf': '1' }, body: fd });
+      const res = await fetch('/api/integrations/dropbox/upload', { method: 'POST', headers: { 'x-dgov-csrf': '1' }, body: fd });
       const body = await res.json().catch(() => null);
       if (res.ok && body?.ok) await qc.invalidateQueries({ queryKey: ['dropbox-files'] });
       else setErr(body?.message || 'Хуулахад алдаа гарлаа.');

@@ -3,7 +3,7 @@ import { backendFetch } from '@/lib/api';
 
 export const dynamic = 'force-dynamic';
 
-// GET /api/auth/sso/start — Gerege SSO (sso.gerege.mn, OIDC) нэвтрэлт эхлүүлэх.
+// GET /api/auth/sso/start — Gerege SSO (sso.dgov.mn, OIDC) нэвтрэлт эхлүүлэх.
 // Backend /sso/start нь state үүсгэж (Redis), authorize URL буцаана; browser-ийг
 // тийш чиглүүлнэ. Landing дээрх "Gerege SSO-гоор нэвтрэх" товч энд заана.
 export async function GET() {
@@ -13,6 +13,6 @@ export async function GET() {
     // Relative Location — nginx-ийн ард origin буруу гарахаас сэргийлнэ.
     return new NextResponse(null, { status: 303, headers: { Location: '/login?error=sso' } });
   }
-  // authURL нь sso.gerege.mn-ий абсолют URL — шууд redirect.
+  // authURL нь sso.dgov.mn-ий абсолют URL — шууд redirect.
   return NextResponse.redirect(authURL);
 }

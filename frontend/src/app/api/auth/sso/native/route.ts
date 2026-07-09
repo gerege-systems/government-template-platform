@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic';
 // /sso/native нь public client-ээр (code_verifier, secret-гүй) солиж, template
 // session (token хос)-ыг буцаана. Токеныг httpOnly cookie-д суулгаж (клиент рүү
 // гаргахгүй), апп-ын URLSession дараагийн хүсэлтэд cookie-гоор нэвтэрнэ.
-// State-changing тул checkOrigin (x-gerege-csrf) эхэлнэ.
+// State-changing тул checkOrigin (x-dgov-csrf) эхэлнэ.
 export async function POST(req: Request) {
   const bad = checkOrigin(req);
   if (bad) return bad;

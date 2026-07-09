@@ -2,7 +2,7 @@
 
 > 🌐 [English](ARCHITECTURE.md) · **Монгол**
 
-Энэ баримт нь **Gerege Backend Template v27** (модуль `template`)-ийн ерөнхий
+Энэ баримт нь **eID based AI enabled Government Template Platform V3.0** (модуль `template`)-ийн ерөнхий
 архитектурыг тайлбарлана. Технологийн стек нь **chi (net/http) + pgx (pgxpool) +
 PostgreSQL + Redis** бөгөөд Clean Architecture зарчмаар зохион байгуулагдсан.
 
@@ -384,4 +384,4 @@ Health check: `curl http://localhost:8080/health`
 
 ---
 
-**Gerege Template Version 27.0** — **Gerege Systems Development Team** болон **Claude AI** хамтран бүтээв, 2026.
+**eID based AI enabled Government Template Platform V3.0** — **Gerege Systems Development Team** болон **Claude AI** хамтран бүтээв, 2026.

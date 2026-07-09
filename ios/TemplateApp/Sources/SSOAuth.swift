@@ -1,4 +1,4 @@
-// Gerege Template Version 27.0
+// eID based AI enabled Government Template Platform V3.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 import UIKit
@@ -12,7 +12,7 @@ import CryptoKit
 // /api/auth/sso/native (backend public-client exchange) → cookie session.
 @MainActor
 final class SSOAuth: NSObject, ObservableObject, ASWebAuthenticationPresentationContextProviding {
-    static let issuer = "https://sso.gerege.mn"
+    static let issuer = "https://sso.dgov.mn"
     static let clientID = "template-gerege-mn-ios"
     static let redirectURI = "geregetemp://oauth2/callback"
     static let callbackScheme = "geregetemp"

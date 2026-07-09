@@ -1068,7 +1068,7 @@ definitions:
 host: localhost:8080
 info:
   contact:
-    name: Gerege Backend Template v27
+    name: eID based AI enabled Government Template Platform V3.0
     url: https://github.com/snykk/go-rest-boilerplate
   description: chi (net/http) + pgx (PostgreSQL) + Redis дээр суурилсан Clean Architecture
     бүхий Go backend. Нээлттэй эхийн snykk/go-rest-boilerplate (MIT, зохиогч Najib
@@ -1077,7 +1077,7 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
   termsOfService: https://github.com/snykk/go-rest-boilerplate
-  title: Gerege Backend Template v27 API
+  title: eID based AI enabled Government Template Platform V3.0 API
   version: "1.0"
 paths:
   /admin/ai/prompts:
@@ -1853,7 +1853,7 @@ paths:
       - auth
   /core/organizations:
     get:
-      description: core.gerege.mn /api/organization/find — search_text (регистр г.м.).
+      description: core.dgov.mn /api/organization/find — search_text (регистр г.м.).
         Хариуг дамжуулна.
       parameters:
       - description: regno / нэр
@@ -1872,7 +1872,7 @@ paths:
       - core
   /core/users:
     get:
-      description: core.gerege.mn /api/user/find — search_text (core_id эсвэл регистр).
+      description: core.dgov.mn /api/user/find — search_text (core_id эсвэл регистр).
         Хариуг дамжуулна.
       parameters:
       - description: core_id / regno
@@ -2887,7 +2887,7 @@ paths:
       - sso
   /sso/start:
     post:
-      description: sso.gerege.mn (OIDC) authorize URL-ийг state-тэй буцаана. BFF browser-ийг
+      description: sso.dgov.mn (OIDC) authorize URL-ийг state-тэй буцаана. BFF browser-ийг
         тийш чиглүүлнэ.
       produces:
       - application/json

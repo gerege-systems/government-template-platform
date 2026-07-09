@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 export const metadata = { title: 'eID баталгаажуулалт — Gerege' };
 
 // eID апп-аас App2App буцалтын callback (IdP-д бүртгэгдсэн
-// https://template.gerege.mn/login/verify). eID апп буцахдаа session id-г
+// https://template.dgov.mn/login/verify). eID апп буцахдаа session id-г
 // нэмдэг — нийтлэг нэрсийг (sessionToken / session_id / sid) хүлээж авна.
 export default async function EidVerifyPage(
   props: {
