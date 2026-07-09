@@ -1,24 +1,19 @@
 import { authedFetch } from '@/lib/api';
-import { readJson, checkOrigin, proxyResult } from '@/lib/bff';
+import { proxyResult, readJson, checkOrigin, checkIntID } from '@/lib/bff';
 
 export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
 
-interface Ctx { params: { id: string } }
-
-/** PUT /api/rbac/roles/:id — эрх засах. */
-export async function PUT(req: Request, { params }: Ctx) {
-  const bad = checkOrigin(req);
+// PUT /api/rbac/roles/{id} — role-ийн нэр/тайлбар (+ permission) шинэчлэх.
+export async function PUT(req: Request, { params }: { params: { id: string } }) {
+  const bad = checkOrigin(req) ?? checkIntID(params.id);
   if (bad) return bad;
-  const body = await readJson<Record<string, unknown>>(req);
-  const r = await authedFetch<unknown>(`/rbac/roles/${encodeURIComponent(params.id)}`, { method: 'PUT', body: JSON.stringify(body) });
-  return proxyResult(r);
+  const body = await readJson(req);
+  return proxyResult(await authedFetch(`/rbac/roles/${params.id}`, { method: 'PUT', body: JSON.stringify(body) }));
 }
 
-/** DELETE /api/rbac/roles/:id — эрх устгах. */
-export async function DELETE(req: Request, { params }: Ctx) {
-  const bad = checkOrigin(req);
+// DELETE /api/rbac/roles/{id} — системийн бус role устгах.
+export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+  const bad = checkOrigin(req) ?? checkIntID(params.id);
   if (bad) return bad;
-  const r = await authedFetch<unknown>(`/rbac/roles/${encodeURIComponent(params.id)}`, { method: 'DELETE' });
-  return proxyResult(r);
+  return proxyResult(await authedFetch(`/rbac/roles/${params.id}`, { method: 'DELETE' }));
 }

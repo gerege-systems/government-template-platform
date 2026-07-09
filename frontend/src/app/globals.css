@@ -51,13 +51,9 @@
   --radius-chip:  6px;
 
   /* Бүтэц */
-  --topbar-h:   64px;
-  --rail-w:     240px;
-  --iconrail-w: 64px;
-  /* Контентийн дээд өргөн — өргөн дэлгэц дээр хоёр талд хэт их хоосон зай
-     үлдээхгүйгээр (rail + main-ийг тооцоод) дэлгэцийг дагаж бараг дүүргэнэ.
-     Доод өргөнд auto-margin + padding-аар уян хатан жижигрэнэ. */
-  --content-max: 1560px;
+  --topbar-h: 64px;
+  --rail-w:   240px;
+  --content-max: 880px;
   --content-pad-x: 32px;
 
   /* Сүүдэр (хэмнэлттэй ашиглана) */
@@ -109,7 +105,9 @@ html, body {
 }
 
 a { color: var(--dan-blue-text); text-decoration: none; }
-a:hover { text-decoration: underline; }
+/* Hover үед доогуур зураас гаргахгүй (nav/карт/block-link-үүдэд эвгүй харагддаг);
+   холбоосууд өнгөөрөө (--dan-blue-text) ялгагдана. */
+a:hover { text-decoration: none; }
 
 button { font-family: inherit; cursor: pointer; }
 
@@ -127,98 +125,6 @@ p  { margin: 0; }
 /* ---------- App shell ---------- */
 
 .app-shell { display: grid; grid-template-rows: var(--topbar-h) 1fr; min-height: 100vh; }
-
-/* ============================================================================
-   Хоёр түвшний бүрхүүл (icon rail + дэлгэгддэг дэд цэс + контентын header)
-   ============================================================================ */
-.shell2 {
-  display: grid;
-  grid-template-columns: var(--iconrail-w) var(--rail-w) 1fr;
-  height: 100vh;
-  transition: grid-template-columns 0.2s ease;
-}
-.shell2.is-collapsed { grid-template-columns: var(--iconrail-w) 0 1fr; }
-
-/* --- Нарийн icon rail --- */
-.iconrail {
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  padding: 12px 0;
-  background: var(--surface); border-right: 1px solid var(--border);
-  height: 100vh; overflow-y: auto;
-}
-.iconrail__brand { width: 40px; height: 40px; border-radius: 10px; overflow: hidden; display: block; margin-bottom: 8px; flex-shrink: 0; }
-.iconrail__brand img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.iconrail__nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
-.iconrail__bottom { display: flex; flex-direction: column; gap: 4px; margin-top: auto; }
-.iconrail__btn {
-  width: 40px; height: 40px; display: grid; place-items: center;
-  border-radius: 10px; border: 0; background: transparent; color: var(--muted);
-  cursor: pointer; transition: background 0.12s ease, color 0.12s ease;
-}
-.iconrail__btn:hover { background: var(--surface-2); color: var(--fg); }
-.iconrail__btn.is-active { background: var(--dan-blue-soft); color: var(--dan-blue); }
-.iconrail__signout:hover { background: var(--danger-soft); color: var(--danger); }
-
-/* --- Дэлгэгддэг дэд цэс --- */
-.sidepanel {
-  background: var(--surface); border-right: 1px solid var(--border);
-  height: 100vh; overflow-x: hidden; overflow-y: auto;
-}
-.shell2.is-collapsed .sidepanel { border-right-color: transparent; }
-.sidepanel__head {
-  height: var(--topbar-h);
-  display: flex; flex-direction: column; justify-content: center;
-  padding: 0 18px;
-  border-bottom: 1px solid var(--border); min-width: var(--rail-w);
-}
-.sidepanel__brand-name { display: block; font-family: var(--font-display); font-weight: 600; font-size: 16px; letter-spacing: -0.005em; color: var(--fg); }
-.sidepanel__title { display: block; font-size: 11px; color: var(--muted); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.08em; }
-.sidepanel__nav { display: flex; flex-direction: column; padding: 12px; min-width: var(--rail-w); }
-.sidepanel__group { display: flex; flex-direction: column; gap: 2px; }
-.sidepanel__group + .sidepanel__group { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
-.sidepanel__group-label { display: block; text-transform: uppercase; font-size: 11px; letter-spacing: 0.08em; color: var(--muted); padding: 0 12px 6px; font-weight: 500; }
-.sidepanel__link {
-  display: flex; align-items: center; gap: 11px; padding: 9px 12px;
-  border-radius: 8px; color: var(--fg); font-size: 14px; text-decoration: none;
-  white-space: nowrap; transition: background 0.12s ease;
-}
-.sidepanel__link:hover { background: var(--surface-2); text-decoration: none; }
-.sidepanel__link.is-active { background: var(--dan-blue-soft); color: var(--dan-blue-text); font-weight: 600; }
-.sidepanel__link svg { flex-shrink: 0; }
-.sidepanel__link.is-active svg { color: var(--dan-blue); }
-
-/* --- Контентын багана + header --- */
-.maincol { display: flex; flex-direction: column; min-width: 0; height: 100vh; }
-.topbar2 {
-  display: flex; align-items: center; gap: 16px;
-  height: var(--topbar-h); padding: 0 24px; flex-shrink: 0;
-  background: var(--surface); border-bottom: 1px solid var(--border);
-  position: relative; z-index: 30;
-}
-.topbar2__toggle {
-  width: 38px; height: 38px; display: grid; place-items: center;
-  border-radius: 8px; border: 0; background: transparent; color: var(--fg); cursor: pointer;
-}
-.topbar2__toggle:hover { background: var(--surface-2); }
-.topbar2__spacer { flex: 1; }
-.topbar2__search {
-  display: flex; align-items: center; gap: 8px;
-  background: var(--surface-2); border: 1px solid var(--border);
-  border-radius: 999px; padding: 7px 14px; min-width: 240px; color: var(--muted);
-}
-.topbar2__search-input { border: 0; background: transparent; outline: none; color: var(--fg); font-size: 13px; width: 100%; font-family: var(--font-body); }
-.topbar2__actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-
-/* Жижиг дэлгэц: дэд цэс контентын дээгүүр overlay болно */
-@media (max-width: 900px) {
-  .shell2, .shell2.is-collapsed { grid-template-columns: var(--iconrail-w) 1fr; }
-  .sidepanel {
-    position: fixed; left: var(--iconrail-w); top: 0; bottom: 0; width: var(--rail-w);
-    z-index: 60; box-shadow: var(--shadow-menu); transition: transform 0.2s ease;
-  }
-  .shell2.is-collapsed .sidepanel { transform: translateX(-110%); }
-  .topbar2__search { min-width: 0; }
-}
 
 .topbar {
   display: flex; align-items: center; gap: 16px;
@@ -557,11 +463,8 @@ html[lang="en"] .i18n-banner { display: block; }
 .rail__signout:hover { background: var(--danger-soft); }
 
 .main {
-  flex: 1;
-  overflow-y: auto;
-  padding: 32px var(--content-pad-x) 80px;
+  padding: 40px var(--content-pad-x) 96px;
   min-width: 0;
-  min-height: 0;
 }
 .main__inner { max-width: var(--content-max); margin: 0 auto; }
 
@@ -586,10 +489,6 @@ html[lang="en"] .i18n-banner { display: block; }
   padding: 24px;
 }
 .card + .card { margin-top: 16px; }
-/* Grid доторх картууд босоо стек биш — adjacent-sibling margin-top нь grid-ийн
-   2/3-р картыг доош түлхэж эгнээг тэгш бус болгодог тул тэглэнэ (өндрийг grid
-   stretch тэгшитгэж, доод CTA-г marginTop:auto зэрэгцүүлнэ). */
-.grid-2 .card { margin-top: 0; }
 
 .card__head {
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
@@ -613,6 +512,56 @@ html[lang="en"] .i18n-banner { display: block; }
 .defrow:last-child { border-bottom: 0; }
 .defrow__label { color: var(--muted); }
 .defrow__value { color: var(--fg); }
+/* Файлын мөр (интеграцийн browser) — нэр зүүн, үйлдэл баруун. */
+.defrow.defrow--wide { grid-template-columns: 1fr auto; align-items: start; }
+.defrow.defrow--wide .defrow__value { text-align: right; white-space: nowrap; }
+
+/* ---------- Dialog (modal) ---------- */
+
+.dlg-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: color-mix(in oklch, black 55%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow-y: auto;
+}
+.dlg-content {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  background: var(--surface);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 24px 60px color-mix(in oklch, black 30%, transparent);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.dlg-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.dlg-close:hover { background: var(--surface-2); color: var(--fg); }
+.dlg-header { display: flex; flex-direction: column; gap: 6px; padding-right: 32px; }
+.dlg-title { font-size: 17px; font-weight: 700; color: var(--fg); margin: 0; }
+.dlg-desc { font-size: 13px; color: var(--muted); margin: 0; }
 
 /* ---------- Form ---------- */
 
@@ -729,6 +678,7 @@ html[lang="en"] .i18n-banner { display: block; }
 .badge--verified svg { color: var(--gold); }
 .badge--success { background: var(--success-soft); color: var(--success); }
 .badge--danger  { background: var(--danger-soft);  color: var(--danger); }
+.badge--warning { background: var(--gold-soft);    color: var(--gold-text); }
 .badge--primary { background: var(--dan-blue-soft); color: var(--dan-blue-text); }
 
 /* ---------- Profile summary block ---------- */
@@ -1057,286 +1007,403 @@ html[lang="en"] .i18n-banner { display: block; }
   .main { padding: 0; }
 }
 
-/* Spinner — voice орчуулга боловсруулж байх үеийн ачааллын индикатор. */
-@keyframes spin { to { transform: rotate(360deg); } }
-.spin { animation: spin 0.9s linear infinite; }
+/* ---------- Shell2: two-level system nav (admin / manager / user) ---------- */
 
-/* AI чатын markdown хариу — bubble дотор цомхон, уншихад тохиромжтой. */
-.chat-md > :first-child { margin-top: 0; }
-.chat-md > :last-child { margin-bottom: 0; }
-.chat-md p { margin: 0 0 8px; }
-.chat-md h1, .chat-md h2, .chat-md h3, .chat-md h4 { font-size: 15px; font-weight: 600; margin: 12px 0 6px; line-height: 1.3; }
-.chat-md ul, .chat-md ol { margin: 0 0 8px; padding-left: 20px; }
-.chat-md li { margin: 2px 0; }
-.chat-md li > p { margin: 0; }
-.chat-md strong { font-weight: 600; }
-.chat-md a { color: var(--dan-blue-text); }
-.chat-md code { background: var(--surface-2); padding: 1px 5px; border-radius: 4px; font-size: 12.5px; }
-.chat-md pre { background: var(--surface-2); padding: 10px 12px; border-radius: 8px; overflow-x: auto; margin: 0 0 8px; }
-.chat-md pre code { background: none; padding: 0; }
-.chat-md blockquote { margin: 0 0 8px; padding-left: 12px; border-left: 3px solid var(--border); color: var(--muted); }
+.shell2 {
+  display: grid;
+  grid-template-columns: 64px 232px 1fr;
+  min-height: 100vh;
+  background: var(--bg);
+  /* hamburger дарахад sidepanel гулсаж нээгдэх/хаагдана. */
+  transition: grid-template-columns 0.24s ease;
+}
+.shell2.is-collapsed { grid-template-columns: 64px 0 1fr; }
+.shell2--loading { background: var(--bg); }
 
-/* ====================================================================== */
-/* BPM (бизнес процесс) — жагсаалт, modeler, динамик форм                  */
-/* ====================================================================== */
-
-/* Жижиг товчлуур (жагсаалт/inspector-ийн нягт үйлдлүүдэд). */
-.btn--sm { padding: 6px 10px; font-size: 13px; border-radius: var(--radius-chip); }
-
-/* --- Жагсаалт --- */
-.bpm-list { display: flex; flex-direction: column; gap: 16px; }
-.bpm-list__head { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; align-items: flex-start; }
-
-/* .bpmn оруулах самбар */
-.bpm-import { flex: 1 0 100%; display: flex; flex-direction: column; gap: 14px; }
-.bpm-import__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.bpm-import__actions { display: flex; gap: 8px; flex-wrap: wrap; }
-.bpm-icon-btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 26px; height: 26px; padding: 0;
+.iconrail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0 0 12px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  /* Viewport-д бэхлэх — grid мөрийн өндрөөр сунахгүй тул доод товчнууд
+     (Тусламж/Гарах) контентын урт хамаарахгүйгээр үргэлж доод буланд харагдана. */
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  align-self: start;
+}
+.iconrail__brand { display: flex; align-items: center; justify-content: center; width: 100%; height: var(--topbar-h, 60px); margin-bottom: 6px; }
+.iconrail__brand img { width: 30px; height: 30px; border-radius: 8px; object-fit: contain; }
+/* lucide SVG-ууд flex эгнээнд багтахдаа 0 хүртэл шахагдаж алга болохоос
+   сэргийлнэ (урт шошготой холбоосууд дээр илэрдэг "icon алга" алдаа). */
+.iconrail__btn svg, .sidepanel__link svg, .topbar2 svg, .btn svg,
+.users-table svg, .page-head svg { flex: 0 0 auto; }
+.iconrail__nav { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.iconrail__bottom { display: flex; flex-direction: column; gap: 6px; margin-top: auto; }
+.iconrail__btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 42px; height: 42px;
+  border: 0; border-radius: 12px; cursor: pointer;
   background: transparent; color: var(--muted);
-  border: 1px solid var(--border); border-radius: var(--radius-chip); cursor: pointer;
+  transition: background .15s, color .15s;
 }
-.bpm-icon-btn:hover { color: var(--fg); border-color: var(--border-strong); }
-.bpm-list__loading { display: flex; align-items: center; gap: 8px; padding: 24px 0; }
-.bpm-grid {
-  display: grid; gap: 16px;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  align-items: stretch; /* нэг эгнээний картууд агуулгын өндрөөр тэгшилнэ */
-}
-/* Глобал `.card + .card { margin-top:16px }` (босоо овоолсон картуудад зориулсан)
-   нь grid дотор эхнийхээс бусад картыг доош түлхэж зөрүүлдэг — grid нь gap
-   ашигладаг тул энд margin-ийг тэглэнэ (.grid-2-той ижил). */
-.bpm-grid .card { margin-top: 0; }
-/* height тавихгүй — grid-ийн өгөгдмөл align-items:stretch нь auto-өндөртэй
-   item-уудыг л тэгшилдэг тул height:100% нь stretch-ийг идэвхгүй болгож, мөрийн
-   картуудыг зөрүүлдэг байсан. Stretch + доорх grid-auto-rows нь жигдрүүлнэ. */
-.bpm-card { display: flex; flex-direction: column; gap: 12px; }
-.bpm-card__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-/* Нэрийг нэг мөрөнд ellipsis-тэй байлгана — урт нэр картуудыг дээш-доош
-   зөрүүлэхгүй, бүх мөр тэгшилнэ. Бүтэн нэр нь title (hover) дотор. */
-.bpm-card__title {
-  font-size: 16px; font-weight: 600; margin: 0;
-  flex: 1; min-width: 0;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.bpm-card__head .chip { flex-shrink: 0; }
-.bpm-card__desc { font-size: 13px; margin: 0; }
-/* Картын дотор defrow-ийн шошгын багана нарийн — огноо хоёр мөр болж эвдрэхгүй */
-.bpm-card .defrow { grid-template-columns: auto 1fr; gap: 12px; }
-.bpm-card .defrow__value { white-space: nowrap; text-align: right; }
-/* Товчнууд огнооны мөрийн дараа шууд (нэгдсэн gap-аар) — доош түлхэхгүй тул
-   огноо ба товчны хооронд хоосон зай үүсэхгүй. */
-.bpm-card__actions { display: flex; flex-wrap: wrap; gap: 8px; }
-.bpm-empty { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 40px 24px; text-align: center; color: var(--muted); }
+.iconrail__btn:hover { background: var(--surface-2); color: var(--fg); }
+.iconrail__btn.is-active { background: var(--dan-blue-soft); color: var(--dan-blue-text); }
+.iconrail__signout:hover { background: var(--danger-soft); color: var(--danger); }
 
-/* --- Modeler (bpmn-js диаграмм + form-js editor) --- */
-.bpm-modeler { display: flex; flex-direction: column; gap: 12px; }
-.bpm-modeler__toolbar { display: flex; align-items: center; gap: 12px; }
-.bpm-modeler__name { flex: 1; }
-.bpm-modeler__name .input { width: 100%; }
-/* Процессын canvas дээр, маягт зохиох самбар доор нь бүтэн өргөнөөр (босоо
-   давхаргалсан) — маягт засварлахад уужим талбайтай. */
-.bpm-modeler__body {
+.sidepanel {
+  display: flex; flex-direction: column;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  overflow: hidden;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  align-self: start;
+}
+.is-collapsed .sidepanel { border-right: 0; }
+.sidepanel__head { display: flex; flex-direction: column; justify-content: center; gap: 1px; height: var(--topbar-h, 64px); padding: 0 16px; border-bottom: 1px solid var(--border); }
+.sidepanel__brand-name { font-size: 12px; color: var(--muted); }
+.sidepanel__title { font-family: var(--font-display); font-size: 16px; font-weight: 650; color: var(--fg); }
+.sidepanel__nav { display: flex; flex-direction: column; gap: 14px; padding: 14px 10px; overflow-y: auto; }
+.sidepanel__group { display: flex; flex-direction: column; gap: 3px; }
+.sidepanel__group-label { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--faint); padding: 4px 10px; }
+.sidepanel__link {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px; border-radius: 10px;
+  color: var(--secondary); font-size: 14px; text-decoration: none;
+  transition: background .15s, color .15s;
+}
+.sidepanel__link:hover { background: var(--surface-2); color: var(--fg); }
+.sidepanel__link.is-active { background: var(--surface-2); color: var(--dan-blue); font-weight: 600; }
+
+.maincol { display: flex; flex-direction: column; min-width: 0; min-height: 100vh; }
+.topbar2 {
+  display: flex; align-items: center; gap: 12px;
+  height: var(--topbar-h, 60px); padding: 0 20px;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 20;
+}
+.topbar2__toggle { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border: 0; border-radius: 10px; background: transparent; color: var(--muted); cursor: pointer; }
+.topbar2__toggle:hover { background: var(--surface-2); color: var(--fg); }
+.topbar2__spacer { flex: 1; }
+.topbar2__actions { display: flex; align-items: center; gap: 10px; }
+.topbar2__search {
+  display: flex; align-items: center; gap: 8px;
+  flex: 0 1 360px; min-width: 0;
+  height: 38px; padding: 0 14px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: 999px; color: var(--muted);
+  transition: border-color .15s;
+}
+.topbar2__search:focus-within { border-color: var(--dan-blue); }
+.topbar2__search svg { flex: 0 0 auto; }
+.topbar2__search-input {
+  flex: 1; min-width: 0; border: 0; outline: none; background: transparent;
+  font-size: 14px; color: var(--fg);
+}
+.topbar2__search-input::placeholder { color: var(--muted); }
+@media (max-width: 640px) { .topbar2__search { display: none; } }
+
+/* Shell2 контентыг өргөн дэлгэцэнд бүтэн ашиглаж, хоёр талын том зайг арилгана
+   (нарийн 880px reading-width нь зөвхөн дангаар нэвтрэх хуудсуудад). Хажуугийн
+   padding нь дэлгэцийн хэмжээнд тааруулж responsive. */
+.maincol .main { padding: 28px clamp(16px, 3.5vw, 44px) 72px; }
+.maincol .main__inner { max-width: 1400px; }
+
+/* ---------- Admin tables / RBAC matrix ---------- */
+
+.users__head { display: flex; justify-content: flex-end; margin-bottom: 14px; }
+/* OrgList нь card биш тул дээрх card-тай (OrgRepsCard) .card + .card дүрэмд
+   баригдахгүй — үүсгэх товч дээрх карттай наалдахаас сэргийлж дээд зай өгнө. */
+.orgs { margin-top: 16px; }
+.users-table-wrap { padding: 0; overflow-x: auto; }
+.users-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.users-table th { text-align: left; padding: 11px 14px; color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; border-bottom: 1px solid var(--border); }
+.users-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.users-table tbody tr:last-child td { border-bottom: 0; }
+.users-table tbody tr:hover { background: var(--surface-2); }
+.users-table__role { min-width: 120px; padding: 6px 8px; font-size: 13px; }
+.users-table__actions { text-align: right; white-space: nowrap; }
+
+.rbac-matrix { width: 100%; border-collapse: collapse; font-size: 13px; }
+.rbac-matrix th, .rbac-matrix td { padding: 9px 12px; border-bottom: 1px solid var(--border); text-align: center; }
+.rbac-matrix th:first-child, .rbac-matrix td:first-child { text-align: left; }
+.rbac-matrix thead th { color: var(--muted); font-weight: 600; }
+.rbac-matrix tbody tr:hover { background: var(--surface-2); }
+.rbac-matrix input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; accent-color: var(--dan-blue); }
+.rbac-perm-label { display: flex; flex-direction: column; gap: 1px; align-items: flex-start; }
+.rbac-perm-label small { color: var(--faint); font-size: 11px; }
+
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 22px; }
+.stat-card { padding: 18px; }
+.stat-card__value { font-family: var(--font-display); font-size: 30px; font-weight: 700; color: var(--fg); }
+.stat-card__label { color: var(--muted); font-size: 13px; margin-top: 4px; }
+
+.btn--sm { padding: 5px 9px; font-size: 13px; gap: 5px; }
+
+/* Dashboard картын тор — мөр доторх картууд жигд (тэнцүү) өндөртэй. */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; align-items: stretch; }
+.card-grid > .card { height: 100%; display: flex; flex-direction: column; gap: 6px; margin: 0; }
+.card-grid > .card h3 { margin: 4px 0 0; }
+.card-grid > .card p { margin: 0; }
+/* grid-2 (нүүр) картууд мөн тэнцүү өндөртэй. */
+.grid-2 { align-items: stretch; }
+.grid-2 > .card { height: 100%; }
+
+.spin { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 900px) {
+  .shell2 { grid-template-columns: 64px 0 1fr; }
+  .shell2:not(.is-collapsed) { grid-template-columns: 64px 232px 1fr; }
+}
+
+/* ---- AI туслахын чат (/me/ai) ---- */
+.aichat { display: flex; flex-direction: column; min-height: 60vh; }
+.aichat__scroll {
+  flex: 1;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  padding: 4px 2px 12px;
+}
+.aichat__empty {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+  max-width: 360px;
+}
+.aichat__msg { display: flex; flex-direction: column; gap: 4px; max-width: 78%; }
+.aichat__msg--user { align-self: flex-end; align-items: flex-end; }
+.aichat__msg--model { align-self: flex-start; align-items: flex-start; }
+.aichat__bubble {
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.aichat__msg--user .aichat__bubble {
+  background: var(--dan-blue);
+  border-color: var(--dan-blue);
+  color: var(--on-dan-blue);
+  border-bottom-right-radius: 4px;
+}
+.aichat__msg--model .aichat__bubble { border-bottom-left-radius: 4px; }
+.aichat__msg.is-degraded .aichat__bubble { color: var(--muted); font-style: italic; }
+.aichat__bubble--pending { color: var(--muted); animation: aichat-pulse 1.2s ease-in-out infinite; }
+@keyframes aichat-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+.aichat__tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.aichat__form { display: flex; gap: 8px; margin-top: 12px; }
+.aichat__input { flex: 1; }
+
+/* ---- Voice чат + live орчуулга ---- */
+.aichat__meta { display: inline-flex; align-items: center; gap: 8px; min-height: 18px; }
+.aichat__iconbtn {
+  display: inline-flex;
+  align-items: center;
+  border: none;
+  background: none;
+  padding: 2px;
+  cursor: pointer;
+  color: var(--muted);
+}
+.aichat__iconbtn:hover { color: var(--dan-blue); }
+.aichat__iconbtn:disabled { opacity: 0.5; cursor: default; }
+.aichat__speaking { animation: aichat-pulse 1s ease-in-out infinite; color: var(--dan-blue); }
+.aichat__voice-ico { margin-right: 6px; vertical-align: -2px; opacity: 0.8; }
+.aichat__mic { padding-left: 12px; padding-right: 12px; }
+.aichat__mic.is-recording {
+  color: var(--danger);
+  border-color: var(--danger);
+  animation: aichat-pulse 1.2s ease-in-out infinite;
+}
+.aichat__error { color: var(--danger); font-size: 13px; }
+
+.aichat__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.aichat__toolbar-spacer { flex: 1; }
+.aichat__lang { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); }
+.aichat__speak { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--muted); cursor: pointer; }
+
+.trrow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-2);
+}
+.trrow__source { font-size: 13px; color: var(--muted); }
+.trrow__translated { font-size: 15px; line-height: 1.55; }
+
+/* ---- Хуудаслалт (admin хүснэгт) ---- */
+.pager { display: flex; align-items: center; gap: 12px; justify-content: flex-end; margin-top: 12px; }
+.pager__page { font-size: 13px; color: var(--muted); }
+
+/* Профайл — төлөөлдөг байгууллагын жагсаалт (OrgRepsCard) */
+.org-reps { display: flex; flex-direction: column; gap: 10px; }
+.org-rep { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; }
+.org-rep__icon { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 8px; background: var(--dan-blue-soft); color: var(--dan-blue-text); flex: none; }
+.org-rep__body { min-width: 0; flex: 1; }
+.org-rep__name { font-weight: 600; }
+.org-rep__meta { color: var(--muted); font-size: 0.85em; margin-top: 2px; }
+/* Дарж болох карт (жагсаалт → удирдах дэлгэц). */
+.org-rep--link { text-decoration: none; color: inherit; cursor: pointer; transition: border-color .12s, background .12s; }
+.org-rep--link:hover { border-color: var(--border-strong); background: var(--surface-2, rgba(127,127,127,.05)); }
+.org-rep__chevron { color: var(--muted); flex: none; }
+/* Байгууллагын гарын үсэг зурагчид — картан жагсаалт (аватар + нэр + эрх). */
+.org-signers { display: flex; flex-direction: column; gap: 8px; }
+.org-signer { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; }
+.org-signer__avatar { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; background: var(--dan-blue-soft); color: var(--dan-blue-text); flex: none; }
+.org-signer__body { min-width: 0; flex: 1; }
+.org-signer__name { font-weight: 600; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-width: 0; }
+.org-signer__nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.org-signer__meta { color: var(--muted); font-size: 0.82em; margin-top: 3px; }
+.chip--admin { background: var(--dan-blue-soft); color: var(--dan-blue-text); }
+.chip--pending { background: var(--warning-soft, #fef3c7); color: var(--warning, #b45309); }
+.btn--icon { padding: 6px; flex: none; }
+
+/* Профайл — eID PKI самбар (EidPkiSection) */
+.pki-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 4px; }
+.pki-tile { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px 10px; border: 1px solid var(--border); border-radius: 10px; text-align: center; }
+.pki-tile__icon { color: var(--dan-blue-text); }
+.pki-tile__value { font-size: 1.35rem; font-weight: 700; }
+.pki-tile__label { font-size: 0.78rem; color: var(--muted); }
+.pki-tile--success .pki-tile__icon { color: var(--success); }
+.pki-tile--danger .pki-tile__icon { color: var(--danger); }
+.pki-list { margin-top: 16px; }
+.pki-list__title { font-size: 0.85rem; color: var(--muted); font-weight: 600; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 0.03em; }
+.pki-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+.pki-row__main { min-width: 0; }
+.pki-row__meta { color: var(--muted); font-size: 0.82em; margin-left: auto; }
+
+/* Профайл — 2 баганат карт grid (зайг зохистой ашиглах) */
+.profile-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; margin-top: 16px; }
+.profile-grid > .card { margin-top: 0; }
+@media (max-width: 860px) { .profile-grid { grid-template-columns: 1fr; } }
+
+/* Login card — target дизайн (Gerege App нэвтрэлт) */
+.login-instruction {
+  text-align: center;
+  color: var(--dan-blue-text);
+  font-size: 13.5px;
+  line-height: 1.55;
+  margin: 0 0 4px;
+}
+.input--lg-center {
+  text-align: center;
+  font-size: 17px;
+  letter-spacing: 2px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+.btn--eid {
+  background: linear-gradient(135deg, var(--dan-blue), #8b7ff0);
+  color: #fff;
+  /* border-box өндрийг btn--google (1px border)-тэй тэнцүүлэхийн тулд ил
+     transparent border үлдээнэ (border:0 нь 2px намхан болгодог байсан). */
+  border: 1px solid transparent;
+  font-weight: 600;
+}
+.btn--eid:hover { filter: brightness(1.05); color: #fff; }
+.btn--eid:active { filter: brightness(0.97); }
+.btn--eid:disabled { opacity: 0.6; }
+.login-footer { margin-top: 4px; text-align: center; }
+.login-footer__divider { border: 0; border-top: 1px solid var(--border); margin: 4px 0 16px; }
+.login-footer__register {
+  display: block;
+  font-weight: 700;
+  color: var(--fg);
+  text-decoration: none;
+  font-size: 14.5px;
+}
+.login-footer__register:hover { color: var(--dan-blue-text); }
+.login-footer__help {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 13px;
+}
+.login-footer__help:hover { color: var(--fg); }
+
+/* Login switch tab — Google/Нэвтрэх товчтой (btn--lg) ижил өндөр.
+   padding 2px (container) + item 44px + border 2px ≈ btn--lg-ийн өндөр. */
+.segmented--tall .segmented__item {
+  padding-top: 0;
+  padding-bottom: 0;
+  min-height: 44px;
+  font-size: 14px;
+  letter-spacing: 0.01em;
 }
 
-/* bpmn-js канвас — host + zoom overlay-г байрлуулах wrapper */
-.bpm-canvas {
-  position: relative;
-  height: 56vh; min-height: 420px;
-  border: 1px solid var(--border); border-radius: var(--radius-card);
-  overflow: hidden; background: var(--surface);
+/* Google login товч + "эсвэл" зураас */
+.btn--google { background: var(--surface); color: var(--fg); border: 1px solid var(--border); font-weight: 600; }
+.btn--google:hover { background: var(--surface-2); color: var(--fg); }
+.login-or { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 12px; margin: 6px 0; }
+.login-or::before, .login-or::after { content: ""; flex: 1; border-top: 1px solid var(--border); }
+
+/* ---------- Дээд талын цэс хайлт (NavSearch dropdown) ---------- */
+.navsearch { position: relative; }
+.navsearch__results {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: var(--card, #fff);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(16, 24, 40, 0.12);
+  padding: 6px;
+  max-height: 340px;
+  overflow-y: auto;
 }
-.bpm-canvas__host { width: 100%; height: 100%; }
-/* bpmn-js нь өөрийн SVG/styling-тэй — зөвхөн доторх хэмжээг л баталгаажуулна */
-.bpm-canvas .bjs-container { height: 100%; }
-/* "Powered by bpmn.io" watermark-ийг зүүн доод буланд зөөнө — баруун доод дахь
-   zoom товчтой давхрахгүй (лицензийн дагуу харагдсан хэвээр). */
-.bpm-canvas .bjs-powered-by { left: 12px; right: auto; bottom: 10px; }
-
-/* Zoom хяналт (баруун доод буланд, bpmn.io шиг) */
-.bpm-canvas__zoom { position: absolute; right: 12px; bottom: 12px; display: flex; flex-direction: column; gap: 6px; z-index: 5; }
-.bpm-zoom-btn {
-  width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center;
-  background: var(--surface); color: var(--fg);
-  border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+.navsearch__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 9px 12px;
+  border: 0;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: var(--fg, #111827);
 }
-.bpm-zoom-btn:hover { border-color: var(--dan-blue); color: var(--dan-blue); }
-
-/* Toolbar дахь зөвхөн-икон товч */
-.bpm-icon-only { padding-left: 10px; padding-right: 10px; }
-
-/* Бүтэн дэлгэц горим — modeler-ийг харагдацыг бүхэлд нь дүүргэнэ */
-.bpm-modeler.is-fullscreen {
-  position: fixed; inset: 0; z-index: 1000;
-  margin: 0; padding: 16px;
-  background: var(--bg);
-  display: flex; flex-direction: column; gap: 12px;
-}
-.bpm-modeler.is-fullscreen .bpm-modeler__body { flex: 1; min-height: 0; overflow: auto; }
-
-/* form-js editor самбар — canvas-ийн доор бүтэн өргөнөөр */
-.bpm-form-panel {
-  display: flex; flex-direction: column;
-  width: 100%; min-height: 480px; overflow: hidden;
-  background: var(--surface);
-  border: 1px solid var(--border); border-radius: var(--radius-card);
-}
-.bpm-form-panel__head {
-  display: flex; align-items: center; gap: 8px;
-  padding: 12px 14px; border-bottom: 1px solid var(--border);
-  font-size: 13px; font-weight: 600;
-}
-.bpm-form-panel__editor { flex: 1; overflow: auto; }
-
-/* Маягтын эх сурвалж сонгогч (inline / shared) */
-.bpm-form-source { display: flex; gap: 16px; padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
-.bpm-form-source__opt { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
-.bpm-form-panel__shared { padding: 14px; display: flex; flex-direction: column; gap: 8px; }
-.bpm-form-panel__sharedhint { font-size: 12px; }
-
-/* Маягт сан (FormsManager) */
-.bpm-forms { display: flex; flex-direction: column; gap: 12px; }
-.bpm-forms__editbar { display: flex; gap: 8px; align-items: center; }
-.bpm-forms__editbar .input { flex: 1; }
-.bpm-forms__host { height: 60vh; min-height: 420px; border: 1px solid var(--border); border-radius: var(--radius-card); overflow: auto; background: var(--surface); }
-
-/* Байгууллагын мод (OrgTree) */
-.orgtree__list { padding: 6px 0; }
-.orgtree__row { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 8px; }
-.orgtree__row:hover { background: var(--surface-2, rgba(0,0,0,0.03)); }
-.orgtree__icon { color: var(--muted); flex-shrink: 0; }
-.orgtree__name { font-weight: 500; }
-.orgtree__actions { margin-left: auto; display: flex; gap: 2px; }
-.orgtree__form { display: flex; align-items: center; gap: 8px; padding: 8px 12px; flex-wrap: wrap; }
-.orgtree__form .input { width: auto; min-width: 180px; }
-.orgtree__formlabel { font-size: 12px; }
-
-/* serviceTask / gateway тохиргооны самбар */
-.bpm-cfg { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
-.bpm-cfg__body { display: flex; flex-direction: column; gap: 12px; padding: 16px; overflow-y: auto; }
-.bpm-cfg__body textarea.input { resize: vertical; }
-.bpm-form-panel__empty {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 10px; height: 100%; padding: 24px; text-align: center;
-}
-
-/* --- Admin: хэрэглэгч удирдлага --- */
-.users { display: flex; flex-direction: column; gap: 16px; }
-.users__head { display: flex; justify-content: flex-end; }
-.users-form { display: flex; flex-direction: column; gap: 14px; }
-.users-form__head { display: flex; align-items: center; gap: 8px; font-weight: 600; }
-.users-form__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-.users-form__actions { display: flex; gap: 10px; }
-.users-table-wrap { padding: 0; overflow-x: auto; }
-.users-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-.users-table th, .users-table td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); }
-.users-table th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); font-weight: 500; }
-.users-table tr:last-child td { border-bottom: 0; }
-.users-table__role { width: auto; min-width: 120px; padding: 6px 10px; }
-.users-table__actions { text-align: right; white-space: nowrap; }
-
-/* --- Admin: эрх (RBAC) удирдлага --- */
-.roles { display: flex; flex-direction: column; gap: 16px; }
-.roles__head { display: flex; justify-content: flex-end; }
-.roles-form { display: flex; flex-direction: column; gap: 14px; }
-.roles-form__head { display: flex; align-items: center; gap: 8px; font-weight: 600; }
-.role-card { display: flex; flex-direction: column; gap: 14px; }
-.role-card__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-.role-card__name { font-size: 16px; font-weight: 600; }
-.role-card__desc { font-size: 13.5px; margin: 0; }
-.role-card__perms { display: flex; flex-direction: column; gap: 14px; }
-.role-perm-group { display: flex; flex-direction: column; gap: 8px; }
-.role-perm-group__label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
-.role-perm-group__items { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
-.role-perm { display: flex; align-items: center; gap: 8px; font-size: 13.5px; cursor: pointer; }
-.role-perm input { width: 16px; height: 16px; accent-color: var(--dan-blue); cursor: pointer; }
-.role-perm.is-locked { opacity: 0.7; cursor: default; }
-.role-card__note { font-size: 12.5px; margin: 0; }
-.role-card__actions { display: flex; gap: 10px; }
-
-/* --- Personal dashboard quick links --- */
-.kpi-link { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--fg); transition: border-color 0.12s ease, background 0.12s ease; }
-.kpi-link:hover { border-color: var(--dan-blue); background: var(--surface-2); text-decoration: none; }
-.kpi-link__icon { width: 40px; height: 40px; flex-shrink: 0; display: grid; place-items: center; border-radius: 10px; background: var(--dan-blue-soft); color: var(--dan-blue); }
-.kpi-link__body { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
-.kpi-link__title { font-weight: 600; font-size: 14px; }
-.kpi-link__sub { font-size: 13px; color: var(--muted); }
-.kpi-link__arrow { color: var(--muted); flex-shrink: 0; }
-
-/* --- AI knowledge base --- */
-.kb { display: flex; flex-direction: column; gap: 16px; }
-.kb__head { display: flex; justify-content: flex-end; }
-.kb-form { display: flex; flex-direction: column; gap: 14px; }
-.kb-form__head { display: flex; align-items: center; gap: 8px; font-weight: 600; }
-.kb-form__textarea { resize: vertical; min-height: 120px; font-family: inherit; line-height: 1.55; }
-.kb-form__actions { display: flex; gap: 10px; }
-.kb__list { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); align-items: stretch; }
-.kb__list .card { margin-top: 0; }
-.kb-card { display: flex; flex-direction: column; gap: 12px; }
-.kb-card__title { font-size: 15px; font-weight: 600; margin: 0; overflow-wrap: anywhere; }
-.kb-card__content {
-  font-size: 13.5px; color: var(--muted); margin: 0; white-space: pre-wrap; overflow-wrap: anywhere;
-  display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; overflow: hidden;
-}
-.kb-card__owner { align-self: flex-start; font-size: 11px; margin-bottom: 2px; }
-.kb-card__actions { display: flex; gap: 8px; margin-top: auto; }
-
-/* --- Runs / instance monitoring --- */
-.bpm-runs__list { display: flex; flex-direction: column; gap: 10px; }
-.bpm-run-row { display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; }
-.bpm-run-row__main { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
-.bpm-run-row__meta { display: flex; flex-direction: column; gap: 2px; font-size: 13px; }
-.bpm-run-row__meta .defrow__label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
-.bpm-run-row__vars {
-  margin: 0; padding: 12px; font-size: 12.5px; line-height: 1.5;
-  background: var(--surface-2); border-radius: var(--radius-input);
-  overflow-x: auto; white-space: pre-wrap; word-break: break-word;
-}
-.bpm-badge {
-  display: inline-flex; align-items: center; padding: 3px 10px;
-  font-size: 12px; font-weight: 600; border-radius: 999px; white-space: nowrap;
-}
-.bpm-badge--running { background: var(--dan-blue-soft); color: var(--dan-blue-text); }
-.bpm-badge--completed { background: var(--success-soft, oklch(95% 0.05 150)); color: var(--success); }
-.bpm-badge--failed { background: var(--danger-soft); color: var(--danger); }
-.bpm-badge--cancelled { background: var(--surface-2); color: var(--muted); }
-
-/* Instance-ийн audit timeline */
-.bpm-run-row__detail { display: flex; flex-direction: column; gap: 12px; border-top: 1px solid var(--border); padding-top: 12px; }
-.bpm-timeline { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
-.bpm-timeline__item { display: flex; align-items: center; gap: 10px; position: relative; }
-.bpm-timeline__dot {
-  width: 9px; height: 9px; border-radius: 999px; flex-shrink: 0;
-  background: var(--dan-blue); margin: 0 3px;
-}
-.bpm-timeline__item--service_failed .bpm-timeline__dot,
-.bpm-timeline__item--instance_failed .bpm-timeline__dot { background: var(--danger); }
-.bpm-timeline__item--instance_completed .bpm-timeline__dot { background: var(--success); }
-.bpm-timeline__body { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: 1; min-width: 0; }
-.bpm-timeline__label { font-size: 13px; font-weight: 500; }
-.bpm-timeline__detail { font-size: 12px; overflow-wrap: anywhere; }
-.bpm-timeline__time { font-size: 12px; flex-shrink: 0; }
-.bpm-run-row__vars-wrap summary { cursor: pointer; font-size: 13px; }
-
-/* --- Run (form-js viewer-ээр автомат зурагдсан дэлгэц) --- */
-.bpm-form { display: flex; flex-direction: column; gap: 16px; max-width: 960px; }
-.bpm-form__host { min-height: 40px; } /* form-js өөрийн styling-тэй; талбар гарах зай */
-/* form-js хэт өргөн talбаруудыг зөөлрүүлнэ (2 баган layout-тай хослоно) */
-.bpm-form .fjs-container { width: 100%; }
-
-/* --- Run (динамик дэлгэц) --- */
-.bpm-run { display: flex; flex-direction: column; gap: 16px; }
-.bpm-run__state { display: flex; align-items: center; gap: 8px; padding: 32px 0; justify-content: center; }
-.bpm-run__step { padding: 24px; }
-.bpm-run__done { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 40px 24px; text-align: center; color: var(--success); }
-.bpm-run__done h2 { margin: 0; font-size: 18px; color: var(--fg); }
-
-@media (max-width: 900px) {
-  .bpm-modeler__body { grid-template-columns: 1fr; }
-  .bpm-canvas { height: 50vh; }
-}
+.navsearch__item:hover,
+.navsearch__item.is-active { background: var(--dan-blue-soft, #eef2ff); }
+.navsearch__label { font-size: 14px; font-weight: 500; }
+.navsearch__group { font-size: 11.5px; color: var(--muted, #6b7280); white-space: nowrap; }
+.navsearch__empty { padding: 12px; font-size: 13px; color: var(--muted, #6b7280); text-align: center; }

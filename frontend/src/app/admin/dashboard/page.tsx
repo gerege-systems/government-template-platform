@@ -1,31 +1,22 @@
+import React from 'react';
 import { redirect } from 'next/navigation';
-import { User, ShieldCheck, Sparkles } from 'lucide-react';
-import AppShell from '@/components/AppShell';
-import DashboardView, { type DashboardCard } from '@/components/DashboardView';
-import { hasSession } from '@/lib/session';
-import { fetchMe } from '@/lib/api';
-import { initialsOf } from '@/lib/format';
-import { getServerLang } from '@/lib/lang';
+import PageHead from '@/components/PageHead';
+import DashboardCards from '@/components/DashboardCards';
+import { fetchMe, fetchMyPermissions } from '@/lib/api';
 
 export const dynamic = 'force-dynamic';
-
-export const metadata = { title: 'Хяналтын самбар — Gerege' };
-
-const CARDS: DashboardCard[] = [
-  { href: '/admin/profile',  eyebrowKey: 'card.profile.eyebrow',  titleKey: 'card.profile.title',  descKey: 'card.profile.desc',  icon: User },
-  { href: '/admin/chat',     eyebrowKey: 'card.ai.eyebrow',       titleKey: 'card.ai.title',       descKey: 'card.ai.desc',       icon: Sparkles },
-  { href: '/admin/settings', eyebrowKey: 'card.security.eyebrow', titleKey: 'card.security.title', descKey: 'card.security.desc', icon: ShieldCheck },
-];
+export const metadata = { title: 'Админ — Хяналтын самбар' };
 
 export default async function AdminDashboardPage() {
-  if (!hasSession()) redirect('/login?next=/admin/dashboard');
   const me = await fetchMe();
   if (!me) redirect('/login?next=/admin/dashboard');
-  const lang = getServerLang();
+  const perms = await fetchMyPermissions();
+  if (!perms.includes('dashboard.view')) redirect('/');
 
   return (
-    <AppShell user={{ username: me.username, email: me.email, roleId: me.roleId, initials: initialsOf(me.username) }}>
-      <DashboardView me={me} lang={lang} profileHref="/admin/profile" cards={CARDS} />
-    </AppShell>
+    <>
+      <PageHead eyebrowKey="sys.admin" titleKey="nav.dashboard" subKey="admin.dashboard.sub" />
+      <DashboardCards set="admin" perms={perms} />
+    </>
   );
 }

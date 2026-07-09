@@ -1,4 +1,4 @@
-// Government AI Platform Template V1.0
+// Gerege Template Version 27.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Package observability нь бизнес package-ууд болон collector бүртгэдэг HTTP
@@ -11,8 +11,6 @@
 package observability
 
 import (
-	"database/sql"
-
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -25,10 +23,10 @@ var (
 		[]string{"layer", "op", "result"},
 	)
 
-	mailerOpsTotal = prometheus.NewCounterVec(
+	otpSendTotal = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
-			Name: "mailer_operations_total",
-			Help: "OTP mailer outcomes: sent, failed, queue_full.",
+			Name: "otp_send_total",
+			Help: "OTP send outcomes via GeregeCloud Verify: sent, failed.",
 		},
 		[]string{"result"},
 	)
@@ -57,13 +55,23 @@ var (
 )
 
 func init() {
-	prometheus.MustRegister(cacheOpsTotal, mailerOpsTotal, dbPoolOpen, dbPoolInUse, dbPoolWait)
+	prometheus.MustRegister(cacheOpsTotal, otpSendTotal, dbPoolOpen, dbPoolInUse, dbPoolWait)
 }
 
-// dbStatsProvider нь эхлэх үед холбогддог бөгөөд ингэснээр GaugeFunc callback-ууд
-// server package-г import хийлгүйгээр амьд sql.DBStats-г унших боломжтой болно.
-// Энэ нь gormDB.DB()-ээр GORM handle-аас авсан түүхий *sql.DB-г буцаана.
-var dbStatsProvider func() *sql.DB
+// DBPoolStats нь database/sql эсвэл pgxpool-аас үл хамааран pool-ийн
+// статистикийн снапшот юм — provider үүнийг бөглөж, gauge callback-ууд
+// уншина.
+type DBPoolStats struct {
+	OpenConnections int
+	InUse           int
+	WaitCount       int64
+}
+
+// dbStatsProvider нь эхлэх үед холбогддог бөгөөд ингэснээр GaugeFunc
+// callback-ууд server package-г import хийлгүйгээр амьд pool-статистикийг
+// унших боломжтой болно. Энэ нь pgxpool.Pool.Stat()-аас авсан снапшотыг
+// буцаана.
+var dbStatsProvider func() DBPoolStats
 
 type dbStatsSnapshot struct {
 	OpenConnections int
@@ -75,11 +83,7 @@ func currentDBStats() dbStatsSnapshot {
 	if dbStatsProvider == nil {
 		return dbStatsSnapshot{}
 	}
-	db := dbStatsProvider()
-	if db == nil {
-		return dbStatsSnapshot{}
-	}
-	s := db.Stats()
+	s := dbStatsProvider()
 	return dbStatsSnapshot{
 		OpenConnections: s.OpenConnections,
 		InUse:           s.InUse,
@@ -87,10 +91,10 @@ func currentDBStats() dbStatsSnapshot {
 	}
 }
 
-// RegisterDBStatsProvider-г эхлэх үед амьд *sql.DB-г (gormDB.DB()-ээс) өгдөг
-// provider-ийн хамт нэг удаа дуудах ёстой бөгөөд ингэснээр pool-статистикийн
-// gauge-ууд scrape бүрт түүнийг унших боломжтой болно.
-func RegisterDBStatsProvider(provider func() *sql.DB) {
+// RegisterDBStatsProvider-г эхлэх үед pgxpool.Stat()-аас снапшот гаргаж
+// өгдөг provider-ийн хамт нэг удаа дуудах ёстой бөгөөд ингэснээр
+// pool-статистикийн gauge-ууд scrape бүрт түүнийг унших боломжтой болно.
+func RegisterDBStatsProvider(provider func() DBPoolStats) {
 	dbStatsProvider = provider
 }
 
@@ -103,9 +107,10 @@ func ObserveCacheOp(layer, op, result string) {
 	cacheOpsTotal.WithLabelValues(layer, op, result).Inc()
 }
 
-// ObserveMailerOp нь нэг mailer-ийн үр дүнг тэмдэглэнэ.
+// ObserveOTPSend нь GeregeCloud Verify-ээр OTP илгээх нэг үйлдлийн үр дүнг
+// тэмдэглэнэ.
 //
-//	result: "sent" | "failed" | "queue_full"
-func ObserveMailerOp(result string) {
-	mailerOpsTotal.WithLabelValues(result).Inc()
+//	result: "sent" | "failed"
+func ObserveOTPSend(result string) {
+	otpSendTotal.WithLabelValues(result).Inc()
 }

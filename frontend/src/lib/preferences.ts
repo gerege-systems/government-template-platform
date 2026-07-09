@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useSyncExternalStore } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export type ThemePref = 'light' | 'dark' | 'system';
 export type LangPref = 'mn' | 'en';
@@ -36,47 +36,21 @@ const applyTheme = (value: ThemePref) => {
 const applyLang = (value: LangPref) => {
   if (typeof document === 'undefined') return;
   document.documentElement.setAttribute('lang', value);
-  // Server component-ууд (SSR render) хэлийг мэдэхийн тулд localStorage-тэй
-  // зэрэгцээ энгийн (httpOnly биш) cookie-д давхар бичнэ — src/lib/lang.ts-ийн
-  // getServerLang() үүнийг уншина. Нууц мэдээлэл биш тул JS-д ил байх нь OK.
-  try {
-    document.cookie = `gerege.lang=${value}; path=/; max-age=31536000; samesite=lax`;
-  } catch {}
-};
-
-// --- Хуваалцсан store (бүх usePreferences хэрэглэгч нэг эх сурвалжаас уншина) ---
-// Өмнө нь component бүр өөрийн useState-тэй байсан тул нэг газар хэл/загвар
-// солиход бусад нь хуучнаар үлддэг байв. useSyncExternalStore-оор нэг
-// модуль-түвшний төлөвт холбож, өөрчлөлт БҮХ хэрэглэгчид тархана.
-let _theme: ThemePref = 'light';
-let _lang: LangPref = 'mn';
-let _hydrated = false;
-const listeners = new Set<() => void>();
-const emit = () => { for (const l of listeners) l(); };
-const subscribe = (cb: () => void) => {
-  listeners.add(cb);
-  return () => { listeners.delete(cb); };
 };
 
 /**
- * gerege-ийн тохиргоог (загвар + хэл) localStorage-д уншиж/бичээд <html> дээр
- * тусгана. Бүх компонент хуваалцсан store-оос уншина — нэг газар солиход
- * бүгд шинэчлэгдэнэ.
+ * gerege theme-ийн тохиргоог (загвар + хэл) localStorage-д уншиж/бичээд <html>
+ * дээр тусгана. me.gerege.mn-ийн site.js-тэй ижил зарчмаар ажиллана.
  */
 export function usePreferences() {
-  // SSR + эхний client render нь анхдагч (mn/light)-аар — hydration зөрөхгүй;
-  // дараа нь эхний mount localStorage-аас синк хийж emit хийнэ.
-  const theme = useSyncExternalStore(subscribe, () => _theme, () => 'light' as ThemePref);
-  const lang = useSyncExternalStore(subscribe, () => _lang, () => 'mn' as LangPref);
+  // Inline-bootstrap утгаас эхэлснээр SSR markup эхний client render-тэй тохирно
+  // (hydration зөрөхгүй). useEffect-д localStorage-аас дахин синк хийнэ.
+  const [theme, setThemeState] = useState<ThemePref>('light');
+  const [lang, setLangState] = useState<LangPref>('mn');
 
   useEffect(() => {
-    if (_hydrated) return;
-    _hydrated = true;
-    _theme = read('theme', 'light', VALID.theme);
-    _lang = read<LangPref>('lang', 'mn', VALID.lang);
-    applyTheme(_theme);
-    applyLang(_lang);
-    emit();
+    setThemeState(read('theme', 'light', VALID.theme));
+    setLangState(read('lang', 'mn', VALID.lang));
   }, []);
 
   // OS загвар солигдоход "system" дээр байвал дахин тусгана.
@@ -90,18 +64,16 @@ export function usePreferences() {
 
   const setTheme = useCallback((value: ThemePref) => {
     if (!VALID.theme.has(value)) return;
-    _theme = value;
+    setThemeState(value);
     try { localStorage.setItem(KEYS.theme, value); } catch {}
     applyTheme(value);
-    emit();
   }, []);
 
   const setLang = useCallback((value: LangPref) => {
     if (!VALID.lang.has(value)) return;
-    _lang = value;
+    setLangState(value);
     try { localStorage.setItem(KEYS.lang, value); } catch {}
     applyLang(value);
-    emit();
   }, []);
 
   return { theme, setTheme, lang, setLang };

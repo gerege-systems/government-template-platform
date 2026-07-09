@@ -1,7 +1,8 @@
 import React from 'react';
-import { headers } from 'next/headers';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
+import { LangProvider } from '@/lib/lang';
+import Providers from '@/components/Providers';
 
 // Фонтыг build үед татаж next/font өөрөө host хийдэг тул CSP-г чанд 'self'-ээр
 // үлдээж болно (гадны фонт host хэрэггүй).
@@ -27,16 +28,12 @@ const jbMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  title: 'Gerege — Бүртгэлийн булан',
+  title: 'Gerege Template',
   description:
-    'gerege-template-ai-v1.0 дээр суурилсан хэрэглэгчийн булан — нэвтрэх, бүртгүүлэх, профайл болон аюулгүй байдлын тохиргоог нэг дороос.',
+    'Gerege Template — chi (net/http) + pgx дээр суурилсан жишээ апп: нэвтрэх, бүртгүүлэх, профайл болон аюулгүй байдлын тохиргоог нэг дороос.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // CSP nonce middleware-аас "x-nonce" request header-аар ирнэ. Inline эсвэл
-  // same-origin script (theme-bootstrap.js) дээр энэ nonce-ийг тавьснаар
-  // 'unsafe-inline' хэрэггүй CSP-д ажиллана.
-  const nonce = headers().get('x-nonce') ?? undefined;
   return (
     <html
       lang="mn"
@@ -54,9 +51,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             body зурахаас ӨМНӨ ажиллах ёстой тул async/defer хийхгүй (эс бөгөөс
             загвар анивчина). Иймд no-sync-scripts дүрмийг энд зориуд унтраав. */}
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-        <script src="/theme-bootstrap.js" nonce={nonce} />
+        <script src="/theme-bootstrap.js" />
       </head>
-      <body>{children}</body>
+      <body><Providers><LangProvider>{children}</LangProvider></Providers></body>
     </html>
   );
 }

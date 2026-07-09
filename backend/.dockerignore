@@ -1,18 +1,4 @@
-# Local build outputs / IDE state — never copy into the builder context.
+*.log
+.env
 bin/
-vendor/
-coverage.out
-coverage.html
-.git
-.github
-.idea
-.vscode
-
-# Secrets — guard against accidental inclusion (compose mounts these at runtime).
-*.env
-*.env.*
-!*.env.example
-
-# Test artefacts
-**/*_test.go.bak
-testdata/.cache
+tmp/

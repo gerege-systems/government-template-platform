@@ -1,39 +1,50 @@
+import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import { backendFetch } from '@/lib/api';
-import { getRefreshToken, clearSession } from '@/lib/session';
-import { toClientResponse, checkOrigin } from '@/lib/bff';
+import { getRefreshToken, getAccessToken } from '@/lib/session';
+import { checkOrigin } from '@/lib/bff';
+import { ACCESS_COOKIE, REFRESH_COOKIE, SSO_LOGOUT_COOKIE } from '@/lib/cookies';
 
 export const dynamic = 'force-dynamic';
 
-// POST /api/auth/logout — refresh токенг backend-ийн blacklist руу илгээж,
-// амжилттай үед л client cookie-г цэвэрлэнэ. Backend амжилтгүй ч client
-// "гарсан" гэж буруу мэдэгдвэл хуучин refresh token 7 хоног backend-д
-// амьд үлдэх эрсдэлтэй — иймд 5xx үед cookie үлдээж, хэрэглэгчийг дахин
-// оролдохыг шаардана.
+// POST /api/auth/logout — refresh токенг backend-ийн blacklist руу, access
+// токенг deny-list руу илгээж, cookie-г заавал цэвэрлэнэ. SSO-ээр нэвтэрсэн бол
+// (gerege_sso_logout cookie байвал) хариунд sso_logout_url буцаана — клиент тийш
+// чиглүүлж, SSO (Hydra) дээрх session-ийг мөн дуусгана. Backend амжилтгүй ч
+// client тал нэвтрэлтгүй болж, дахин нэвтрэхийг шаардана.
 export async function POST(req: Request) {
   const bad = checkOrigin(req);
   if (bad) return bad;
 
   const refresh = getRefreshToken();
-  if (!refresh) {
-    // Аль хэдийн нэвтрэхгүй — idempotent амжилт.
-    clearSession();
-    return toClientResponse({ ok: true, status: 200, message: 'Гарлаа' });
+  if (refresh) {
+    await backendFetch('/auth/logout', {
+      method: 'POST',
+      body: JSON.stringify({ refresh_token: refresh, access_token: getAccessToken() ?? '' }),
+    });
   }
 
-  const r = await backendFetch('/auth/logout', {
-    method: 'POST',
-    body: JSON.stringify({ refresh_token: refresh }),
+  // SSO-ээр нэвтэрсэн бол (logout ref cookie байвал) backend-ээс SSO дээр session
+  // дуусгах RP-initiated logout URL-ийг авна. Ref нэг удаагийн (Redis GetDel).
+  let ssoLogoutURL: string | undefined;
+  const ref = cookies().get(SSO_LOGOUT_COOKIE)?.value;
+  if (ref) {
+    const lr = await backendFetch<{ sso_logout_url?: string }>('/sso/logout', {
+      method: 'POST',
+      body: JSON.stringify({ ref }),
+    });
+    if (lr.ok && lr.data?.sso_logout_url) ssoLogoutURL = lr.data.sso_logout_url;
+  }
+
+  const res = NextResponse.json({
+    ok: true,
+    status: 200,
+    message: 'Гарлаа',
+    ...(ssoLogoutURL ? { data: { sso_logout_url: ssoLogoutURL } } : {}),
   });
-
-  // Backend амжилттай хариу өгсөн (2xx) эсвэл 401 (token аль хэдийн
-  // хүчингүй) тохиолдолд хоёуланд нь cookie-г цэвэрлэнэ — backend талд
-  // session аль хэдийн байхгүй.
-  if (r.ok || r.status === 401) {
-    clearSession();
-    return toClientResponse({ ok: true, status: 200, message: 'Гарлаа' });
-  }
-
-  // Backend хариу өгөөгүй / 5xx — cookie үлдээнэ. Client дахин оролдох
-  // боломжтой; ингэснээр backend session leak хаагдана.
-  return toClientResponse(r);
+  // Бүх session cookie-г устгана (SSO logout URL cookie-г мөн).
+  res.cookies.delete(ACCESS_COOKIE);
+  res.cookies.delete(REFRESH_COOKIE);
+  res.cookies.delete(SSO_LOGOUT_COOKIE);
+  return res;
 }

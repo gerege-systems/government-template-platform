@@ -1,38 +1,43 @@
 /** @type {import('next').NextConfig} */
 
-// Content-Security-Policy-г middleware.ts-ээс per-request nonce-тэй өгнө.
-// Энд зөвхөн CSP-аас бусад статик security header-уудыг хариуцна.
+// Content-Security-Policy: бодит, ажиллах боломжтой бодлого.
+// - script-src: 'self' нь /theme-bootstrap.js (same-origin) болон Next.js-ийн
+//   chunk-уудыг хамарна. 'unsafe-inline' нь Next.js-ийн inline bootstrap
+//   script-уудад (мөн зарим inline) шаардлагатай pragmatic dev default —
+//   production-д nonce руу шилжих нь зохистой.
+// - style-src: апп `style=` inline attribute ашигладаг тул 'unsafe-inline' хэрэгтэй.
+// - connect-src 'self': browser зөвхөн same-origin BFF (/api/*) рүү хандана.
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  // Google профайл зураг (dashboard-д холбогдсон Google account) нь
+  // lh3.googleusercontent.com зэрэг Google CDN-ээс ирдэг тул зөвшөөрнө.
+  // gstatic — Google Drive интеграцийн файлын icon (iconLink) ба browser-т
+  // шууд ачаалагддаг тул зөвшөөрнө.
+  "img-src 'self' data: https://*.googleusercontent.com https://*.gstatic.com",
+  "font-src 'self' data:",
+  "connect-src 'self'",
+  // frame-src: Google Drive + Dropbox файлын урьдчилан харах (preview) iframe —
+  // эдгээр нь провайдерын интерактив preview хуудас тул BFF-ээр дамжуулах
+  // боломжгүй (провайдер proxied origin-оос framing-ийг татгалздаг). Интеграцийн
+  // OAuth тохируулаагүй үед эдгээр хост руу хэзээ ч хандахгүй (feature inert).
+  "frame-src 'self' https://drive.google.com https://docs.google.com https://*.dropboxusercontent.com https://www.dropbox.com",
+  "frame-ancestors 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+].join('; ');
 
 const nextConfig = {
   reactStrictMode: true,
   // Standalone output → slim production Docker image (server.js + minimal
   // node_modules) instead of shipping the whole tree. See frontend/Dockerfile.
   output: 'standalone',
-  // Стандарт JWKS зам (/.well-known/jwks.json)-ийг BFF route руу дотооддоо
-  // дахин бичнэ — федерацийн node-ууд Gerege-ийн нийтийн түлхүүрийг эндээс авна.
+  // iOS Universal Links — Apple нь /.well-known/apple-app-site-association-ыг
+  // татдаг. Next.js dot-folder route-ыг найдваргүй тул /api/aasa руу rewrite хийнэ.
   async rewrites() {
     return [
-      { source: '/.well-known/jwks.json', destination: '/api/jwks' },
-      { source: '/.well-known/fed-jwks.json', destination: '/api/fed-jwks' },
-    ];
-  },
-  // Хуучин root-level зам → /admin/* (Admin системийг /admin дор төвлөрүүлсэн)
-  // тул хуучин холбоос/bookmark эвдрэхгүй.
-  async redirects() {
-    return [
-      { source: '/chat', destination: '/admin/chat', permanent: false },
-      { source: '/knowledge', destination: '/admin/knowledge', permanent: false },
-      { source: '/translate', destination: '/admin/translate', permanent: false },
-      { source: '/settings', destination: '/admin/settings', permanent: false },
-      { source: '/profile', destination: '/admin/profile', permanent: false },
-      { source: '/bpm', destination: '/admin/bpm', permanent: false },
-      { source: '/bpm/:path*', destination: '/admin/bpm/:path*', permanent: false },
-      // Personal систем → User систем; Manager bare → /manager/dashboard.
-      { source: '/personal', destination: '/user/dashboard', permanent: false },
-      { source: '/personal/profile', destination: '/user/profile', permanent: false },
-      { source: '/personal/:path*', destination: '/user/:path*', permanent: false },
-      { source: '/manager', destination: '/manager/dashboard', permanent: false },
-      { source: '/user', destination: '/user/dashboard', permanent: false },
+      { source: '/.well-known/apple-app-site-association', destination: '/api/aasa' },
     ];
   },
   // Security headers applied to every response.
@@ -42,14 +47,10 @@ const nextConfig = {
       { key: 'X-Content-Type-Options', value: 'nosniff' },
       { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
       {
-        // microphone=(self) — дуу хоолойн орчуулга + чатын дуу таних (STT)
-        // нь mic ашигладаг тул өөрийн origin-д зөвшөөрнө. camera/geolocation
-        // хэрэггүй тул хаалттай хэвээр.
         key: 'Permissions-Policy',
-        value: 'camera=(), microphone=(self), geolocation=()',
+        value: 'camera=(), microphone=(), geolocation=()',
       },
-      // Content-Security-Policy — middleware.ts дотор per-request nonce-тэй
-      // тохируулагдана. Энд static header болгож тавихгүй (nonce-гүй болно).
+      { key: 'Content-Security-Policy', value: CSP },
     ];
 
     // HSTS-ийг зөвхөн production-д илгээнэ — dev дээр http тул HSTS тохиромжгүй.

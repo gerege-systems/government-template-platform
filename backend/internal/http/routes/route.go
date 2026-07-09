@@ -1,16 +1,18 @@
-// Government AI Platform Template V1.0
+// Gerege Template Version 27.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package routes
 
 import (
+	"encoding/json"
 	"net/http"
-
-	"github.com/gofiber/fiber/v3"
 )
 
-func RootHandler(c fiber.Ctx) error {
-	return c.Status(http.StatusOK).JSON(map[string]interface{}{
+// RootHandler нь /api root-ийн энгийн "alive" хариу.
+func RootHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	_ = json.NewEncoder(w).Encode(map[string]interface{}{
 		"status":  true,
 		"message": "welcome to an amazing api",
 	})

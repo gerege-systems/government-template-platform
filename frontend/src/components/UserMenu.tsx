@@ -5,21 +5,22 @@ import Link from 'next/link';
 import { ChevronDown, User, Settings, Globe, Moon, Sun, Monitor, HelpCircle, LogOut } from 'lucide-react';
 import SegmentedControl from './SegmentedControl';
 import { usePreferences, showToast } from '@/lib/preferences';
+import { useLang } from '@/lib/lang';
 import { signOut } from '@/lib/signout';
 
 interface Props {
   username: string;
   email: string;
   initials: string;
-  profileHref?: string;
-  settingsHref?: string;
+  picture?: string; // Google профайл зураг (холбогдсон бол initials-ийн оронд)
 }
 
-export default function UserMenu({ username, email, initials, profileHref = '/admin/profile', settingsHref = '/admin/settings' }: Props) {
+export default function UserMenu({ username, email, initials, picture }: Props) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const { theme, setTheme, lang, setLang } = usePreferences();
+  const { theme, setTheme } = usePreferences();
+  const { lang, setLang } = useLang();
 
   // Гадна дарах + Escape хаах
   useEffect(() => {
@@ -71,7 +72,12 @@ export default function UserMenu({ username, email, initials, profileHref = '/ad
           if (e.key === 'ArrowDown') { e.preventDefault(); setOpen(true); }
         }}
       >
-        <span className="topbar__avatar">{initials}</span>
+        {picture ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img className="topbar__avatar" src={picture} alt="" width={28} height={28} style={{ objectFit: 'cover', padding: 0 }} referrerPolicy="no-referrer" />
+        ) : (
+          <span className="topbar__avatar">{initials}</span>
+        )}
         <span>{username}</span>
         <ChevronDown size={14} className="topbar__user-chevron" strokeWidth={2} />
       </button>
@@ -83,11 +89,11 @@ export default function UserMenu({ username, email, initials, profileHref = '/ad
             <div className="user-menu__sub mono">{email}</div>
           </div>
 
-          <Link className="user-menu__item" role="menuitem" href={profileHref} onClick={() => setOpen(false)}>
+          <Link className="user-menu__item" role="menuitem" href="/me/profile" onClick={() => setOpen(false)}>
             <User size={16} strokeWidth={2} />
             <span>{lang === 'en' ? 'Profile' : 'Профайл'}</span>
           </Link>
-          <Link className="user-menu__item" role="menuitem" href={settingsHref} onClick={() => setOpen(false)}>
+          <Link className="user-menu__item" role="menuitem" href="/me/settings" onClick={() => setOpen(false)}>
             <Settings size={16} strokeWidth={2} />
             <span>{lang === 'en' ? 'Settings' : 'Тохиргоо'}</span>
           </Link>

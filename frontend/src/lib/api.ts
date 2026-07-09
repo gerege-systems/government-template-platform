@@ -1,97 +1,53 @@
 import 'server-only';
-import type { Envelope, BackendUser, MeData, ValidationData, SessionUser } from './types';
+import { headers } from 'next/headers';
+import type { Envelope, BackendUser, MeData, SessionUser } from './types';
 import { toSessionUser } from './types';
-import { getAccessToken, getRefreshToken, setSession } from './session';
+import { getAccessToken, getRefreshToken, setSession, canPersistSession } from './session';
 
-// Серверийн талд gerege-template-ai-v1.0 рүү хандах цорын ганц цэг.
+// Серверийн талд gerege-backend-template-v27 рүү хандах цорын ганц цэг.
 // Browser энд хэзээ ч хүрэхгүй — зөвхөн route handler ба server component.
 
-// BACKEND_URL-ийг startup үед нэг удаа resolve хийж, scheme-ийг хатуу
-// шалгана. Production-д private IP / loopback зөвшөөрөхгүй (SSRF guard) —
-// compose дотор service нэрээр (жнь "api") холбогддог тул IP literal-ыг
-// тусгай DISABLE_BACKEND_URL_GUARD=true env-ээр л давах боломжтой.
-function resolveBackendBase(): string {
-  const raw = process.env.BACKEND_URL ?? 'http://localhost:8080';
-  let parsed: URL;
+const BASE = (process.env.BACKEND_URL ?? 'http://localhost:8080').replace(/\/$/, '') + '/api/v1';
+
+// forwardedForHeaders нь ирж буй хүсэлтээс жинхэнэ клиентийн IP-г (nginx
+// тавьсан x-forwarded-for, эс бөгөөс x-real-ip) уншиж backend руу дамжуулах
+// header болгоно. api нь нийтийн порт-гүй, зөвхөн энэ BFF-ээр дамждаг тул
+// үүнгүйгээр бүх хүсэлт web контейнерийн IP дор орж, api-ийн per-IP rate-limit
+// нэг bucket-д уначихна. api-ийн clientIP() нь TRUSTED_PROXIES-ийн дор XFF-г
+// баруунаас нь (сүүлийн итгэмжгүй hop) уншдаг тул spoofing-д тэсвэртэй хэвээр —
+// nginx client-ийн жинхэнэ RemoteAddr-г мөрийн төгсгөлд залгасан байдаг.
+function forwardedForHeaders(): Record<string, string> {
   try {
-    parsed = new URL(raw);
+    const h = headers();
+    const xff = h.get('x-forwarded-for');
+    if (xff) return { 'x-forwarded-for': xff };
+    const xrip = h.get('x-real-ip');
+    if (xrip) return { 'x-forwarded-for': xrip };
   } catch {
-    throw new Error(`Invalid BACKEND_URL: ${raw}`);
+    // headers() зарим статик контекстэд байхгүй байж болно — чимээгүй алгасна.
   }
-  if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
-    throw new Error(`BACKEND_URL must use http(s) scheme, got ${parsed.protocol}`);
-  }
-  const isProd = process.env.NODE_ENV === 'production';
-  const allowGuardBypass = process.env.DISABLE_BACKEND_URL_GUARD === 'true';
-  if (isProd && !allowGuardBypass && isPrivateHost(parsed.hostname)) {
-    throw new Error(
-      `BACKEND_URL points to a private/loopback host (${parsed.hostname}) in production. ` +
-        `Use a service hostname or set DISABLE_BACKEND_URL_GUARD=true if this is intentional.`,
-    );
-  }
-  return parsed.toString().replace(/\/$/, '') + '/api/v1';
+  return {};
 }
-
-function isPrivateHost(host: string): boolean {
-  if (host === 'localhost') return true;
-  // IPv4 literal-ыг шалгана (compose service нэр шиг "api"-г private гэж тооцохгүй).
-  const v4 = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(host);
-  if (v4) {
-    const [a, b] = [Number(v4[1]), Number(v4[2])];
-    if (a === 10) return true;
-    if (a === 127) return true;
-    if (a === 169 && b === 254) return true; // link-local
-    if (a === 172 && b >= 16 && b <= 31) return true;
-    if (a === 192 && b === 168) return true;
-    if (a === 0) return true;
-  }
-  // IPv6 loopback / unique-local
-  if (host === '::1' || host.startsWith('[::1') || host.startsWith('fc') || host.startsWith('fd'))
-    return true;
-  return false;
-}
-
-// BASE-ийг функц байдлаар экспозлоно — lazy resolution-ийг хадгалахын тулд.
-const baseURL = () => resolveBackendBase();
-
-// Backend дуудлагын timeout — backend санамсаргүй удааширсан тохиолдолд
-// BFF unbounded hang болохоос сэргийлнэ. Refresh дуудлагад тусдаа богино
-// timeout ашиглана.
-const DEFAULT_TIMEOUT_MS = 15_000;
-const REFRESH_TIMEOUT_MS = 8_000;
 
 export type ApiOk<T> = { ok: true; status: number; message?: string; data?: T };
 export type ApiErr = { ok: false; status: number; message: string; fieldErrors?: Record<string, string> };
 export type ApiResult<T> = ApiOk<T> | ApiErr;
 
 /** Дугтуйг тайлж, нэгдсэн ApiResult болгож буцаах суурь fetch. */
-export async function backendFetch<T>(
-  path: string,
-  init?: RequestInit,
-  opts?: { timeoutMs?: number },
-): Promise<ApiResult<T>> {
-  const controller = new AbortController();
-  const timeoutMs = opts?.timeoutMs ?? DEFAULT_TIMEOUT_MS;
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
+export async function backendFetch<T>(path: string, init?: RequestInit): Promise<ApiResult<T>> {
   let res: Response;
   try {
-    res = await fetch(baseURL() + path, {
+    res = await fetch(BASE + path, {
       ...init,
-      signal: controller.signal,
       cache: 'no-store',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json', ...init?.headers },
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json', ...forwardedForHeaders(), ...init?.headers },
     });
-  } catch (e: unknown) {
-    const aborted = (e as { name?: string } | null)?.name === 'AbortError';
+  } catch {
     return {
       ok: false,
-      status: aborted ? 504 : 503,
-      message: aborted
-        ? 'Backend хариу хэт удаашрав.'
-        : 'Backend-тэй холбогдож чадсангүй. gerege-template-ai-v1.0 ажиллаж байгаа эсэхийг шалгана уу.',
+      status: 503,
+      message: 'Backend-тэй холбогдож чадсангүй. gerege-backend-template-v27 ажиллаж байгаа эсэхийг шалгана уу.',
     };
-  } finally {
-    clearTimeout(timer);
   }
 
   let body: Envelope<T> | null = null;
@@ -108,7 +64,19 @@ export async function backendFetch<T>(
     return { ok: true, status: res.status, message: body?.message, data: body?.data };
   }
 
-  const fieldErrors = (body?.data as ValidationData | undefined)?.errors;
+  // Backend нь талбарын алдааг массив ([{field,tag,message}]) хэлбэрээр
+  // буцаадаг; клиент тал нь талбар→мессеж object хүлээдэг тул хэвийн болгоно.
+  const rawErrors = (body?.data as { errors?: unknown } | undefined)?.errors;
+  let fieldErrors: Record<string, string> | undefined;
+  if (Array.isArray(rawErrors)) {
+    fieldErrors = {};
+    for (const item of rawErrors) {
+      const fe = item as { field?: string; message?: string };
+      if (fe?.field) fieldErrors[fe.field] = fe.message ?? '';
+    }
+  } else if (rawErrors && typeof rawErrors === 'object') {
+    fieldErrors = rawErrors as Record<string, string>;
+  }
   return {
     ok: false,
     status: res.status,
@@ -117,44 +85,25 @@ export async function backendFetch<T>(
   };
 }
 
-// Concurrent refresh race-аас сэргийлэх module-scope lock. Зэрэг олон
-// authedFetch 401 авбал зөвхөн нэг refresh дуудлага явуулна; үлдсэн нь
-// ижил promise-ийг хүлээнэ. Энэ нь backend-ийн refresh reuse-detection-ийг
-// false-positive trigger хийхгүй болгоно.
-let refreshInFlight: Promise<string | null> | null = null;
-
 /** Refresh токеноор шинэ access токен авах. Амжилттай бол шинэ токенг буцаана. */
 async function tryRefresh(): Promise<string | null> {
-  if (refreshInFlight) return refreshInFlight;
-  refreshInFlight = (async () => {
-    try {
-      const refresh = getRefreshToken();
-      if (!refresh) return null;
-      const r = await backendFetch<BackendUser>(
-        '/auth/refresh',
-        {
-          method: 'POST',
-          body: JSON.stringify({ refresh_token: refresh }),
-        },
-        { timeoutMs: REFRESH_TIMEOUT_MS },
-      );
-      if (r.ok && r.data?.token && r.data?.refresh_token) {
-        // Server component-ийн render үед cookie бичих боломжгүй (зөвхөн route
-        // handler / server action). Тэр тохиолдолд алдааг залгиад, шинэ токеныг
-        // зөвхөн энэ хүсэлтэд санах ойд ашиглана.
-        try {
-          setSession(r.data.token, r.data.refresh_token);
-        } catch {
-          /* RSC render — cookie бичих боломжгүй */
-        }
-        return r.data.token;
-      }
-      return null;
-    } finally {
-      refreshInFlight = null;
-    }
-  })();
-  return refreshInFlight;
+  const refresh = getRefreshToken();
+  if (!refresh) return null;
+  // Backend refresh нь rotation хийдэг — хуучин refresh jti нэг удаад
+  // хэрэглэгдээд устдаг. RSC render үед cookie бичих боломжгүй тул шинэ
+  // хосыг хадгалж чадахгүй — тэгвэл хүчинтэй сессиэ шатаах байсан тул
+  // refresh-ийг ОГТ дуудахгүй (дараагийн route handler хүсэлт refresh
+  // хийгээд cookie-г зөв шинэчилнэ).
+  if (!canPersistSession()) return null;
+  const r = await backendFetch<BackendUser>('/auth/refresh', {
+    method: 'POST',
+    body: JSON.stringify({ refresh_token: refresh }),
+  });
+  if (r.ok && r.data?.token && r.data?.refresh_token) {
+    setSession(r.data.token, r.data.refresh_token);
+    return r.data.token;
+  }
+  return null;
 }
 
 /**
@@ -177,27 +126,47 @@ export async function authedFetch<T>(path: string, init?: RequestInit): Promise<
 }
 
 /**
- * Streaming BFF route-уудад зориулсан туслахууд: SSE proxy нь backendFetch-ийн
- * JSON задлагчийг ашиглаж чадахгүй тул access токен + refresh-ийг ил гаргана.
- * refreshAccessToken нь module-scope lock-той tryRefresh-ийг дахин ашигладаг
- * тул зэрэгцээ stream + JSON хүсэлтүүд нэг л refresh дуудлага үүсгэнэ.
+ * Bearer токеноор backend руу хандаж, ТҮҮХИЙ Response-г буцаана (JSON тайлахгүй).
+ * Файл татах зэрэг binary хариунд ашиглана. 401 ирвэл нэг удаа refresh оролдоно.
  */
-export function backendBaseURL(): string {
-  return baseURL();
+export async function authedRaw(path: string, init?: RequestInit): Promise<Response> {
+  const withAuth = (token?: string) =>
+    fetch(BASE + path, {
+      ...init,
+      cache: 'no-store',
+      headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...forwardedForHeaders(), ...init?.headers },
+    });
+
+  const res = await withAuth(getAccessToken());
+  if (res.status !== 401) return res;
+  const newToken = await tryRefresh();
+  if (!newToken) return res;
+  return withAuth(newToken);
 }
 
-export async function refreshAccessToken(): Promise<string | null> {
-  return tryRefresh();
+export type MeResult =
+  | { ok: true; user: SessionUser }
+  | { ok: false; status: number };
+
+/**
+ * GET /users/me — бүтэлгүйтлийн ШАЛТГААНЫГ ялгаж буцаана. 401/403 бол сесси
+ * үнэхээр үхсэн (refresh дууссан/rotation-д хэрэглэгдсэн) — cookie цэвэрлэж
+ * дахин нэвтрүүлнэ; бусад статус (503/5xx) бол backend түр унтарсан — session-г
+ * хадгална. AreaShell энэ ялгааг ашиглан redirect давталтаас сэргийлдэг.
+ */
+export async function getMe(): Promise<MeResult> {
+  const r = await authedFetch<MeData>('/users/me', { method: 'GET' });
+  if (r.ok && r.data?.user) return { ok: true, user: toSessionUser(r.data.user) };
+  return { ok: false, status: r.status };
 }
 
 /** GET /users/me — нэвтэрсэн хэрэглэгчийн профайл, эсвэл null. */
 export async function fetchMe(): Promise<SessionUser | null> {
-  const r = await authedFetch<MeData>('/users/me', { method: 'GET' });
-  if (r.ok && r.data?.user) return toSessionUser(r.data.user);
-  return null;
+  const r = await getMe();
+  return r.ok ? r.user : null;
 }
 
-/** GET /rbac/me — нэвтэрсэн хэрэглэгчийн эрхийн түлхүүрүүд (server-side gate). */
+/** GET /rbac/me — нэвтэрсэн хэрэглэгчийн эрхийн түлхүүрүүд (хоосон массив fallback). */
 export async function fetchMyPermissions(): Promise<string[]> {
   const r = await authedFetch<string[]>('/rbac/me', { method: 'GET' });
   return r.ok && Array.isArray(r.data) ? r.data : [];

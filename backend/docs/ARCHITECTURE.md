@@ -2,19 +2,17 @@
 
 > 🌐 **English** · [Монгол](ARCHITECTURE_MN.md)
 
-This document describes the high-level architecture of **Government AI Platform Template
-v1.0** (module `govtemplateai`). The stack is **Fiber v3 + GORM +
-PostgreSQL + Redis**, organized along Clean Architecture lines.
+This document describes the high-level architecture of the **Gerege Backend
+Template v27** (module `template`). The stack is **chi (net/http) + pgx
+(pgxpool) + PostgreSQL + Redis**, organized along Clean Architecture lines.
 
 > **Origin & credits.** This template is **derived from the open-source project
 > [snykk/go-rest-boilerplate](https://github.com/snykk/go-rest-boilerplate)**
 > by Najib Fikri (MIT License) — the Clean Architecture layering, JWT/OTP auth
 > flows, caching, observability, and test strategy come from there. We adapted
-> it by converting the HTTP layer **Gin → Fiber v3** and the data layer
-> **sqlx → GORM**. Fiber v3 idioms were cross-checked against the open-source
-> [rachmanzz/fiber-starter](https://github.com/rachmanzz/fiber-starter). Both
-> upstreams are MIT-licensed; their license terms are honored — see
-> [Credits](#credits--license).
+> it by converting the HTTP layer **Gin → chi (net/http)** and the data layer
+> **sqlx → pgx (pgxpool)**. The upstream is MIT-licensed; its license terms are
+> honored — see [Credits](#credits--license).
 
 ## Layer Diagram
 
@@ -25,12 +23,13 @@ PostgreSQL + Redis**, organized along Clean Architecture lines.
 │  internal/http/{routes, datatransfers, middlewares, auth}         │
 ├─────────────────────────────────────────────────────────────────┤
 │                       Usecase Layer                               │
-│  internal/business/usecases/{auth,users,ai,voice}                 │
+│  internal/business/usecases/{auth,users,rbac,ai}                  │
 │  (Business logic, validation, orchestration)                      │
 ├─────────────────────────────────────────────────────────────────┤
 │                     Repository Layer                              │
 │  internal/datasources/repositories/{interface, postgres}          │
-│  (Data access via GORM, soft-delete, caching)                     │
+│  (Data access via pgx hand-written SQL, explicit soft-delete,     │
+│   caching)                                                        │
 ├─────────────────────────────────────────────────────────────────┤
 │                       Domain Layer                                │
 │  internal/business/domain                                         │
@@ -53,21 +52,21 @@ PostgreSQL + Redis**, organized along Clean Architecture lines.
 │   ├── apperror/                   # Typed domain errors (→ HTTP status)
 │   ├── business/
 │   │   ├── domain/                 # Enterprise entities (innermost circle)
-│   │   └── usecases/{auth,users,ai,voice}/  # Business logic — interface + impl
-│   │       # ai    = Anthropic Claude streaming chat
-│   │       # voice = Gemini STT / MN↔EN translate / TTS
+│   │   └── usecases/{auth,users,rbac,ai}/  # Business logic — interface + impl
+│   │       └── ai/                 # Gemini pipeline: function-calling chat,
+│   │                               #   STT/TTS/translate, layered prompts, tools
 │   ├── config/                     # Viper-backed config + .env.example
 │   ├── constants/                  # Env, logger, error, endpoint constants
 │   ├── datasources/
 │   │   ├── caches/                 # Redis + Ristretto two-tier cache
-│   │   ├── drivers/                # GORM Postgres connection (driver.gorm*)
+│   │   ├── drivers/                # pgx (pgxpool) Postgres connection (driver_pgx.go)
 │   │   ├── migration/              # Migration runner (SQL + AutoMigrate)
-│   │   ├── records/                # GORM models + record↔domain mappers
+│   │   ├── records/                # pgx record structs + record↔domain mappers
 │   │   └── repositories/
 │   │       ├── interface/          # Gateway abstractions (package _interface)
-│   │       └── postgres/{users,ai,voice}/  # GORM implementations
+│   │       └── postgres/{users,rbac,ai}/ # pgx implementations (hand-written SQL)
 │   └── http/
-│       ├── auth/                   # CurrentUser from Fiber Locals
+│       ├── auth/                   # CurrentUser from request context
 │       ├── datatransfers/          # Request / Response DTOs
 │       ├── handlers/v1/            # HTTP handlers
 │       ├── middlewares/            # Middleware stack
@@ -75,10 +74,10 @@ PostgreSQL + Redis**, organized along Clean Architecture lines.
 ├── migrations/                     # SQL migration files
 ├── pkg/                            # Framework-agnostic utilities
 │   ├── jwt/ logger/ clock/ helpers/ validators/
-│   ├── mailer/                     # Async OTP mailer
+│   ├── verify/                     # GeregeCloud Verify (OTP) client
+│   ├── gemini/                     # SDK-free Gemini REST client (function calling,
+│   │                               #   audio in/out, retry+backoff, PCM→WAV)
 │   ├── audit/                      # Auth-event audit log
-│   ├── aiclient/                   # Anthropic Messages SSE client
-│   ├── geminiclient/               # Gemini generateContent (STT/TTS) client
 │   └── observability/              # Tracing + metrics
 └── internal/test/                  # Mocks, fixtures, testcontainers harness
 ```
@@ -91,7 +90,7 @@ Dependencies flow inward only (Clean Architecture principle):
 HTTP → Usecase → Repository → Domain
   │        │          │
   ▼        ▼          ▼
- DTO   Interface   GORM/DB
+ DTO   Interface   pgx/SQL
 ```
 
 - **HTTP Layer** depends on **Usecase** interfaces (`auth.Usecase`, `users.Usecase`)
@@ -100,18 +99,18 @@ HTTP → Usecase → Repository → Domain
 - **Domain Layer** imports only the standard library + `golang.org/x/crypto/bcrypt` — never `internal/` or `pkg/`
 
 This is verified structurally: `internal/business/**` and
-`internal/datasources/repositories/**` import **no** Fiber package, so the
-delivery framework can be swapped without touching business code.
+`internal/datasources/repositories/**` import **no** chi/net-http web package,
+so the delivery framework can be swapped without touching business code.
 
 ## Key Components
 
 ### 1. HTTP Layer
 
 **Composition root:** `cmd/api/server/server.go`
-- Initializes tracing, DB (GORM), Redis/Ristretto, JWT service, mailer
+- Initializes tracing, DB (pgx pool), Redis/Ristretto, JWT service, GeregeCloud Verify client
 - Wires repositories → usecases → routes by hand (no global singletons, no DI container)
-- Builds the Fiber app and installs the middleware stack
-- Owns graceful shutdown (drains HTTP, mailer queue, DB, Redis, tracer)
+- Builds the chi router and installs the middleware stack
+- Owns graceful shutdown (drains HTTP, rate-limiter, pgx pool, Redis, tracer)
 
 **Routes:** `internal/http/routes/`
 - All API routes live under `/api/v1`
@@ -120,7 +119,7 @@ delivery framework can be swapped without touching business code.
 
 **Handlers:** `internal/http/handlers/v1/`
 - Parse + validate the request DTO, call the usecase, format the response
-- Handler signature is Fiber v3: `func(c fiber.Ctx) error`
+- Handler signature: `func(w http.ResponseWriter, r *http.Request) error` (wrapped by `v1.Wrap`)
 
 **DTOs:** `internal/http/datatransfers/{requests,responses}/`
 - Request structs carry `validate:` tags; responses shape the public payload
@@ -129,8 +128,8 @@ delivery framework can be swapped without touching business code.
 
 Global middleware, applied in order in `server.go::setupRouter`:
 
-1. **Tracing** — starts the per-request OTel span (hand-rolled; `otelgin` has no Fiber v3 port)
-2. **Request ID** — generates / propagates `X-Request-ID` into Locals + logger
+1. **Tracing** — starts the per-request OTel span via chi middleware
+2. **Request ID** — generates / propagates `X-Request-ID` into the request context + logger
 3. **Metrics** — Prometheus HTTP request counters + latency
 4. **Security Headers** — HSTS, CSP, nosniff, frame options, referrer policy
 5. **CORS** — origins from `ALLOWED_ORIGINS` (wildcard only in dev)
@@ -158,7 +157,7 @@ type Usecase interface {
 ```
 
 Responsibilities: business-rule validation, orchestration of repository +
-cache + JWT + mailer, login lockout, the password-rotation token cutoff.
+cache + JWT + GeregeCloud Verify, login lockout, the password-rotation token cutoff.
 `auth.Usecase` depends on `users.Usecase` (auth reuses user reads/writes).
 
 ### 4. Repository Layer
@@ -166,7 +165,7 @@ cache + JWT + mailer, login lockout, the password-rotation token cutoff.
 **Location:** `internal/datasources/repositories/`
 
 The `interface/` package (package name `_interface` — `interface` is a Go
-keyword) holds gateway abstractions; `postgres/users/` implements them with GORM:
+keyword) holds gateway abstractions; `postgres/users/` implements them with pgx:
 
 ```go
 // internal/datasources/repositories/interface/interface.go
@@ -181,24 +180,10 @@ type UserRepository interface {
 }
 ```
 
-Key features: GORM queries via `db.WithContext(ctx)`, soft delete via
-`gorm.DeletedAt` (default queries auto-exclude deleted rows), `Store` uses
-`INSERT … RETURNING` for a single round-trip, duplicate keys surface as
-`apperror.Conflict` (via GORM `TranslateError`).
-
-Every query runs inside `withRLS(ctx, fn)` (`users.postgres.go`), which opens a
-transaction and publishes the caller's identity to Postgres Row-Level Security
-as two session GUCs before running the query:
-
-```go
-SELECT set_config('app.user_id', ?, true),   -- the authenticated user's UUID
-       set_config('app.user_role', ?, true)  -- 'service' | 'admin' | 'user'
-```
-
-`set_config(..., true)` is `SET LOCAL` — scoped to the transaction — so a pooled
-connection never leaks one request's identity into the next. The identity comes
-from `rls.FromContext(ctx)`; if it is absent the GUCs are empty and the policies
-deny every row (fail-closed). See [Database → Row-Level Security](#row-level-security-rls).
+Key features: queries take `ctx` directly, soft delete via explicit
+`deleted_at IS NULL` predicates, `Store` uses single round-trip
+`INSERT … RETURNING`, duplicate keys detected via pgconn error code `23505` →
+`apperror.Conflict`. Rows are scanned with `pgx.RowToStructByName`.
 
 ### 5. Domain Layer
 
@@ -236,7 +221,7 @@ JWT access + refresh tokens (`pkg/jwt`):
   password change are rejected (`User.TokensRevokedBefore`)
 - `kind` claim guard prevents using a refresh token as an access token
 - The auth middleware (`internal/http/middlewares/middleware.auth.go`) validates
-  the bearer token and stashes the claims in Fiber Locals
+  the bearer token and stashes the claims in the request context
 
 ### Authorization
 
@@ -246,52 +231,20 @@ HTTP-layer `CurrentUser` view is read with
 
 ## Database
 
-- **ORM:** GORM v2 (`gorm.io/gorm`, `gorm.io/driver/postgres`)
+- **Driver:** pgx v5 (`github.com/jackc/pgx/v5` + pgxpool), hand-written SQL (no ORM)
 - **Database:** PostgreSQL
 - **Migrations:** SQL files in `migrations/` + idempotent `AutoMigrate`
-- **Row-Level Security:** enabled + FORCED on `users` (see below)
-- **Tracing:** `gorm.io/plugin/opentelemetry/tracing`
-
-### Row-Level Security (RLS)
-
-`migrations/6_enable_rls_users.up.sql` turns RLS on for the `users` table and
-defines a self/admin/service model enforced by the database itself — a second
-line of defence behind the `WHERE` clauses the repository already writes.
-
-| Role (`app.user_role`) | Can see / modify |
-|------------------------|------------------|
-| `service`              | every row — used by pre-auth flows (login lookup, registration, OTP activation, password reset) and the seeder |
-| `admin`                | every row |
-| `user`                 | only the row whose `id` equals `app.user_id` |
-| *(unset / empty)*      | nothing — **fail-closed** |
-
-The app connects as the table **owner**, and owners bypass ordinary RLS, so the
-migration uses `ALTER TABLE users FORCE ROW LEVEL SECURITY` to subject the owner
-to the policies too.
-
-Identity is carried in `context.Context` (`internal/datasources/rls`) and set at
-the trust boundary, not deep in the query:
-
-- **Pre-auth auth flows** (`usecases/auth`: login, register, OTP, refresh, reset)
-  mark the context `service`; `ChangePassword` marks it `user` for the caller's
-  own id (least privilege).
-- **Authenticated routes** — `middleware.auth.go` injects `user`/`admin` identity
-  into the request context after validating the JWT, so `/users/*` handlers carry
-  it automatically.
-
-The repository's `withRLS` helper then publishes that identity per-transaction
-(see [Repository Layer](#4-repository-layer)). **To extend to multi-tenancy:** add
-`tenant_id` to new tables, add a policy comparing it to a `app.tenant_id` GUC, and
-carry the tenant in `rls.Identity`.
+- **Tracing:** OpenTelemetry via chi middleware + pgx pool instrumentation (`otelpgx`)
 
 ### Connection Management
 
-Pool configured from env (`internal/datasources/drivers/driver.gorm_setup.go`):
+Pool configured from env (`internal/datasources/drivers/driver_pgx.go`,
+`SetupPgxPostgres`):
 
 ```go
-sqlDB.SetMaxOpenConns(cfg.MaxOpenConns)   // DB_MAX_OPEN_CONNS (default 25)
-sqlDB.SetMaxIdleConns(cfg.MaxIdleConns)   // DB_MAX_IDLE_CONNS (default 5)
-sqlDB.SetConnMaxLifetime(cfg.MaxLifetime) // DB_CONN_MAX_LIFE_MINS (default 15)
+poolCfg.MaxConns        = cfg.MaxConns    // DB_MAX_OPEN_CONNS (default 25)
+poolCfg.MinConns        = cfg.MinConns    // DB_MAX_IDLE_CONNS (default 5)
+poolCfg.MaxConnLifetime = cfg.MaxLifetime // DB_CONN_MAX_LIFE_MINS (default 15)
 ```
 
 ## Observability
@@ -303,8 +256,8 @@ sqlDB.SetConnMaxLifetime(cfg.MaxLifetime) // DB_CONN_MAX_LIFE_MINS (default 15)
 
 ### Metrics
 - **Library:** Prometheus, endpoint `GET /metrics`
-- HTTP request counters/latency, cache hit/miss/error per layer, mailer
-  outcomes (`mailer_operations_total`), DB pool stats
+- HTTP request counters/latency, cache hit/miss/error per layer, OTP send
+  outcomes (`otp_send_total`), DB pool stats
 
 ### Tracing
 - **Library:** OpenTelemetry; exporter selected by `OTEL_EXPORTER`
@@ -312,7 +265,7 @@ sqlDB.SetConnMaxLifetime(cfg.MaxLifetime) // DB_CONN_MAX_LIFE_MINS (default 15)
 
 ### Health Checks
 - `GET /health` — liveness
-- `GET /ready` — DB ping (via GORM) + Redis probe
+- `GET /ready` — DB ping (via pgx pool) + Redis probe
 
 ## Security Features
 
@@ -324,9 +277,8 @@ sqlDB.SetConnMaxLifetime(cfg.MaxLifetime) // DB_CONN_MAX_LIFE_MINS (default 15)
 | Body size limit   | global + tighter 4 KiB on `/auth`    | `middlewares/middleware.bodysizelimit.go` |
 | Input validation  | `validate:` struct tags              | `internal/http/datatransfers/requests/`   |
 | Password hashing  | bcrypt (cost 10–31, default 12)      | `internal/business/domain/domain.users.go`|
-| SQL injection     | GORM (parameterized)                 | `internal/datasources/repositories/`      |
+| SQL injection     | pgx (parameterized queries)          | `internal/datasources/repositories/`      |
 | Login lockout     | brute-force attempt cap in Redis     | `internal/business/usecases/auth/`        |
-| Row-Level Security| FORCE RLS on `users`, self/admin/service via `SET LOCAL` GUCs | `migrations/6_*`, `internal/datasources/rls` |
 
 ## API Design
 
@@ -346,6 +298,12 @@ All under base path `/api/v1` (plus infra routes at root):
 | POST   | `/api/v1/auth/password/reset` | —    | Complete password reset  |
 | PUT    | `/api/v1/auth/password/change`| JWT  | Change password          |
 | GET    | `/api/v1/users/me`            | JWT  | Current user profile     |
+| POST   | `/api/v1/ai/chat`             | JWT  | AI chat (text/voice, function calling) |
+| POST   | `/api/v1/ai/stt`              | JWT  | Speech-to-text           |
+| POST   | `/api/v1/ai/tts`              | JWT  | Text-to-speech (WAV)     |
+| POST   | `/api/v1/ai/translate`        | JWT  | Live translation (text/audio) |
+| GET/PUT| `/api/v1/admin/ai/prompts`    | JWT+perm | AI prompt layers (settings.manage) |
+| GET    | `/api/v1/rbac/*` `/api/v1/admin/users*` | JWT+perm | RBAC + user administration |
 | GET    | `/health` `/ready` `/metrics` | —    | Ops endpoints            |
 | GET    | `/swagger/*`                  | —    | Swagger UI               |
 
@@ -402,7 +360,6 @@ Loaded from `.env` / environment by Viper (`internal/config/config.go`). See
 ## Deployment
 
 ```bash
-make docker-up        # Postgres + Redis + API via docker-compose
 make build            # build the API binary
 ```
 
@@ -414,16 +371,14 @@ This template stands on open-source work:
 
 | Project | Author | License | What we used |
 |---------|--------|---------|--------------|
-| [snykk/go-rest-boilerplate](https://github.com/snykk/go-rest-boilerplate) | Najib Fikri | MIT | Base architecture, auth/OTP/mailer/audit flows, caching, observability, tests |
-| [rachmanzz/fiber-starter](https://github.com/rachmanzz/fiber-starter) | rachmanzz | MIT | Fiber v3 idioms reference |
-| [GoFiber](https://github.com/gofiber/fiber) · [GORM](https://github.com/go-gorm/gorm) | — | MIT | Web framework · ORM |
+| [snykk/go-rest-boilerplate](https://github.com/snykk/go-rest-boilerplate) | Najib Fikri | MIT | Base architecture, auth/OTP/audit flows, caching, observability, tests |
 
-Our changes vs. the upstream boilerplate: **Gin → Fiber v3** (HTTP layer) and
-**sqlx → GORM** (data layer); everything else was reproduced faithfully. As an
+Our changes vs. the upstream boilerplate: **Gin → chi (net/http)** (HTTP layer) and
+**sqlx → pgx (pgxpool)** (data layer); everything else was reproduced faithfully. As an
 MIT derivative, this template retains the upstream copyright notices and is
 itself distributed under the MIT License (see `LICENSE`).
 
 
 ---
 
-**Government AI Platform Template V1.0** — Co-developed by the **Gerege Systems Development Team** and **Claude AI**, 2026.
+**Gerege Template Version 27.0** — Co-developed by the **Gerege Systems Development Team** and **Claude AI**, 2026.

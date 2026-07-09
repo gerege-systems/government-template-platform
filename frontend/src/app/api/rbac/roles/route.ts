@@ -1,20 +1,17 @@
 import { authedFetch } from '@/lib/api';
-import { readJson, checkOrigin, proxyResult } from '@/lib/bff';
+import { proxyResult, readJson, checkOrigin } from '@/lib/bff';
 
 export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
 
-/** GET /api/rbac/roles — эрхүүд (permission-уудтай). */
+// GET /api/rbac/roles — бүх role + permission (RBAC matrix). roles.manage эрх.
 export async function GET() {
-  const r = await authedFetch<unknown>('/rbac/roles', { method: 'GET' });
-  return proxyResult(r);
+  return proxyResult(await authedFetch('/rbac/roles', { method: 'GET' }));
 }
 
-/** POST /api/rbac/roles — эрх үүсгэх. */
+// POST /api/rbac/roles — шинэ role үүсгэх.
 export async function POST(req: Request) {
   const bad = checkOrigin(req);
   if (bad) return bad;
-  const body = await readJson<Record<string, unknown>>(req);
-  const r = await authedFetch<unknown>('/rbac/roles', { method: 'POST', body: JSON.stringify(body) });
-  return proxyResult(r);
+  const body = await readJson(req);
+  return proxyResult(await authedFetch('/rbac/roles', { method: 'POST', body: JSON.stringify(body) }));
 }

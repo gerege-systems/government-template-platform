@@ -1,6 +1,6 @@
 //go:build integration
 
-// Government AI Platform Template V1.0
+// Gerege Template Version 27.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package migration_test
@@ -11,11 +11,11 @@ import (
 	"path/filepath"
 	"testing"
 
-	"govtemplateai/internal/datasources/migration"
-	"govtemplateai/internal/test/testenv"
-	"govtemplateai/pkg/logger"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"template/internal/datasources/migration"
+	"template/internal/test/testenv"
+	"template/pkg/logger"
 )
 
 // writeMigration нь dir дотор зохиомол migration хосыг үүсгэдэг жижиг
@@ -30,9 +30,9 @@ func writeMigration(t *testing.T, dir, num, body, downBody string) {
 
 func newRunner(t *testing.T) (*migration.Runner, string) {
 	t.Helper()
-	db := testenv.StartPostgresEmpty(t)
+	pool := testenv.StartPostgresEmpty(t)
 	dir := t.TempDir()
-	r := migration.New(db, dir)
+	r := migration.New(pool, dir)
 	// runner-ийн чимээг намжаа — testing.T нь юу амжилтгүй болсныг аль
 	// хэдийн харуулдаг.
 	r.SetLogger(func(string, logger.Fields) {})
@@ -89,16 +89,16 @@ func TestRunner_PartialFailureRollsBack(t *testing.T) {
 
 	// Амжилтгүй болсон migration-ийн нэр schema_migrations-д ГАРАХ
 	// ёсгүй.
-	db := r.DB()
+	pool := r.Pool()
 	var count int
-	require.NoError(t, db.WithContext(ctx).Raw(
-		`SELECT COUNT(*) FROM schema_migrations WHERE name = ?`, "1_test.up.sql").Scan(&count).Error)
+	require.NoError(t, pool.QueryRow(ctx,
+		`SELECT COUNT(*) FROM schema_migrations WHERE name = $1`, "1_test.up.sql").Scan(&count))
 	assert.Equal(t, 0, count, "schema_migrations must not record a failed migration")
 
 	// Мөн хүснэгт өөрөө байх ёсгүй (rollback нь DDL-г барьсан).
 	var exists bool
-	require.NoError(t, db.WithContext(ctx).Raw(
-		`SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'half_done')`).Scan(&exists).Error)
+	require.NoError(t, pool.QueryRow(ctx,
+		`SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'half_done')`).Scan(&exists))
 	assert.False(t, exists, "half-applied DDL must roll back with the tx")
 }
 
@@ -121,8 +121,8 @@ func TestRunner_AppliesMultipleFilesInOrder(t *testing.T) {
 	require.NoError(t, r.Up(ctx))
 
 	// schema_migrations-ийн хоёр мөр хоёулаа байх ёстой.
-	db := r.DB()
+	pool := r.Pool()
 	var count int
-	require.NoError(t, db.WithContext(ctx).Raw(`SELECT COUNT(*) FROM schema_migrations`).Scan(&count).Error)
+	require.NoError(t, pool.QueryRow(ctx, `SELECT COUNT(*) FROM schema_migrations`).Scan(&count))
 	assert.Equal(t, 2, count)
 }

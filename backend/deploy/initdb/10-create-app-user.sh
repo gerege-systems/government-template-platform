@@ -1,46 +1,51 @@
 #!/bin/sh
-# Runs ONCE, at first database initialisation, by the postgres image
-# entrypoint — executed as the bootstrap superuser POSTGRES_USER against
-# POSTGRES_DB (before the migrate container runs).
+# Gerege Template Version 27.0
 #
-# Why: the users table enforces Row-Level Security (migration 6), but a
-# SUPERUSER (which the postgres image makes POSTGRES_USER) BYPASSES RLS even
-# when it is FORCED. So we create a NON-superuser role for the API to connect
-# as; then the RLS policies actually take effect. The migrate container keeps
-# using POSTGRES_USER (it needs superuser for CREATE EXTENSION "uuid-ossp").
+# Postgres-ийн анхны init дээр НЭГ удаа (data volume хоосон үед) superuser
+# POSTGRES_USER-ээр ажиллана. Хамгийн бага эрхтэй (least-privilege) application
+# role үүсгэдэг — ингэснээр api нь NON-superuser-ээр холбогдож Row-Level Security
+# бодит хэрэгжинэ (superuser болон BYPASSRLS role нь RLS-ийг алгасдаг).
 #
-# FAIL-CLOSED: APP_DB_USER / APP_DB_PASSWORD ЗААВАЛ шаардлагатай. Дутуу бол
-# init-ийг зогсооно (exit 1) — өмнө нь чимээгүй superuser-ээр fallback хийж
-# бүх RLS-ийг алгасдаг байсан (аюултай).
+# migrate контейнер нь POSTGRES_USER (superuser) хэвээр ашигладаг — CREATE
+# EXTENSION "uuid-ossp", ALTER TABLE ... FORCE ROW LEVEL SECURITY, CREATE POLICY
+# зэрэгт superuser/owner эрх шаардлагатай. Зөвхөн api л энэ хязгаарлагдмал
+# role-оор холбогдоно.
 set -e
 
-if [ -z "${APP_DB_USER}" ] || [ -z "${APP_DB_PASSWORD}" ]; then
-  echo "initdb: FATAL — APP_DB_USER/APP_DB_PASSWORD must be set (refusing to run the API as a superuser that bypasses RLS)." >&2
-  exit 1
-fi
+: "${APP_DB_USER:?APP_DB_USER must be set for the least-privilege app role}"
+: "${APP_DB_PASSWORD:?APP_DB_PASSWORD must be set for the least-privilege app role}"
 
-# Нууц үгийг SQL-д шууд залгахгүй (injection эрсдэл) — psql -v хувьсагчаар
-# дамжуулж, кодод параметржүүлж хэрэглэнэ.
-psql -v ON_ERROR_STOP=1 \
-  --username "${POSTGRES_USER}" --dbname "${POSTGRES_DB}" \
-  -v app_user="${APP_DB_USER}" -v app_pass="${APP_DB_PASSWORD}" <<SQL
-DO \$\$
-BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = :'app_user') THEN
-    EXECUTE format('CREATE ROLE %I LOGIN PASSWORD %L NOSUPERUSER NOBYPASSRLS', :'app_user', :'app_pass');
-  END IF;
-END
-\$\$;
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+	DO \$\$
+	BEGIN
+		IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = '${APP_DB_USER}') THEN
+			CREATE ROLE ${APP_DB_USER} LOGIN PASSWORD '${APP_DB_PASSWORD}'
+				NOSUPERUSER NOBYPASSRLS NOCREATEDB NOCREATEROLE;
+		END IF;
+	END
+	\$\$;
 
-GRANT USAGE ON SCHEMA public TO :"app_user";
+	GRANT CONNECT ON DATABASE ${POSTGRES_DB} TO ${APP_DB_USER};
+	GRANT USAGE ON SCHEMA public TO ${APP_DB_USER};
 
--- Tables are created later by the migrate container (running as
--- ${POSTGRES_USER}); grant DML on those future tables automatically so the
--- API role never needs superuser. RLS still constrains which ROWS it sees.
-ALTER DEFAULT PRIVILEGES FOR ROLE "${POSTGRES_USER}" IN SCHEMA public
-  GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO :"app_user";
-ALTER DEFAULT PRIVILEGES FOR ROLE "${POSTGRES_USER}" IN SCHEMA public
-  GRANT USAGE, SELECT ON SEQUENCES TO :"app_user";
-SQL
+	-- migrate (POSTGRES_USER-ээр) дараа нь үүсгэх хүснэгт/sequence-ууд app
+	-- role-д DML эрхийг автоматаар олгоно.
+	ALTER DEFAULT PRIVILEGES FOR ROLE ${POSTGRES_USER} IN SCHEMA public
+		GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO ${APP_DB_USER};
+	ALTER DEFAULT PRIVILEGES FOR ROLE ${POSTGRES_USER} IN SCHEMA public
+		GRANT USAGE, SELECT ON SEQUENCES TO ${APP_DB_USER};
 
-echo "initdb: created non-superuser role '${APP_DB_USER}' for the API (RLS enforced)."
+	-- init үед аль хэдийн байгаа аливаа объект (цэвэр volume дээр байхгүй ч,
+	-- байгаа schema-руу дахин ажиллуулахад зөв байлгана).
+	GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO ${APP_DB_USER};
+	GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO ${APP_DB_USER};
+
+	-- Тэмдэглэл: эдгээр нь өргөн (бүх хүснэгтэд DML) default. RLS-гүй глобал
+	-- config хүснэгтүүд (permissions / role_permissions / ai_prompts /
+	-- ai_knowledge) дээрх эрхийг migration 17 нь repo-ийн бодит хэрэглээнд
+	-- нийцүүлж (defense-in-depth) багасгана. Тэр migration нь role нэрийг
+	-- 'app_user' гэж үздэг тул APP_DB_USER-г өөр нэрээр тохируулбал тэнд
+	-- заасан REVOKE-уудыг гараар давтана уу.
+EOSQL
+
+echo "initdb: least-privilege role '${APP_DB_USER}' (NOSUPERUSER NOBYPASSRLS) ready"

@@ -1,18 +1,18 @@
-// Government AI Platform Template V1.0
+// Gerege Template Version 27.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package seeders
 
 import (
+	"context"
 	"errors"
 	"time"
 
-	"govtemplateai/internal/constants"
-	"govtemplateai/internal/datasources/records"
-	"govtemplateai/internal/datasources/rls"
-	"govtemplateai/pkg/logger"
+	"template/internal/constants"
+	"template/internal/datasources/records"
+	"template/pkg/logger"
 
-	"gorm.io/gorm"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type Seeder interface {
@@ -20,11 +20,11 @@ type Seeder interface {
 }
 
 type seeder struct {
-	db *gorm.DB
+	pool *pgxpool.Pool
 }
 
-func NewSeeder(db *gorm.DB) Seeder {
-	return &seeder{db: db}
+func NewSeeder(pool *pgxpool.Pool) Seeder {
+	return &seeder{pool: pool}
 }
 
 func (s *seeder) UserSeeder(userData []records.Users) (err error) {
@@ -34,31 +34,30 @@ func (s *seeder) UserSeeder(userData []records.Users) (err error) {
 
 	logger.Info("inserting users data...", logger.Fields{constants.LoggerCategory: constants.LoggerCategorySeeder})
 
+	ctx := context.Background()
 	// Бүхэл багцад нэг транзакц — хагас дутуу seed нь огт байхгүйгээс дор.
 	// Id-г INSERT-ээс хассан тул Postgres түүнийг uuid_generate_v4() баганы
 	// анхдагч утгаар (migration-ууд бэлдсэн) дүүргэнэ.
-	err = s.db.Transaction(func(tx *gorm.DB) error {
-		// users хүснэгт дээр RLS асаалттай бөгөөд FORCE хийгдсэн тул seeder
-		// нь хүснэгтийн эзэн (owner) байсан ч мөр оруулахын тулд "service"
-		// үүргийг авах ёстой. set_config(..., true) нь SET LOCAL — зөвхөн
-		// энэ транзакцид хүчинтэй.
-		if cfgErr := tx.Exec(
-			`SELECT set_config('app.user_role', ?, true)`, string(rls.RoleService),
-		).Error; cfgErr != nil {
-			return cfgErr
-		}
-		for i := range userData {
-			userData[i].CreatedAt = time.Now().UTC()
-			if createErr := tx.Omit("Id").Create(&userData[i]).Error; createErr != nil {
-				return createErr
-			}
-		}
-		return nil
-	})
+	tx, err := s.pool.Begin(ctx)
 	if err != nil {
+		return err
+	}
+	defer func() { _ = tx.Rollback(ctx) }()
+
+	for i := range userData {
+		if _, createErr := tx.Exec(ctx, `
+			INSERT INTO users(id, username, email, password, active, role_id, created_at)
+			VALUES (uuid_generate_v4(), $1, $2, $3, $4, $5, $6)
+		`, userData[i].Username, userData[i].Email, userData[i].Password,
+			userData[i].Active, userData[i].RoleId, time.Now().UTC()); createErr != nil {
+			return createErr
+		}
+	}
+
+	if err := tx.Commit(ctx); err != nil {
 		return err
 	}
 
 	logger.Info("users data inserted successfully", logger.Fields{constants.LoggerCategory: constants.LoggerCategorySeeder})
-	return
+	return nil
 }

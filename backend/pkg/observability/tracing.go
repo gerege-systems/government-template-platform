@@ -1,4 +1,4 @@
-// Government AI Platform Template V1.0
+// Gerege Template Version 27.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package observability
@@ -21,7 +21,7 @@ import (
 // TracerName нь дуудагчид глобал provider-ээс tracer авахдаа ашиглах ёстой
 // import зам бөгөөд ингэснээр энэ төслөөс ялгарах span бүр ижил
 // instrumentation library шошготой болно.
-const TracerName = "govtemplateai"
+const TracerName = "gerege-template"
 
 // TracingConfig нь tracer-provider байгуулалтыг удирдана. Тэг утга нь no-op
 // tracer (sampler=never, exporter байхгүй)-ийг өгдөг бөгөөд тест болон OTel
@@ -67,7 +67,7 @@ func SetupTracing(ctx context.Context, cfg TracingConfig) (Shutdown, error) {
 
 	res, err := resource.New(ctx,
 		resource.WithAttributes(
-			semconv.ServiceName(orDefault(cfg.ServiceName, "gerege-template")),
+			semconv.ServiceName(orDefault(cfg.ServiceName, "go-rest-boilerplate")),
 			semconv.DeploymentEnvironment(orDefault(cfg.Environment, "development")),
 		),
 	)

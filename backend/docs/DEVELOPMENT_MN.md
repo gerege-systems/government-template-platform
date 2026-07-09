@@ -2,13 +2,13 @@
 
 > 🌐 [English](DEVELOPMENT.md) · **Монгол**
 
-Энэ заавар нь хөгжүүлэгчдэд **Government AI Platform Template V1.0** кодын бааз дээр тохиргоо
+Энэ заавар нь хөгжүүлэгчдэд **Gerege Backend Template v27** кодын бааз дээр тохиргоо
 хийж, ажиллахад туслана.
 
 > **Эх сурвалж.** Najib Fikri-ийн нээлттэй эх
 > [snykk/go-rest-boilerplate](https://github.com/snykk/go-rest-boilerplate)
-> (MIT)-аас гаралтай бөгөөд HTTP давхаргыг **Gin → Fiber v3**, өгөгдлийн
-> давхаргыг **sqlx → GORM** болгож хөрвүүлсэн. Бүрэн зохиогчдын мэдээллийг
+> (MIT)-аас гаралтай бөгөөд HTTP давхаргыг **Gin → chi (net/http)**, өгөгдлийн
+> давхаргыг **sqlx → pgx (pgxpool)** болгож хөрвүүлсэн. Бүрэн зохиогчдын мэдээллийг
 > [ARCHITECTURE.md](./ARCHITECTURE.md#credits--license)-аас үз.
 
 ## Шаардлага (Prerequisites)
@@ -26,11 +26,8 @@ cp internal/config/.env.example internal/config/.env
 # Edit .env — JWT_SECRET must be at least 32 characters
 
 # 2. Start the stack (Postgres + Redis + API)
-make docker-up
 
 # 3. Or run locally: apply migrations, then serve
-make mig-up
-make serve
 ```
 
 Сервер `http://localhost:8080` дээр ажиллана; Swagger UI нь
@@ -39,8 +36,6 @@ make serve
 ## Хөгжүүлэлтийн командууд (Development Commands)
 
 ```bash
-make serve              # Run the API server
-make dev                # Hot reload (requires: go install github.com/air-verse/air@latest)
 make build              # Build the API binary
 make tidy               # go mod tidy
 make lint               # golangci-lint
@@ -62,28 +57,15 @@ make test-cover         # Tests with coverage report
 ### Migration-ууд
 
 ```bash
-make mig-up                       # Apply all pending migrations
-make mig-down                     # Roll back the last migration
-make seed                         # Seed the database
 ```
 
-Migration-ууд нь `migrations/` доторх түүхий SQL файлууд бөгөөд
-`internal/datasources/migration/` доторх runner-аар хэрэгжиж, дараа нь
-`internal/datasources/records/` доторх model-уудын idempotent GORM
-`AutoMigrate`-ээр үргэлжилнэ.
-
-**Row-Level Security:** `6_enable_rls_users.up.sql` нь `users` дээр RLS-г асааж
-`FORCE` хийгээд self/admin/service бодлоготой болгоно
-([ARCHITECTURE → Row-Level Security](ARCHITECTURE_MN.md#row-level-security-rls)-г
-үз). Хэрэгжсэний дараа `users` хүснэгтэд хүрэх ямар ч код request-ийн
-`context.Context`-д identity зөөж явах ёстой, эс бөгөөс бодлогууд бүх мөрийг
-хаана:
-
-- Хүсэлтийн дотор identity автоматаар тогтоогдоно — нэвтрэхээс өмнөх
-  `usecases/auth` урсгалуудаар `service`, `middleware.auth.go`-оор `user`/`admin`.
-- Хүсэлтээс гадуур (script, job, repo-г шууд дууддаг тест) context-оо эхлээд
-  `rls.WithService(ctx)` / `rls.WithUser(ctx, id)`-ээр боо. Seeder нь өөрийн
-  транзакцид `service` GUC-г аль хэдийн тогтоодог.
+Migration-ууд нь `internal/datasources/migration/` (болон `migrations/`) доторх
+түүхий SQL файлууд бөгөөд migration runner-аар хэрэгждэг. Schema-г өөрчлөхдөө
+урагшлах (forward) SQL migration файл нэм; migration runner үүнийг idempotent
+байдлаар хэрэгжүүлнэ (advisory lock + файл тус бүрийн transaction +
+`schema_migrations` хяналт). ORM AutoMigrate байхгүй — `internal/datasources/records/`
+доторх record struct-ууд нь schema тодорхойлолт биш, харин pgx-ээр уншигддаг
+энгийн struct-ууд юм.
 
 ## Кодын зохион байгуулалт (Code Organization)
 
@@ -112,18 +94,41 @@ Migration-ууд нь `migrations/` доторх түүхий SQL файлууд
    }
    ```
 
-3. **GORM Model + Repository Impl** — `internal/datasources/records/record.products.go`
+3. **Record struct + Repository Impl** — `internal/datasources/records/record_products.go`
    болон `internal/datasources/repositories/postgres/products/`
+
+   Record нь `db:"..."` tag-тай **энгийн Go struct** юм. `pgx.RowToStructByName`
+   нь үр дүнгийн баганануудыг нэрээр нь талбаруудтай тааруулдаг бөгөөд soft-delete
+   нь энгийн nullable `*time.Time DeletedAt` (NULL → nil) — **gorm tag, AutoMigrate
+   байхгүй**.
    ```go
-   // record.products.go
-   type Products struct {
-       Id        string         `gorm:"column:id;primaryKey"`
-       Name      string         `gorm:"column:name"`
-       Price     int64          `gorm:"column:price"`
-       CreatedAt time.Time      `gorm:"column:created_at"`
-       DeletedAt gorm.DeletedAt `gorm:"column:deleted_at;index"`
+   // internal/datasources/records/record_products.go
+   type Product struct {
+       ID        string     `db:"id"`
+       Name      string     `db:"name"`
+       Price     int64      `db:"price"`
+       CreatedAt time.Time  `db:"created_at"`
+       DeletedAt *time.Time `db:"deleted_at"`
    }
-   func (Products) TableName() string { return "products" }
+   ```
+   Repository нь `*pgxpool.Pool` авч, гараар бичсэн SQL ажиллуулдаг —
+   `INSERT ... RETURNING`-г `pgx.CollectExactlyOneRow` + `pgx.RowToStructByName`-ээр
+   цуглуулна. `23505` unique violation нь `apperror.Conflict` болж буудаг; уншихдаа
+   `deleted_at IS NULL` нөхцөлийг ИЛ-ээр нэмнэ.
+   ```go
+   func (r *productRepository) Create(ctx context.Context, p *records.Product) (records.Product, error) {
+       rows, _ := r.pool.Query(ctx, `INSERT INTO products (id, name, price) VALUES ($1,$2,$3)
+           RETURNING id, name, price, created_at, deleted_at`, p.ID, p.Name, p.Price)
+       out, err := pgx.CollectExactlyOneRow(rows, pgx.RowToStructByName[records.Product])
+       if err != nil {
+           var pgErr *pgconn.PgError
+           if errors.As(err, &pgErr) && pgErr.Code == "23505" {
+               return records.Product{}, apperror.Conflict("product exists")
+           }
+           return records.Product{}, err
+       }
+       return out, nil
+   }
    ```
 
 4. **Usecase Interface + Impl** — `internal/business/usecases/products/`
@@ -143,35 +148,47 @@ Migration-ууд нь `migrations/` доторх түүхий SQL файлууд
    }
    ```
 
-6. **Handler** — `internal/http/handlers/v1/products/products.handler.go`
+6. **Handler** — `internal/http/handlers/v1/products/products_handler.go`
+
+   Handler-ууд нь `func(w http.ResponseWriter, r *http.Request) error` гарын
+   үсэгтэй бөгөөд route бүртгэх үед `v1.Wrap`-ээр ороогддог (буцаасан алдааг JSON
+   envelope болгон хувиргадаг). Body-г `v1.DecodeBody`-ээр унш, контекстийг
+   `r.Context()`-ээр унш, `v1.NewSuccessResponse` / `v1.RespondWithError`-ээр буцаа.
    ```go
-   func (h Handler) Create(c fiber.Ctx) error {
+   func (h Handler) Create(w http.ResponseWriter, r *http.Request) error {
        var req requests.CreateProductRequest
-       if err := c.Bind().Body(&req); err != nil {
-           return v1.NewErrorResponse(c, http.StatusBadRequest, "invalid request body")
+       if err := v1.DecodeBody(r, &req); err != nil {
+           return v1.NewErrorResponse(w, r, http.StatusBadRequest, "invalid request body")
        }
        if err := validators.ValidatePayloads(req); err != nil {
-           return v1.RespondWithError(c, err)
+           return v1.RespondWithError(w, r, err)
        }
-       // ... call h.usecase.Create(c.Context(), ...) ...
+       data, err := h.usecase.Create(r.Context(), products.CreateRequest{Name: req.Name, Price: req.Price})
+       if err != nil {
+           return v1.RespondWithError(w, r, err)
+       }
+       return v1.NewSuccessResponse(w, r, http.StatusCreated, "created", data)
    }
    ```
 
-7. **Route** — `internal/http/routes/route.products.go` (`route.users.go`-г дуурайлга)
+7. **Route** — `internal/http/routes/route_products.go` (`route_users.go`-г дуурайлга)
+
+   Route-ууд нь chi router ашигладаг; handler бүрийг `v1.Wrap`-ээр оро. Path
+   параметрийг `chi.URLParam(r, "id")`-ээр унш.
    ```go
-   func (r *productsRoute) Routes() {
-       v1 := r.router.Group("/v1")
-       grp := v1.Group("/products")
-       grp.Use(r.authMiddleware)
-       grp.Post("/", r.handler.Create)
-       grp.Get("/:id", r.handler.GetByID)
+   func (rt *productsRoute) Routes() {
+       rt.router.Route("/v1/products", func(r chi.Router) {
+           r.Use(rt.authMiddleware)
+           r.Post("/", v1.Wrap(rt.handler.Create))
+           r.Get("/{id}", v1.Wrap(rt.handler.GetByID))
+       })
    }
    ```
 
 8. **Wire Up** — `cmd/api/server/server.go` дотор одоо байгаагийнх нь хажууд
    repo → usecase → route-ийг бүтээ:
    ```go
-   productRepo := productspostgres.NewProductRepository(conn)
+   productRepo := productspostgres.NewProductRepository(pool)
    productsUC := products.NewUsecase(productRepo)
    routes.NewProductsRoute(api, productsUC, authMiddleware).Routes()
    ```
@@ -196,16 +213,19 @@ func TestUsecase_Create(t *testing.T) {
 }
 ```
 
-#### Handler тестүүд (Fiber)
+#### Handler тестүүд (net/http)
+
+chi router-г (эсвэл `v1.Wrap`-ээр ороосон handler-г) `net/http/httptest`-ээр
+жолоодоно — `httptest.NewRequest` нь хүсэлтийг бүтээж, `httptest.NewRecorder`
+нь хариуг барьж авна. Fiber тест app байхгүй.
 
 ```go
 func TestHandler_Create(t *testing.T) {
-    app := fiber.New(fiber.Config{ErrorHandler: func(c fiber.Ctx, err error) error {
-        return v1.RespondWithError(c, err)
-    }})
-    // ... register route with a mocked usecase ...
-    resp, _ := app.Test(httptest.NewRequest(http.MethodPost, "/api/v1/products", body))
-    assert.Equal(t, http.StatusCreated, resp.StatusCode)
+    // ... mock usecase-тай router бүтээх ...
+    req := httptest.NewRequest(http.MethodPost, "/api/v1/products", strings.NewReader(body))
+    rec := httptest.NewRecorder()
+    router.ServeHTTP(rec, req)
+    require.Equal(t, http.StatusCreated, rec.Code)
 }
 ```
 
@@ -215,8 +235,8 @@ func TestHandler_Create(t *testing.T) {
 //go:build integration
 
 func TestProductRepository_Store(t *testing.T) {
-    db := testenv.SetupPostgres(t)      // testcontainers — real Postgres
-    repo := postgres.NewProductRepository(db)
+    pool := testenv.SetupPostgres(t)    // testcontainers — бодит Postgres (pgxpool)
+    repo := postgres.NewProductRepository(pool)
     got, err := repo.Store(context.Background(), &domain.Product{Name: "X", Price: 100})
     assert.NoError(t, err)
     assert.NotEmpty(t, got.ID)
@@ -264,15 +284,41 @@ if err != nil {
 ### Контекст ашиглах (Context Usage)
 
 `context.Context`-ийг үргэлж эхэнд нь дамжуул; handler дотор үүнийг
-`c.Context()`-ээр унш:
+`r.Context()`-ээр унш, pgx дуудлага бүрд дамжуул:
 
 ```go
 func (r *postgreUserRepository) GetByID(ctx context.Context, id string) (domain.User, error) {
-    var rec records.Users
-    err := r.conn.WithContext(ctx).Where(`"id" = ?`, id).First(&rec).Error
+    rows, err := r.pool.Query(ctx,
+        `SELECT `+records.UserColumns+` FROM users WHERE id = $1 AND deleted_at IS NULL`, id)
+    if err != nil {
+        return domain.User{}, err
+    }
+    rec, err := pgx.CollectExactlyOneRow(rows, pgx.RowToStructByName[records.Users])
     // ...
 }
 ```
+
+## AI туслахыг өргөтгөх
+
+> Гүн тайлбар: [AI_PIPELINE_MN.md](AI_PIPELINE_MN.md) — урсгал, prompt давхарга, voice, troubleshooting.
+
+Gemini pipeline (`internal/business/usecases/ai`) нь проект бүрд өргөтгөгдөхөөр
+зохиогдсон:
+
+- **Tool нэмэх** — `ai.ToolDef` (Gemini function declaration + Go `Execute`
+  функц) бичээд `cmd/api/server/server.go`-ийн tool жагсаалтад нэмнэ. Model
+  хэзээ дуудахаа өөрөө шийднэ; backend хүсэлтийн context-оор гүйцэтгэдэг тул
+  DB хандалтад RLS үйлчилнэ. Жишээ: `KnowledgeSearchTool` (`ai_knowledge`-ээс
+  хайдаг), `get_server_time`.
+- **Туслахын чиглэлийг өөрчлөх** — `scope` давхаргыг ажиллаж байх үед нь
+  засна (Админ → Тохиргоо, эсвэл `PUT /admin/ai/prompts/scope`). Suurь
+  хамгаалалтын давхарга (хэл, хүрээний сахилт, prompt-injection эсэргүүцэл)
+  `ai_prompts.go`-д хатуу бичигдсэн — тэр хэвээрээ байх ёстой.
+- **Мэдлэгийн санг өргөтгөх** — `ai_knowledge`-д мөр нэмнэ
+  (title/content/tags). `repositories/postgres/ai`-ийн ILIKE хайлт нэг query —
+  сан томрох үед tsvector эсвэл pgvector-оор солино.
+- **Model-ууд** — чат/STT/орчуулга `GEMINI_MODEL`, TTS `GEMINI_TTS_MODEL`
+  (audio гаргадаг тусдаа model) хэрэглэнэ; хоёулаа зөвхөн env тохиргоо.
 
 ## API баримтжуулалт (API Documentation)
 
@@ -290,7 +336,7 @@ Handler-ууд нь `swag`-ийн ашигладаг godoc annotation-уудыг
 // @Success      200 {object} v1.BaseResponse
 // @Failure      401 {object} v1.BaseResponse
 // @Router       /auth/login [post]
-func (h Handler) Login(c fiber.Ctx) error { /* ... */ }
+func (h Handler) Login(w http.ResponseWriter, r *http.Request) error { /* ... */ }
 ```
 
 ### Баримтжуулалтыг дахин үүсгэх (Regenerate Docs)
@@ -335,9 +381,7 @@ Deploy хийхээс өмнө дараахыг баталгаажуул:
 - [ ] Нууц утгууд environment-ээс ирдэг, хэзээ ч commit хийгддэггүй
 - [ ] Production-д `ALLOWED_ORIGINS` тохируулагдсан (wildcard байхгүй)
 - [ ] Edge / load balancer дээр HTTPS албадан хэрэгжсэн
-- [ ] RLS migration (`6_enable_rls_users`) хэрэгжсэн; `users`-д хүрэх шинэ код
-      бүр `rls` identity тогтоодог (эс бөгөөс fail-closed болж хаагдана)
 
 ---
 
-**Government AI Platform Template V1.0** — **Gerege Systems Development Team** болон **Claude AI** хамтран бүтээв, 2026.
+**Gerege Template Version 27.0** — **Gerege Systems Development Team** болон **Claude AI** хамтран бүтээв, 2026.

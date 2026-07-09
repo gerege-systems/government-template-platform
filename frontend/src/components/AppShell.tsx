@@ -3,21 +3,30 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
+import { getJSON } from '@/lib/client';
 import {
-  LayoutDashboard, User, ShieldCheck, HelpCircle, LogOut, Sparkles, Languages, Workflow,
-  BookOpen, Menu, Search, Users, ShieldHalf, UserCircle, Briefcase, Building2,
+  LayoutDashboard, User, ShieldCheck, HelpCircle, LogOut, Menu, Search,
+  Users, ShieldHalf, UserCircle, Briefcase, Bot, Languages, Building2,
+  ScrollText, ShieldAlert, CreditCard, KeyRound, Smartphone,
+  Landmark, FileText, FileCheck, CalendarClock, Wallet, Bell, Plug,
+  FileSignature, Gauge, Server, Route, Crown,
 } from 'lucide-react';
 import UserMenu from './UserMenu';
+import NavSearch, { type SearchItem } from './NavSearch';
 import { signOut } from '@/lib/signout';
-import { useT } from '@/lib/useT';
+import { useT } from '@/lib/lang';
 import type { DictKey } from '@/lib/i18n';
-
-const ROLE_ADMIN = 1; // backend domain.RoleAdmin
+import { displayName, isAdminLevel, isSuperAdmin } from '@/lib/types';
+import { initialsOf } from '@/lib/format';
 
 export interface AppUser {
   username: string;
+  fullName: string;
+  fullNameEn: string;
   email: string;
   initials: string;
+  picture?: string; // Google профайл зураг (холбогдсон бол)
   roleId: number;
 }
 
@@ -31,6 +40,7 @@ interface NavItem {
   labelKey: DictKey;
   icon: typeof User;
   perm?: string; // шаардагдах эрх; байхгүй бол бүх нэвтэрсэн хэрэглэгчид
+  superAdminOnly?: boolean; // зөвхөн super admin (perm bypass-д хамаарахгүй)
 }
 interface NavGroup {
   labelKey?: DictKey;
@@ -40,130 +50,172 @@ interface NavGroup {
 interface NavSystem {
   key: string;
   labelKey: DictKey;
+  brand: string; // sidepanel-ийн дээд мөр — идэвхтэй систем бүрээр солигдоно (English)
   icon: typeof User;
-  adminOnly: boolean;
+  adminOnly?: boolean;
   groups: NavGroup[];
 }
 
+// BPMN, translator, AI зэрэг хэсгүүдийг хассан — зөвхөн generic admin цөм.
 const SYSTEMS: NavSystem[] = [
   {
     key: 'admin',
-    labelKey: 'shell.sysAdmin',
+    labelKey: 'sys.admin',
+    brand: 'Admin System',
     icon: ShieldHalf,
     adminOnly: true,
     groups: [
       {
-        labelKey: 'shell.groupProfile',
+        labelKey: 'group.general',
         items: [
           { href: '/admin/dashboard', labelKey: 'nav.dashboard', icon: LayoutDashboard, perm: 'dashboard.view' },
-          { href: '/admin/profile', labelKey: 'nav.profile', icon: User, perm: 'dashboard.view' },
         ],
       },
       {
-        labelKey: 'shell.groupAI',
+        labelKey: 'group.management',
         items: [
-          { href: '/admin/chat', labelKey: 'nav.chat', icon: Sparkles, perm: 'ai.chat' },
-          { href: '/admin/knowledge', labelKey: 'nav.knowledge', icon: BookOpen, perm: 'knowledge.manage' },
-          { href: '/admin/translate', labelKey: 'nav.translate', icon: Languages, perm: 'voice.translate' },
-          { href: '/admin/bpm', labelKey: 'nav.bpm', icon: Workflow, perm: 'bpm.manage' },
-        ],
-      },
-      {
-        labelKey: 'shell.groupSecurity',
-        items: [
-          { href: '/admin/settings', labelKey: 'nav.security', icon: ShieldCheck, perm: 'settings.manage' },
-          { href: '/admin/orgs', labelKey: 'nav.orgs', icon: Building2, perm: 'org.manage' },
+          { href: '/admin/superadmin', labelKey: 'nav.superadmin', icon: Crown, superAdminOnly: true },
           { href: '/admin/users', labelKey: 'nav.users', icon: Users, perm: 'users.manage' },
+          { href: '/admin/core', labelKey: 'nav.coreSearch', icon: Search, perm: 'users.manage' },
           { href: '/admin/roles', labelKey: 'nav.roles', icon: ShieldHalf, perm: 'roles.manage' },
+          { href: '/admin/settings', labelKey: 'nav.settings', icon: ShieldCheck, perm: 'settings.manage' },
+        ],
+      },
+      {
+        labelKey: 'group.gateway',
+        items: [
+          { href: '/admin/gateway/overview', labelKey: 'nav.gwOverview', icon: Gauge, perm: 'gateway.manage' },
+          { href: '/admin/gateway/services', labelKey: 'nav.gwServices', icon: Server, perm: 'gateway.manage' },
+          { href: '/admin/gateway/routes', labelKey: 'nav.gwRoutes', icon: Route, perm: 'gateway.manage' },
+          { href: '/admin/gateway/consumers', labelKey: 'nav.gwConsumers', icon: KeyRound, perm: 'gateway.manage' },
+          { href: '/admin/gateway/policies', labelKey: 'nav.gwPolicies', icon: ShieldAlert, perm: 'gateway.manage' },
+          { href: '/admin/gateway/logs', labelKey: 'nav.gwLogs', icon: ScrollText, perm: 'gateway.manage' },
+        ],
+      },
+      {
+        labelKey: 'group.security',
+        items: [
+          { href: '/admin/audit', labelKey: 'nav.audit', icon: ScrollText },
+          { href: '/admin/security', labelKey: 'nav.security', icon: ShieldAlert },
         ],
       },
     ],
   },
   {
     key: 'manager',
-    labelKey: 'shell.sysManager',
+    labelKey: 'sys.manager',
+    brand: 'Manager System',
     icon: Briefcase,
-    adminOnly: false,
     groups: [
       {
-        labelKey: 'shell.groupManager',
+        labelKey: 'group.manager',
         items: [
           { href: '/manager/dashboard', labelKey: 'nav.managerDashboard', icon: LayoutDashboard, perm: 'manager.view' },
-          { href: '/manager/profile', labelKey: 'nav.managerProfile', icon: User, perm: 'manager.view' },
+          { href: '/manager/users', labelKey: 'nav.users', icon: Users, perm: 'users.manage' },
         ],
       },
     ],
   },
   {
-    key: 'user',
-    labelKey: 'shell.sysUser',
+    key: 'me',
+    labelKey: 'sys.user',
+    brand: 'Me System',
     icon: UserCircle,
-    adminOnly: false,
     groups: [
       {
-        labelKey: 'shell.groupUser',
+        labelKey: 'group.personal',
+        // Профайл, Тохиргоо нь баруун дээд dropdown-д байгаа тул зүүн цэсэнд давхардуулахгүй.
         items: [
-          { href: '/user/dashboard', labelKey: 'nav.personalDashboard', icon: LayoutDashboard, perm: 'personal.view' },
-          { href: '/user/profile', labelKey: 'nav.personalProfile', icon: User, perm: 'personal.view' },
+          { href: '/me/dashboard', labelKey: 'nav.dashboard', icon: LayoutDashboard },
+          { href: '/me/integrations', labelKey: 'nav.integrations', icon: Plug },
+          { href: '/me/ai', labelKey: 'nav.ai', icon: Bot },
+          { href: '/me/translate', labelKey: 'nav.translate', icon: Languages },
+        ],
+      },
+      {
+        labelKey: 'group.eid',
+        items: [
+          { href: '/me/eid/id', labelKey: 'nav.eidId', icon: CreditCard },
+          { href: '/me/eid/certificates', labelKey: 'nav.eidCerts', icon: KeyRound },
+          { href: '/me/eid/devices', labelKey: 'nav.eidDevices', icon: Smartphone },
+          { href: '/me/eid/logs', labelKey: 'nav.eidLogs', icon: ScrollText },
+          { href: '/me/eid/security', labelKey: 'nav.eidSecurity', icon: ShieldCheck },
+          { href: '/me/eid/sign', labelKey: 'nav.eidSign', icon: FileSignature },
+          { href: '/me/organizations', labelKey: 'nav.org', icon: Building2 },
+        ],
+      },
+      {
+        labelKey: 'group.govServices',
+        items: [
+          { href: '/me/services', labelKey: 'nav.govServices', icon: Landmark },
+          { href: '/me/applications', labelKey: 'nav.govApplications', icon: FileText },
+          { href: '/me/references', labelKey: 'nav.govReferences', icon: FileCheck },
+          { href: '/me/appointments', labelKey: 'nav.govAppointments', icon: CalendarClock },
+          { href: '/me/payments', labelKey: 'nav.govPayments', icon: Wallet },
+          { href: '/me/notifications', labelKey: 'nav.govNotifications', icon: Bell },
         ],
       },
     ],
   },
 ];
 
-// Систем тус бүрийн үндсэн зам — UserMenu-ийн профайл/тохиргооны холбоосыг
-// идэвхтэй системд тааруулна.
-const SYSTEM_BASE: Record<string, string> = { admin: '/admin', manager: '/manager', user: '/user' };
-
 /**
- * Хоёр түвшний бүрхүүл — icon rail дахь "систем" (Admin / Personal) тус бүр
- * өөрийн бүлэгтэй дэд цэстэй. Admin системийг зөвхөн admin (role_id=1) харна;
- * энгийн хэрэглэгчид зөвхөн Personal систем харагдана. Бүх өнгө дизайн
- * системээс (OKLCH).
+ * Хоёр түвшний бүрхүүл — icon rail дахь "систем" (Админ / Менежер / Хэрэглэгч)
+ * тус бүр өөрийн дэд цэстэй. Хэрэглэгчийн эрхээр (/api/rbac/me) цэсийг шүүж,
+ * хэлийг useT()-ээр (mn/en) орчуулна.
  */
 export default function AppShell({ user, children }: Props) {
   const pathname = usePathname() ?? '/';
   const { T, lang } = useT();
-  const isAdmin = user.roleId === ROLE_ADMIN;
+  const isAdmin = isAdminLevel(user.roleId); // super admin + admin
+  const isSuper = isSuperAdmin(user.roleId);
 
-  // Хэрэглэгчийн эрхүүдийг авч цэсийг шүүнэ. admin (role 1) бүгдийг харна;
-  // ачаалж дуустал admin-д бүгд, бусдад зөвхөн эрхгүй (Personal) зүйл харагдана.
-  const [perms, setPerms] = useState<string[] | null>(null);
-  useEffect(() => {
-    let alive = true;
-    fetch('/api/rbac/me', { method: 'GET' })
-      .then((r) => r.json())
-      .then((b) => {
-        if (alive && b?.ok && Array.isArray(b.data)) setPerms(b.data as string[]);
-        else if (alive) setPerms([]);
-      })
-      .catch(() => alive && setPerms([]));
-    return () => {
-      alive = false;
-    };
-  }, []);
+  // TanStack Query — олон component зэрэг mount хийгдсэн ч /api/rbac/me-г
+  // нэг л удаа татна (deduplication + кэш).
+  const permsQuery = useQuery({
+    queryKey: ['rbac-me'],
+    queryFn: () => getJSON<string[]>('/api/rbac/me'),
+  });
+  const perms = permsQuery.isPending ? null : (permsQuery.data ?? []);
 
-  const canSee = (perm?: string) => !perm || isAdmin || (perms?.includes(perm) ?? false);
-  // Эрхтэй item-уудтай бүлэг/системийг л үлдээж шүүнэ.
+  // superAdminOnly item нь perm bypass-д хамаарахгүй — зөвхөн super admin харна
+  // (энгийн admin ч харахгүй).
+  const canSeeItem = (i: NavItem) => {
+    if (i.superAdminOnly) return isSuper;
+    return !i.perm || isAdmin || (perms?.includes(i.perm) ?? false);
+  };
   const visibleGroups = (s: NavSystem) =>
     s.groups
-      .map((g) => ({ ...g, items: g.items.filter((i) => canSee(i.perm)) }))
+      .map((g) => ({ ...g, items: g.items.filter(canSeeItem) }))
       .filter((g) => g.items.length > 0);
-  const systems = SYSTEMS.filter((s) => visibleGroups(s).length > 0);
+  const systems = SYSTEMS.filter((s) => {
+    if (s.adminOnly && !isAdmin) return false;
+    return visibleGroups(s).length > 0;
+  });
+
+  // Дээд талын хайлтын каталог — харагдах бүх цэсний зүйл (эрхийн дагуу) +
+  // dropdown-д байдаг Профайл/Тохиргоо. Бичихэд шүүж, сонгоход шилжинэ.
+  const searchItems: SearchItem[] = [
+    ...systems.flatMap((s) =>
+      visibleGroups(s).flatMap((g) => g.items.map((i) => ({ label: T(i.labelKey), href: i.href, group: T(s.labelKey) }))),
+    ),
+    { label: T('nav.profile'), href: '/me/profile', group: T('sys.user') },
+    { label: T('nav.settings'), href: '/me/settings', group: T('sys.user') },
+  ];
 
   const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
-  const systemMatches = (s: NavSystem) => visibleGroups(s).some((g) => g.items.some((i) => isActive(i.href)));
+  // Нүүр '/' нь "me" системд багтдаг ч default панелийг түүгээр сонгохгүй —
+  // ингэснээр admin/manager нэвтрэхдээ нүүрэн дээр өөрийн дээд системээ нээлттэй
+  // хардаг; гүн холбоос (/admin/*, /manager/*) хэвээр зөв.
+  const systemMatches = (s: NavSystem) =>
+    visibleGroups(s).some((g) => g.items.some((i) => i.href !== '/' && isActive(i.href)));
 
-  // perms ачаалж дуустал admin биш хэрэглэгчид systems хоосон байж болзошгүй
-  // тул activeSystem undefined байж болно — hook-уудыг найдвартай (optional)
-  // дуудаж, дараа нь skeleton render хийнэ (undefined.key crash-аас сэргийлнэ).
   const activeSystem = systems.find(systemMatches) ?? systems[0];
   const [openKey, setOpenKey] = useState(activeSystem?.key ?? '');
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
     if (activeSystem) setOpenKey(activeSystem.key);
-    // activeSystem.key-ээр л дахин ажиллана (object identity-ээр биш).
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSystem?.key]);
 
@@ -171,7 +223,6 @@ export default function AppShell({ user, children }: Props) {
     if (typeof window !== 'undefined' && window.innerWidth <= 900) setCollapsed(true);
   }, []);
 
-  // Эрх ачаалж дуустал (эсвэл харагдах систем огт байхгүй үед) хөнгөн skeleton.
   if (!activeSystem) {
     return (
       <div className="shell2 shell2--loading" aria-busy="true">
@@ -185,13 +236,12 @@ export default function AppShell({ user, children }: Props) {
 
   return (
     <div className={`shell2${collapsed ? ' is-collapsed' : ''}`}>
-      {/* Нарийн icon rail — системүүд */}
       <aside className="iconrail">
         <Link href="/" className="iconrail__brand" aria-label="Gerege">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/brand.webp" alt="Gerege" />
         </Link>
-        <nav className="iconrail__nav" aria-label={T('shell.navLabel')}>
+        <nav className="iconrail__nav" aria-label={T('shell.menu')}>
           {systems.map((s) => {
             const Icon = s.icon;
             const active = s.key === activeSystem.key;
@@ -213,32 +263,18 @@ export default function AppShell({ user, children }: Props) {
           })}
         </nav>
         <div className="iconrail__bottom">
-          <a
-            className="iconrail__btn"
-            href="https://gerege.mn/help"
-            target="_blank"
-            rel="noreferrer"
-            title={T('nav.help')}
-            aria-label={T('nav.help')}
-          >
+          <a className="iconrail__btn" href="https://gerege.mn/help" target="_blank" rel="noreferrer" title={T('nav.help')} aria-label={T('nav.help')}>
             <HelpCircle size={20} strokeWidth={2} />
           </a>
-          <button
-            className="iconrail__btn iconrail__signout"
-            type="button"
-            title={T('nav.signout')}
-            aria-label={T('nav.signout')}
-            onClick={() => signOut()}
-          >
+          <button className="iconrail__btn iconrail__signout" type="button" title={T('nav.signout')} aria-label={T('nav.signout')} onClick={() => signOut()}>
             <LogOut size={20} strokeWidth={2} />
           </button>
         </div>
       </aside>
 
-      {/* Дэлгэгддэг дэд цэс — идэвхтэй системийн бүлгүүд (separator-тай) */}
       <aside className="sidepanel">
         <div className="sidepanel__head">
-          <span className="sidepanel__brand-name">Gerege</span>
+          <span className="sidepanel__brand-name">{panel.brand}</span>
           <span className="sidepanel__title">{T(panel.labelKey)}</span>
         </div>
         <nav className="sidepanel__nav">
@@ -265,34 +301,17 @@ export default function AppShell({ user, children }: Props) {
         </nav>
       </aside>
 
-      {/* Контентын багана: header + scroll content */}
       <div className="maincol">
         <header className="topbar2">
-          <button
-            className="topbar2__toggle"
-            type="button"
-            aria-label={T('shell.toggleMenu')}
-            onClick={() => setCollapsed((c) => !c)}
-          >
+          <button className="topbar2__toggle" type="button" aria-label={T('shell.menu')} onClick={() => setCollapsed((c) => !c)}>
             <Menu size={20} strokeWidth={2} />
           </button>
           <div className="topbar2__spacer" />
-          <div className="topbar2__search">
-            <Search size={16} strokeWidth={2} />
-            <input className="topbar2__search-input" type="search" placeholder={T('shell.search')} aria-label={T('shell.search')} />
-          </div>
+          <NavSearch items={searchItems} placeholder={T('shell.search')} emptyText={lang === 'en' ? 'No results' : 'Илэрц алга'} />
           <div className="topbar2__actions">
-            <UserMenu
-              username={user.username}
-              email={user.email}
-              initials={user.initials}
-              profileHref={`${SYSTEM_BASE[activeSystem.key] ?? '/admin'}/profile`}
-              settingsHref={`${SYSTEM_BASE[activeSystem.key] ?? '/admin'}/settings`}
-            />
+            <UserMenu username={displayName(user, lang)} email={user.email} initials={initialsOf(displayName(user, lang))} picture={user.picture} />
           </div>
         </header>
-
-        {lang === 'en' && <div className="i18n-banner">{T('banner.partial')}</div>}
 
         <main className="main">
           <div className="main__inner">{children}</div>

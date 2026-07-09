@@ -1,16 +1,14 @@
 import { authedFetch } from '@/lib/api';
-import { readJson, checkOrigin, proxyResult } from '@/lib/bff';
+import { proxyResult, readJson, checkOrigin, checkIntID } from '@/lib/bff';
 
 export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
 
-interface Ctx { params: { id: string } }
-
-/** PUT /api/rbac/roles/:id/permissions — эрхийн зөвшөөрлүүдийг тохируулах. */
-export async function PUT(req: Request, { params }: Ctx) {
-  const bad = checkOrigin(req);
+// PUT /api/rbac/roles/{id}/permissions — role-ийн permission-уудыг бүхэлд нь солих.
+export async function PUT(req: Request, { params }: { params: { id: string } }) {
+  const bad = checkOrigin(req) ?? checkIntID(params.id);
   if (bad) return bad;
-  const body = await readJson<Record<string, unknown>>(req);
-  const r = await authedFetch<unknown>(`/rbac/roles/${encodeURIComponent(params.id)}/permissions`, { method: 'PUT', body: JSON.stringify(body) });
-  return proxyResult(r);
+  const body = await readJson(req);
+  return proxyResult(
+    await authedFetch(`/rbac/roles/${params.id}/permissions`, { method: 'PUT', body: JSON.stringify(body) }),
+  );
 }

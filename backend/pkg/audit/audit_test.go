@@ -1,4 +1,4 @@
-// Government AI Platform Template V1.0
+// Gerege Template Version 27.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package audit_test
@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"govtemplateai/pkg/audit"
 	"github.com/stretchr/testify/assert"
+	"template/pkg/audit"
 )
 
 func TestRecord_EmitsJSONLine(t *testing.T) {

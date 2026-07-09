@@ -1,6 +1,6 @@
 //go:build integration
 
-// Government AI Platform Template V1.0
+// Gerege Template Version 27.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Package testenv нь integration-тестийн harness-г агуулна —
@@ -24,37 +24,38 @@ import (
 	"path/filepath"
 	"runtime"
 	"sort"
+	"strconv"
+	"strings"
 	"testing"
 	"time"
 
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/testcontainers/testcontainers-go/wait"
-	gormpostgres "gorm.io/driver/postgres"
-	"gorm.io/gorm"
 )
 
 // StartPostgresEmpty нь устгагдах Postgres контейнер асааж, uuid-ossp
-// өргөтгөлийг суулгаж, түүн рүү чиглэсэн *gorm.DB-г буцаана. Ямар ч
+// өргөтгөлийг суулгаж, түүн рүү чиглэсэн *pgxpool.Pool-г буцаана. Ямар ч
 // migration хэрэгжүүлэгдэхгүй. Тест өөрөө schema өөрчлөлтийг
 // удирддаг үед (жишээ нь migration runner-ийн өөрийн integration тест)
 // үүнийг ашигла.
-func StartPostgresEmpty(t *testing.T) *gorm.DB {
+func StartPostgresEmpty(t *testing.T) *pgxpool.Pool {
 	t.Helper()
 	return startPostgres(t, false)
 }
 
 // StartPostgres нь устгагдах Postgres контейнер асааж,
 // migrations/ дахь бүх .up.sql migration-г лексикографийн
-// дарааллаар хэрэгжүүлж, холбогдсон *gorm.DB-г буцаана. Контейнерийг
+// дарааллаар хэрэгжүүлж, холбогдсон *pgxpool.Pool-г буцаана. Контейнерийг
 // t.Cleanup зогсоодог тул тест бүр цэвэр эхлэл авдаг; ижил package дахь
 // тестүүдийн хооронд юу ч алддаггүй.
-func StartPostgres(t *testing.T) *gorm.DB {
+func StartPostgres(t *testing.T) *pgxpool.Pool {
 	t.Helper()
 	return startPostgres(t, true)
 }
 
-func startPostgres(t *testing.T, runMigrations bool) *gorm.DB {
+func startPostgres(t *testing.T, runMigrations bool) *pgxpool.Pool {
 	t.Helper()
 
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
@@ -96,35 +97,35 @@ func startPostgres(t *testing.T, runMigrations bool) *gorm.DB {
 		t.Fatalf("postgres connection string: %v", err)
 	}
 
-	db, err := gorm.Open(gormpostgres.Open(dsn), &gorm.Config{TranslateError: true})
+	pool, err := pgxpool.New(ctx, dsn)
 	if err != nil {
 		t.Fatalf("connect postgres: %v", err)
 	}
 	t.Cleanup(func() {
-		if sqlDB, dbErr := db.DB(); dbErr == nil {
-			_ = sqlDB.Close()
-		}
+		pool.Close()
 	})
 
 	// uuid_generate_v4()-г users migration ашигладаг.
-	if err := db.WithContext(ctx).Exec(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`).Error; err != nil {
+	if _, err := pool.Exec(ctx, `CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`); err != nil {
 		t.Fatalf("install uuid-ossp: %v", err)
 	}
 
 	if runMigrations {
-		if err := applyMigrations(ctx, db); err != nil {
+		if err := applyMigrations(ctx, pool); err != nil {
 			t.Fatalf("apply migrations: %v", err)
 		}
 	}
 
-	return db
+	return pool
 }
 
-// applyMigrations нь бүх .up.sql файлыг лексикографийн дарааллаар
-// ажиллуулна. integration тест нь runner-ийн транзакц /
-// schema_migrations бүртгэлээс салангид хэвээр байхын тулд cmd/migration-г
-// дахин ашиглахын оронд harness дотор inline байлгасан.
-func applyMigrations(ctx context.Context, db *gorm.DB) error {
+// applyMigrations нь бүх .up.sql файлыг ТООН дарааллаар (файлын нэрний
+// эхний дугаар) ажиллуулна — лексикограф эрэмбэ "10_"-ыг "1_"-ээс өмнө
+// тавьдаг тул болохгүй (runner-ийн listFiles-тэй ижил дүрэм).
+// integration тест нь runner-ийн транзакц / schema_migrations бүртгэлээс
+// салангид хэвээр байхын тулд cmd/migration-г дахин ашиглахын оронд
+// harness дотор inline байлгасан.
+func applyMigrations(ctx context.Context, pool *pgxpool.Pool) error {
 	dir := migrationsDir()
 	entries, err := os.ReadDir(dir)
 	if err != nil {
@@ -137,7 +138,13 @@ func applyMigrations(ctx context.Context, db *gorm.DB) error {
 			files = append(files, name)
 		}
 	}
-	sort.Strings(files)
+	sort.Slice(files, func(i, j int) bool {
+		ni, nj := migrationNumber(files[i]), migrationNumber(files[j])
+		if ni != nj {
+			return ni < nj
+		}
+		return files[i] < files[j]
+	})
 
 	for _, name := range files {
 		full := filepath.Join(dir, name)
@@ -147,11 +154,25 @@ func applyMigrations(ctx context.Context, db *gorm.DB) error {
 		if err != nil {
 			return fmt.Errorf("read %s: %w", name, err)
 		}
-		if err := db.WithContext(ctx).Exec(string(data)).Error; err != nil {
+		if _, err := pool.Exec(ctx, string(data)); err != nil {
 			return fmt.Errorf("exec %s: %w", name, err)
 		}
 	}
 	return nil
+}
+
+// migrationNumber нь "N_name.up.sql" нэрнээс эхний N дугаарыг буцаана;
+// дугааргүй файл хамгийн сүүлд эрэмбэлэгдэнэ.
+func migrationNumber(name string) int {
+	i := strings.IndexByte(name, '_')
+	if i <= 0 {
+		return int(^uint(0) >> 1)
+	}
+	n, err := strconv.Atoi(name[:i])
+	if err != nil {
+		return int(^uint(0) >> 1)
+	}
+	return n
 }
 
 // migrationsDir нь go.mod олдтол энэ эх файлаас дээш алхах замаар

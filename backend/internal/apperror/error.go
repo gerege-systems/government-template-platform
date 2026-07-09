@@ -1,4 +1,4 @@
-// Government AI Platform Template V1.0
+// Gerege Template Version 27.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Package apperror нь business давхарга HTTP handler руу дамжуулдаг
@@ -17,9 +17,6 @@ const (
 	ErrTypeForbidden
 	ErrTypeConflict
 	ErrTypeBadRequest
-	// ErrTypeUnavailable нь 503 болж буудаг — гадаад хамаарал (жишээ нь
-	// AI provider) тохируулагдаагүй эсвэл түр ажиллахгүй байгааг илэрхийлнэ.
-	ErrTypeUnavailable
 )
 
 // DomainError нь business давхаргад дамждаг төрөлжсөн алдаа юм.
@@ -59,7 +56,6 @@ func Forbidden(msg string) *DomainError    { return New(ErrTypeForbidden, msg) }
 func Conflict(msg string) *DomainError     { return New(ErrTypeConflict, msg) }
 func BadRequest(msg string) *DomainError   { return New(ErrTypeBadRequest, msg) }
 func Internal(msg string) *DomainError     { return New(ErrTypeInternal, msg) }
-func Unavailable(msg string) *DomainError  { return New(ErrTypeUnavailable, msg) }
 
 // InternalCause нь тогтсон, ерөнхий, хэрэглэгчид харагдах мессежтэй дотоод
 // алдаа үүсгэж, бодит cause-ийг логдох зорилгоор хадгалдаг. Доод түвшний алдаа

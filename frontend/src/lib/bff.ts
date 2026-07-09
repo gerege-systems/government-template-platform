@@ -14,40 +14,31 @@ export async function readJson<T = Record<string, unknown>>(req: Request): Promi
 }
 
 /**
- * CSRF-ийн эсрэг defense-in-depth. State-changing POST route-ууд дээр
- * `Origin` толгойг аппын өөрийн origin-той тулгана. Browser нь fetch POST-д
- * Origin-г үргэлж тавьдаг тул same-origin хүсэлт асуудалгүй нэвтэрнэ.
+ * CSRF-ийн эсрэг хоёр давхар хамгаалалт. State-changing route-ууд дээр:
  *
- * Чанд бодлого:
- *   - Origin байхгүй: 403 (anti-CSRF defense-in-depth; SameSite=Strict дээр
- *     найдсан хуучин hedge-ийг зайлуулав).
- *   - production-д APP_ORIGIN env заавал тохируулсан байна; өөрөөс host
- *     header дээр найдах нь spoofed Host-той proxy-д сул юм.
- *   - dev (NODE_ENV!=='production') орчинд APP_ORIGIN заагаагүй бол
- *     request URL-ийн origin-ыг pragmatic default-аар авна.
+ *  1. Custom header (`x-gerege-csrf: 1`) шаардана — cross-site form POST
+ *     custom header тавьж чаддаггүй, cross-origin fetch нь preflight-д
+ *     CORS-оор хаагддаг тул энэ header нь хүсэлт өөрийн JS-ээс
+ *     (lib/client.ts sendJSON) гарсныг баталдаг. SameSite=Lax-ийн
+ *     top-level navigation цонхыг (form POST) бүрэн хаана.
+ *  2. `Origin` толгой байвал аппын origin-той тулгана (APP_ORIGIN env,
+ *     эсвэл хүсэлтийн өөрийн URL).
+ *
+ * Зөрвөл 403 буцаах NextResponse-г, тааралцвал `null`-г буцаана.
  */
 export function checkOrigin(req: Request): NextResponse | null {
-  const origin = req.headers.get('origin');
-  if (!origin) {
+  if (req.headers.get('x-gerege-csrf') !== '1') {
     return NextResponse.json(
-      { ok: false, status: 403, message: 'Origin толгой шаардлагатай.' },
+      { ok: false, status: 403, message: 'CSRF header дутуу байна.' },
       { status: 403 },
     );
   }
 
-  const configured = process.env.APP_ORIGIN;
-  if (!configured && process.env.NODE_ENV === 'production') {
-    return NextResponse.json(
-      { ok: false, status: 500, message: 'Сервер тохиргоо дутуу: APP_ORIGIN env шаардлагатай.' },
-      { status: 500 },
-    );
-  }
-  // APP_ORIGIN нь таслалаар тусгаарласан олон origin байж болно (жишээ нь нэг
-  // апп хэд хэдэн домэйн дээр) — аль нэгтэй нь тохирвол зөвшөөрнө.
-  const allowed = configured
-    ? configured.split(',').map((s) => s.trim()).filter(Boolean)
-    : [new URL(req.url).origin];
-  if (allowed.includes(origin)) return null;
+  const origin = req.headers.get('origin');
+  if (!origin) return null; // Origin байхгүй (non-browser) — header шалгалт хангалттай.
+
+  const expected = process.env.APP_ORIGIN ?? new URL(req.url).origin;
+  if (origin === expected) return null;
 
   return NextResponse.json(
     { ok: false, status: 403, message: 'Origin тохирохгүй байна.' },
@@ -55,25 +46,34 @@ export function checkOrigin(req: Request): NextResponse | null {
   );
 }
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const INT_ID_RE = /^\d{1,10}$/;
+
+function invalidID(): NextResponse {
+  return NextResponse.json({ ok: false, status: 400, message: 'ID буруу байна.' }, { status: 400 });
+}
+
+/** Dynamic route-ийн UUID параметрийг шалгана (хэрэглэгчийн id). Буруу бол 400. */
+export function checkUUID(id: string): NextResponse | null {
+  return UUID_RE.test(id) ? null : invalidID();
+}
+
+/** Dynamic route-ийн бүхэл тоон id-г шалгана (role id г.м.). Буруу бол 400. */
+export function checkIntID(id: string): NextResponse | null {
+  return INT_ID_RE.test(id) ? null : invalidID();
+}
+
 /**
- * Backend ApiResult-г browser рүү буцаах client хэлбэрт хувиргана. Токен зэрэг
+ * backend ApiResult-г browser рүү буцаах client хэлбэрт хувиргана. Токен зэрэг
  * нууц талбарыг хэзээ ч client рүү гаргахгүй — зөвхөн ok/status/message/fieldErrors.
- * 5xx алдааны нарийвчилсан мэдээллийг гадаад руу гаргахгүй (info leak).
  */
 export function toClientResponse(r: ApiResult<unknown>): NextResponse {
   const httpStatus = r.ok ? 200 : r.status >= 400 && r.status < 600 ? r.status : 502;
-  // 5xx үед backend-ийн дотоод алдааны мессежийг хааж, ерөнхий мессеж буцаана.
-  // 4xx ба амжилт үед мессеж нь хэрэглэгчийн харах user-facing string гэж
-  // үздэг (validation алдаа, "имэйл буруу" гэх мэт) — тэдгээрийг дамжуулна.
-  const safeMessage =
-    !r.ok && r.status >= 500
-      ? 'Дотоод алдаа гарлаа. Дахин оролдоно уу.'
-      : r.message;
   return NextResponse.json(
     {
       ok: r.ok,
       status: r.status,
-      message: safeMessage,
+      message: r.message,
       ...(r.ok ? {} : { fieldErrors: r.fieldErrors }),
     },
     { status: httpStatus },
@@ -81,52 +81,19 @@ export function toClientResponse(r: ApiResult<unknown>): NextResponse {
 }
 
 /**
- * authedFetch-ийн ApiResult-г browser рүү буцаах client хэлбэрт хувиргана,
- * амжилттай үед `data`-г ХАДГАЛНА (toClientResponse нь data-г хасдаг — session
- * cookie-д тулгуурласан auth route-уудад data хэрэггүй байсан). BPM зэрэг
- * өгөгдөл буцаадаг route-уудад үүнийг ашиглана. 5xx-ийн дотоод мессежийг хааж,
- * 422 validation талбаруудыг дамжуулна.
+ * toClientResponse-тэй адил боловч өгөгдлийг (data) клиент рүү дамжуулна.
+ * Admin/RBAC жагсаалт зэрэг нууц БУС өгөгдлийг буцаах BFF route-уудад ашиглана
+ * (хэзээ ч токен агуулдаггүй).
  */
 export function proxyResult<T>(r: ApiResult<T>): NextResponse {
-  if (r.ok) {
-    return NextResponse.json({ ok: true, status: r.status, data: r.data }, { status: 200 });
-  }
-  const httpStatus = r.status >= 400 && r.status < 600 ? r.status : 502;
-  const safeMessage =
-    r.status >= 500 ? 'Дотоод алдаа гарлаа. Дахин оролдоно уу.' : r.message;
-  return NextResponse.json(
-    { ok: false, status: r.status, message: safeMessage, fieldErrors: r.fieldErrors },
-    { status: httpStatus },
-  );
-}
-
-/**
- * BFF route-ийн body-аас шаардлагатай талбаруудыг шалгана. Алдаа байвал
- * 400 NextResponse-г, тааралцвал validated payload-г буцаана.
- *
- * Backend дахин validate хийнэ — энэ нь зөвхөн "цөөн миллисекундийн өмнө"
- * хог payload-ыг хаах хэмжээний хямд шалгалт юм (zod гэх мэт runtime
- * dep шаардахгүй).
- */
-export function requireFields<T extends Record<string, unknown>>(
-  body: T,
-  fields: ReadonlyArray<keyof T>,
-): NextResponse | null {
-  const missing: string[] = [];
-  for (const f of fields) {
-    const v = body[f];
-    if (v === undefined || v === null || (typeof v === 'string' && v.trim() === '')) {
-      missing.push(String(f));
-    }
-  }
-  if (missing.length === 0) return null;
+  const httpStatus = r.ok ? 200 : r.status >= 400 && r.status < 600 ? r.status : 502;
   return NextResponse.json(
     {
-      ok: false,
-      status: 400,
-      message: 'Шаардлагатай талбар дутуу байна.',
-      fieldErrors: Object.fromEntries(missing.map((m) => [m, 'required'])),
+      ok: r.ok,
+      status: r.status,
+      message: r.message,
+      ...(r.ok ? { data: r.data } : { fieldErrors: r.fieldErrors }),
     },
-    { status: 400 },
+    { status: httpStatus },
   );
 }

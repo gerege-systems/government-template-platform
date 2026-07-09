@@ -1,4 +1,4 @@
-// Government AI Platform Template V1.0
+// Gerege Template Version 27.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package logger_test
@@ -7,7 +7,7 @@ import (
 	"context"
 	"testing"
 
-	"govtemplateai/pkg/logger"
+	"template/pkg/logger"
 )
 
 func TestLoggerUsage(t *testing.T) {

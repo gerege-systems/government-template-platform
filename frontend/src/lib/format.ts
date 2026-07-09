@@ -5,11 +5,7 @@
 // болон client дахин render зөрж React hydration алдаа (418/423/425) гарна.
 // Цагийн бүсийг бэхлэснээр хоёр тал ижил үлдэнэ.
 
-import type { LangPref } from './i18n';
-
 const WEEKDAYS_MN = ['Ням', 'Даваа', 'Мягмар', 'Лхагва', 'Пүрэв', 'Баасан', 'Бямба'];
-const WEEKDAYS_EN = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const MONTHS_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const TZ = 'Asia/Ulaanbaatar';
 
 function parts(d: Date | string): { year: string; month: string; day: string; hour: string; minute: string; weekdayIdx: number } {
@@ -44,28 +40,6 @@ export function formatDateMN(d: Date | string): string {
 export function formatWeekdayMN(d: Date | string): string {
   const p = parts(d);
   return `${WEEKDAYS_MN[p.weekdayIdx]} гариг`;
-}
-
-/** "May 22, 2026". */
-export function formatDateEN(d: Date | string): string {
-  const p = parts(d);
-  return `${MONTHS_EN[Number(p.month) - 1]} ${Number(p.day)}, ${p.year}`;
-}
-
-/** "Wednesday". */
-export function formatWeekdayEN(d: Date | string): string {
-  const p = parts(d);
-  return WEEKDAYS_EN[p.weekdayIdx];
-}
-
-/** Хэлээс хамаарсан огноо. */
-export function formatDate(lang: LangPref, d: Date | string): string {
-  return lang === 'en' ? formatDateEN(d) : formatDateMN(d);
-}
-
-/** Хэлээс хамаарсан гарагийн нэр. */
-export function formatWeekday(lang: LangPref, d: Date | string): string {
-  return lang === 'en' ? formatWeekdayEN(d) : formatWeekdayMN(d);
 }
 
 /** "2026-04-12 08:34" (үргэлж Ulaanbaatar / UTC+08). */

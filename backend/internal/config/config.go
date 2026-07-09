@@ -1,4 +1,4 @@
-// Government AI Platform Template V1.0
+// Gerege Template Version 27.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package config
@@ -9,8 +9,8 @@ import (
 	"net/url"
 	"strings"
 
-	"govtemplateai/internal/constants"
 	"github.com/spf13/viper"
+	"template/internal/constants"
 )
 
 var AppConfig Config
@@ -32,29 +32,71 @@ type Config struct {
 	JWTExpired        int    `mapstructure:"JWT_EXPIRED"`
 	JWTIssuer         string `mapstructure:"JWT_ISSUER"`
 	JWTRefreshExpired int    `mapstructure:"JWT_REFRESH_EXPIRED"` // хоног
-	// JWTECPrivateKey тохируулагдсан бол ES256 (asymmetric) горим идэвхжинэ:
-	// токеныг EC хувийн түлхүүрээр гарын үсэглэж, /.well-known/jwks.json-оор
-	// нийтийн түлхүүрийг гаргана (федерацийн node-ууд шалгана). Хоосон бол
-	// HS256 (symmetric, анхдагч). PEM (PKCS#8/SEC1, P-256).
-	JWTECPrivateKey string `mapstructure:"JWT_EC_PRIVATE_KEY"`
-	JWTECKid        string `mapstructure:"JWT_EC_KID"`
-	// Федерацийн node-ийн "e-seal" — node хооронд солих мессежийг гарын
-	// үсэглэх EC (P-256) хувийн түлхүүр (JWT-ээс ТУСДАА). Тохируулсан бол
-	// /.well-known/fed-jwks.json нийтийн түлхүүрийг гаргана.
-	FedECPrivateKey string `mapstructure:"FED_EC_PRIVATE_KEY"`
-	FedECKid        string `mapstructure:"FED_EC_KID"`
-	FedNodeID       string `mapstructure:"FED_NODE_ID"`  // энэ node-ийн ялгах нэр (iss)
-	FedNodeOrg      string `mapstructure:"FED_NODE_ORG"` // тээж буй байгууллагын id
 
-	OTPEmail       string `mapstructure:"OTP_EMAIL"`
-	OTPPassword    string `mapstructure:"OTP_PASSWORD"`
-	OTPMaxAttempts int    `mapstructure:"OTP_MAX_ATTEMPTS"`
+	OTPMaxAttempts int `mapstructure:"OTP_MAX_ATTEMPTS"`
 
-	MailerWorkers   int `mapstructure:"MAILER_WORKERS"`
-	MailerQueueSize int `mapstructure:"MAILER_QUEUE_SIZE"`
-	MailerRetries   int `mapstructure:"MAILER_RETRIES"`
+	// GeregeCloud Verify API (verify.gecloud.mn) — бүх email/SMS OTP-г (бүртгэл
+	// баталгаажуулах, нууц үг сэргээх) энэ үйлчилгээгээр илгээж/шалгана. SMTP
+	// огт ашиглахгүй. VERIFY_API_KEY production-д заавал шаардлагатай.
+	VerifyAPIBase string `mapstructure:"VERIFY_API_BASE"`
+	VerifyAPIKey  string `mapstructure:"VERIFY_API_KEY"`
+	VerifyChannel string `mapstructure:"VERIFY_CHANNEL"`
+
+	// Gerege Verify / XYP (xyp.gerege.mn) — улсын бүртгэлээс байгууллагын мэдээлэл
+	// авах лавлагаа API. HTTP Basic Auth (client_id:client_secret). Креденшлгүй бол
+	// eID байгууллага холбох функц идэвхгүй болно (boot-ыг эвдэхгүй; сонголттой).
+	XYPAPIBase      string `mapstructure:"XYP_API_BASE"`
+	XYPClientID     string `mapstructure:"XYP_CLIENT_ID"`
+	XYPClientSecret string `mapstructure:"XYP_CLIENT_SECRET"`
+
+	// Gerege Space — апп-ын өөрийн SFTP хадгалалт. Хэрэглэгч бүр квоттой (default
+	// 2MB). Host/User/Password нууц (env-д). Тохируулаагүй бол функц идэвхгүй.
+	GSpaceHost     string `mapstructure:"GSPACE_HOST"`
+	GSpacePort     int    `mapstructure:"GSPACE_PORT"`
+	GSpaceUser     string `mapstructure:"GSPACE_USER"`
+	GSpacePassword string `mapstructure:"GSPACE_PASSWORD"`
+	GSpaceBasePath string `mapstructure:"GSPACE_BASE_PATH"`
+	GSpaceQuota    int64  `mapstructure:"GSPACE_QUOTA_BYTES"`
+
+	// eID identity provider (RP contract) — энэ template нь Relying Party.
+	// "Login with eID" нь цорын ганц нэвтрэх арга тул эдгээр нь сонголттой
+	// биш ч boot-ийг эвдэхгүйн тулд бүгд зохистой default-той (production-д
+	// шинэ required-var шалгалт нэмэхгүй — IdP-ийн нийтийн endpoint өгөгдмөл).
+	// EIDCallbackURL нь IdP-ийн allowlist-д бүртгэгдсэн URL байх ёстой.
+	EIDBaseURL     string `mapstructure:"EID_BASE_URL"`
+	EIDRPUUID      string `mapstructure:"EID_RP_UUID"`
+	EIDRPName      string `mapstructure:"EID_RP_NAME"`
+	EIDRPSecret    string `mapstructure:"EID_RP_SECRET"`
+	EIDCertLevel   string `mapstructure:"EID_CERT_LEVEL"`
+	EIDCallbackURL string `mapstructure:"EID_CALLBACK_URL"`
+	EIDDisplayText string `mapstructure:"EID_DISPLAY_TEXT"`
+
+	// PDF гарын үсгийн (PAdES) серверийн БАЙНГЫН Document-Signer гэрчилгээ +
+	// ECDSA түлхүүрийн PEM файлын зам. Production-д ЗААВАЛ (fail-closed):
+	// эфемер self-signed key нь reproducible/verifiable/revocable бус.
+	// development-д хоосон бол sign usecase dev self-signed руу шилжинэ.
+	SignSignerCertFile string `mapstructure:"SIGN_SIGNER_CERT_FILE"`
+	SignSignerKeyFile  string `mapstructure:"SIGN_SIGNER_KEY_FILE"`
+
+	// Google OAuth — Google account-ийг eID хэрэглэгчид холбох нэвтрэлт.
+	// Client secret нь код exchange-д зөвхөн server талд ашиглагдана.
+	GoogleClientID     string `mapstructure:"GOOGLE_CLIENT_ID"`
+	GoogleClientSecret string `mapstructure:"GOOGLE_CLIENT_SECRET"`
 
 	BcryptCost int `mapstructure:"BCRYPT_COST"`
+
+	// Gemini AI pipeline (/api/v1/ai/*) — REST-ээр шууд дуудна (SDK-гүй).
+	// GEMINI_API_KEY хоосон бол AI endpoint 500 буцаана (template нь
+	// AI-гүйгээр boot хийгдэх боломжтой хэвээр). Model/base/voice сонголттой;
+	// TTS (text-to-speech) нь тусдаа TTS-чадвартай model хэрэглэдэг.
+	GeminiAPIKey   string `mapstructure:"GEMINI_API_KEY"`
+	GeminiModel    string `mapstructure:"GEMINI_MODEL"`
+	GeminiTTSModel string `mapstructure:"GEMINI_TTS_MODEL"`
+	GeminiVoice    string `mapstructure:"GEMINI_VOICE"`
+	GeminiAPIBase  string `mapstructure:"GEMINI_API_BASE"`
+	// AIScopePrompt нь AI туслахын хамрах хүрээний env fallback — DB-ийн
+	// 'scope' prompt давхарга хоосон/уншигдахгүй үед хэрэглэгдэнэ.
+	AIScopePrompt string `mapstructure:"AI_SCOPE_PROMPT"`
 
 	// OTel — OTelExporter хоосон бол tracing идэвхгүй болдог (noop
 	// provider). Dev орчинд span-уудыг хэвлэхийн тулд "stdout" гэж тохируул,
@@ -67,76 +109,54 @@ type Config struct {
 	REDISPassword string `mapstructure:"REDIS_PASS"`
 	REDISExpired  int    `mapstructure:"REDIS_EXPIRED"`
 
+	// ObservabilityToken нь production-д /metrics ба /swagger/doc.json
+	// операторын endpoint-уудыг хамгаалах bearer token. Хоосон бол эдгээр
+	// endpoint production-д 404 буцаана (бүрэн хаалттай). development-д
+	// token хамаагүй — үргэлж нээлттэй (ObservabilityGate-г үз).
+	ObservabilityToken string `mapstructure:"OBSERVABILITY_TOKEN"`
+
 	AllowedOrigins string `mapstructure:"ALLOWED_ORIGINS"`
 
-	// TrustedProxies нь Fiber-ийн X-Forwarded-For / X-Real-IP толгойг
-	// итгэлтэйгээр унших ёстой proxy-уудын IP / CIDR жагсаалт (таслалаар
-	// тусгаарлагдсан). Empty үед proxy-ийн толгойг үл тоомсорлоно — c.IP()
-	// нь TCP peer-ийн IP-г буцаана. Production-д nginx гэх мэт reverse
-	// proxy ард ажиллах үед энэ нь шаардлагатай — өөрөөр бол rate limit,
-	// audit, access log бүгд proxy-ийн ганц IP харна.
+	// TrustedProxies нь итгэмжит урвуу proxy-гийн IP/CIDR жагсаалт
+	// (таслалаар тусгаарласан, жишээ "10.0.0.0/8,127.0.0.1"). Зөвхөн
+	// эдгээрээс ирсэн холболтын X-Forwarded-For-д итгэнэ — эс бөгөөс
+	// клиент IP-г RemoteAddr-аас (peer) шууд авна. Хоосон (өгөгдмөл) =
+	// XFF-д огт итгэхгүй (rate-limit/audit spoofing-ийн эсрэг fail-safe).
 	TrustedProxies string `mapstructure:"TRUSTED_PROXIES"`
 
-	// GeregeCloud Verify (verify.gecloud.mn) — OTP илгээх/шалгах ажлыг
-	// гадаад үйлчилгээнд шилжүүлдэг. VerifyAPIKey хоосон бол OTP клиент
-	// бүтэх боловч дуудлага бүр "missing api key" алдаа буцаах тул
-	// SendOTP/VerifyOTP урсгал тэр даруй амжилтгүй болно — operator-д
-	// чимээгүй ажиллахын оронд тодорхой сэрэмжлүүлэг өгөх боллоо.
-	VerifyAPIBase string `mapstructure:"VERIFY_API_BASE"`
-	VerifyAPIKey  string `mapstructure:"VERIFY_API_KEY"`
-	VerifyChannel string `mapstructure:"VERIFY_CHANNEL"`
+	// IntegrationEncKey нь хэрэглэгчийн гуравдагч этгээдийн (Google Drive/Meet,
+	// Dropbox) OAuth токеныг storage-д хадгалахын өмнө AES-256-GCM-ээр шифрлэх
+	// нууц түлхүүр. SHA-256-аар 32 байт болгон гаргадаг тул дурын урттай байж
+	// болно. Хоосон бол сул default — production-д заавал тохируулна.
+	IntegrationEncKey string `mapstructure:"INTEGRATION_ENC_KEY"`
 
-	// AI (Anthropic Claude) — чат туслахын тохиргоо. ANTHROPIC_API_KEY
-	// хоосон бол AI endpoint-ууд mount хийгдсэн хэвээр боловч дуудлага
-	// бүр 503 "ai service is not configured" буцаана (verify клиентийн
-	// "чимээгүй буруу тохиргоо үлдээхгүй" зарчим). Түлхүүр зөвхөн backend
-	// процессод байна — frontend/browser руу хэзээ ч дамжихгүй.
-	AnthropicAPIKey string `mapstructure:"ANTHROPIC_API_KEY"`
-	AnthropicModel  string `mapstructure:"ANTHROPIC_MODEL"`
-	// GeminiAPIKey нь дуу хоолойн орчуулгын (STT/TTS, MN↔EN) үйлчилгээний
-	// API түлхүүр. Хоосон бол /voice/* endpoint-ууд 503 буцаана. Түлхүүр
-	// зөвхөн backend процессод байна — frontend/browser руу дамжихгүй.
-	GeminiAPIKey string `mapstructure:"GEMINI_API_KEY"`
-	// GeminiModel нь аудио ойлгож орчуулах multimodal модель.
-	GeminiModel string `mapstructure:"GEMINI_MODEL"`
-	// GeminiTTSModel нь орчуулгыг яриа болгох (text-to-speech) модель.
-	GeminiTTSModel string `mapstructure:"GEMINI_TTS_MODEL"`
-	// GeminiVoice нь TTS-ийн prebuilt дуу хоолойн нэр (жнь "Kore").
-	GeminiVoice string `mapstructure:"GEMINI_VOICE"`
-	// VoiceDailyRequestLimit нь нэг хэрэглэгчийн өдрийн дуу хоолойн
-	// орчуулгын хязгаар (Redis тоолуур). 0 = хязгааргүй.
-	VoiceDailyRequestLimit int `mapstructure:"VOICE_DAILY_REQUEST_LIMIT"`
-	// VoiceRequestTimeoutSecs нь нэг Gemini дуудлагын дээд хугацаа (секунд).
-	// Pipeline нь 2 дуудлага хийдэг тул нийлбэр глобал 30с timeout дотор
-	// багтахаар сонгоно.
-	VoiceRequestTimeoutSecs int `mapstructure:"VOICE_REQUEST_TIMEOUT_SECS"`
-	// VoiceMaxAudioKB нь нэг хүсэлтэд зөвшөөрөх түүхий аудионы дээд хэмжээ
-	// (KiB). Base64-той нийлэхэд глобал 1 MiB body cap дотор багтах ёстой.
-	VoiceMaxAudioKB int `mapstructure:"VOICE_MAX_AUDIO_KB"`
-	// AIMaxTokens нь нэг хариунд зөвшөөрөх Claude output токены дээд тоо.
-	AIMaxTokens int `mapstructure:"AI_MAX_TOKENS"`
-	// AIDailyRequestLimit нь нэг хэрэглэгчийн өдрийн AI хүсэлтийн хязгаар
-	// (Redis тоолуур). 0 = хязгааргүй.
-	AIDailyRequestLimit int `mapstructure:"AI_DAILY_REQUEST_LIMIT"`
-	// AIRequestTimeoutSecs нь нэг streaming хариуны дээд хугацаа (секунд).
-	// Глобал 30с request timeout streaming-д үйлчилдэггүй тул тусдаа.
-	AIRequestTimeoutSecs int `mapstructure:"AI_REQUEST_TIMEOUT_SECS"`
-	// AIHistoryLimit нь Claude руу контекст болгон дамжуулах түүхийн
-	// мессежийн дээд тоо. Том утга чанарыг сайжруулж болох ч токены
-	// зардлыг өсгөнө. 0 буюу сөрөг бол default (20).
-	AIHistoryLimit int `mapstructure:"AI_HISTORY_LIMIT"`
+	// Gerege Core (core.gerege.mn) — user/organization find. CoreAPIToken нь
+	// core.gerege.mn-д хандах урт настай service bearer (server-тал л ашиглана).
+	CoreAPIBase  string `mapstructure:"CORE_API_BASE"`
+	CoreAPIToken string `mapstructure:"CORE_API_TOKEN"`
 
-	// ObservabilityToken нь production-д /metrics ба /swagger/doc.json
-	// endpoint-уудыг хамгаалах Bearer токен юм. Хоосон үед production-д
-	// эдгээр endpoint 404 буцаана; development-д тэр чигээрээ нээлттэй.
-	// Prometheus scraper эсвэл developer Postman үүнийг "Authorization:
-	// Bearer <token>" толгойгоор дамжуулна.
-	ObservabilityToken string `mapstructure:"OBSERVABILITY_TOKEN"`
+	// SuperAdminEmail нь bootstrap: тохируулсан бол boot үед энэ и-мэйлтэй
+	// хэрэглэгчийг (байгаа тохиолдолд) super admin (RoleSuperAdmin) болгож
+	// ахиулна. Хоосон бол алгасна — super admin-г зөвхөн DB/энэ env-ээр л
+	// томилно (API-аар үүсгэдэггүй). Хэрэглэгч эхлээд бүртгүүлсэн байх ёстой.
+	SuperAdminEmail string `mapstructure:"SUPERADMIN_EMAIL"`
+
+	// Gerege SSO (sso.gerege.mn, OIDC) — eID-ийн зэрэгцээ 2 дахь нэвтрэлт.
+	// ClientID/Secret хоосон бол SSO урсгал inert (Landing дээр товч харагдахгүй).
+	// RedirectURI нь SSO client-д бүртгэгдсэн callback (жишээ
+	// https://template.gerege.mn/sso/callback) байх ёстой.
+	SSOIssuer       string `mapstructure:"SSO_ISSUER"`
+	SSOClientID     string `mapstructure:"SSO_CLIENT_ID"`
+	SSOClientSecret string `mapstructure:"SSO_CLIENT_SECRET"`
+	SSORedirectURI  string `mapstructure:"SSO_REDIRECT_URI"`
+	SSOScope        string `mapstructure:"SSO_SCOPE"`
+	// SSONativeClientID нь mobile (PKCE, public) урсгалын Hydra client_id —
+	// iOS/Android ASWebAuthenticationSession-ийн code-ийг public client-ээр
+	// солиход хэрэглэгдэнэ (хоосон бол default template-gerege-mn-ios).
+	SSONativeClientID string `mapstructure:"SSO_NATIVE_CLIENT_ID"`
 }
 
-// TrustedProxiesList нь TRUSTED_PROXIES-г таслалаар тусгаарлан, цэвэрлэсэн
-// IP/CIDR жагсаалт болгон буцаана. Empty эсвэл бүгд хоосон үед nil буцаана —
-// дуудагч энэ үед Fiber-д proxy итгэлийг идэвхжүүлэхгүй.
+// TrustedProxiesList нь TRUSTED_PROXIES-г таслалаар салгаж slice болгоно.
 func (c *Config) TrustedProxiesList() []string {
 	if c.TrustedProxies == "" {
 		return nil
@@ -147,9 +167,6 @@ func (c *Config) TrustedProxiesList() []string {
 		if trimmed := strings.TrimSpace(p); trimmed != "" {
 			out = append(out, trimmed)
 		}
-	}
-	if len(out) == 0 {
-		return nil
 	}
 	return out
 }
@@ -180,6 +197,23 @@ func InitializeAppConfig() error {
 	viper.AddConfigPath("/")
 	viper.AllowEmptyEnv(true)
 	viper.AutomaticEnv()
+	// .env файлд байхгүй байж болзошгүй, зөвхөн орчноос ирдэг сонголттой
+	// хувьсагчдыг ил BindEnv хийнэ — эс бөгөөс viper.Unmarshal нь AutomaticEnv-
+	// ийн утгыг struct руу буулгахгүй (key нь config файл/default-оос
+	// бүртгэгдээгүй бол).
+	_ = viper.BindEnv("SUPERADMIN_EMAIL")
+	// XYP (байгууллагын лавлагаа) креденшл — 12-factor орчинд зөвхөн environment-ээс
+	// ирж болзошгүй тул ил bind хийнэ (нууц; .env.example-д хоосон).
+	_ = viper.BindEnv("XYP_API_BASE")
+	_ = viper.BindEnv("XYP_CLIENT_ID")
+	_ = viper.BindEnv("XYP_CLIENT_SECRET")
+	// Gerege Space SFTP — нууц; 12-factor орчинд зөвхөн environment-ээс.
+	_ = viper.BindEnv("GSPACE_HOST")
+	_ = viper.BindEnv("GSPACE_PORT")
+	_ = viper.BindEnv("GSPACE_USER")
+	_ = viper.BindEnv("GSPACE_PASSWORD")
+	_ = viper.BindEnv("GSPACE_BASE_PATH")
+	_ = viper.BindEnv("GSPACE_QUOTA_BYTES")
 	// .env файл байхгүй байх нь алдаа БИШ — контейнер / 12-factor орчинд
 	// тохиргоог зөвхөн environment-ээс уншина. Зөвхөн жинхэнэ задлан унших
 	// (parse) алдааг л буцаана.
@@ -197,15 +231,20 @@ func InitializeAppConfig() error {
 	applyDefaults()
 
 	// шалгалт
-	if AppConfig.Port == 0 || AppConfig.Environment == "" || AppConfig.JWTSecret == "" || AppConfig.JWTExpired == 0 || AppConfig.JWTIssuer == "" || AppConfig.OTPEmail == "" || AppConfig.OTPPassword == "" || AppConfig.REDISHost == "" || AppConfig.REDISPassword == "" || AppConfig.REDISExpired == 0 || AppConfig.DBPostgreDriver == "" {
+	if AppConfig.Port == 0 || AppConfig.Environment == "" || AppConfig.JWTSecret == "" || AppConfig.JWTExpired == 0 || AppConfig.JWTIssuer == "" || AppConfig.REDISHost == "" || AppConfig.REDISPassword == "" || AppConfig.REDISExpired == 0 || AppConfig.DBPostgreDriver == "" {
 		return constants.ErrEmptyVar
 	}
 
 	if AppConfig.Port < 1 || AppConfig.Port > 65535 {
 		return fmt.Errorf("PORT must be between 1 and 65535, got %d", AppConfig.Port)
 	}
-	if AppConfig.JWTExpired < 1 || AppConfig.JWTExpired > 720 {
-		return fmt.Errorf("JWT_EXPIRED must be between 1 and 720 hours, got %d", AppConfig.JWTExpired)
+	// ACCESS токены амьдрах хугацаа. Дээд хязгаарыг 24ц болгож бариулав:
+	// access токеныг Redis доголдвол revoke хийхэд саатал гарч болзошгүй тул
+	// (logout/нууц үг солилтын cutoff шалгалт) урт TTL нь revocation-ийн цонхыг
+	// уртасгана. Урт сессийг refresh токен (JWT_REFRESH_EXPIRED, хоногоор)
+	// зохицуулна — access богино байх ёстой.
+	if AppConfig.JWTExpired < 1 || AppConfig.JWTExpired > 24 {
+		return fmt.Errorf("JWT_EXPIRED must be between 1 and 24 hours, got %d", AppConfig.JWTExpired)
 	}
 	if AppConfig.JWTRefreshExpired < 1 || AppConfig.JWTRefreshExpired > 365 {
 		return fmt.Errorf("JWT_REFRESH_EXPIRED must be between 1 and 365 days, got %d", AppConfig.JWTRefreshExpired)
@@ -224,13 +263,6 @@ func InitializeAppConfig() error {
 	}
 	if AppConfig.BcryptCost < 10 || AppConfig.BcryptCost > 31 {
 		return fmt.Errorf("BCRYPT_COST must be between 10 and 31, got %d", AppConfig.BcryptCost)
-	}
-	// Voice аудио нь base64 (×4/3) болоод JSON-д ороход глобал 1 MiB body cap
-	// (middlewares.DefaultBodyMaxBytes)-аас хэтрэх ёсгүй — эс бөгөөс хүсэлт
-	// usecase-ийн MaxAudioBytes шалгалтад хүрэхээсээ өмнө 413-аар татгалзана.
-	// Import cycle-аас зайлсхийхийн тулд хязгаарыг (1<<20) шууд бичив.
-	if b64 := int64(AppConfig.VoiceMaxAudioKB) * 1024 * 4 / 3; b64 >= (1 << 20) {
-		return fmt.Errorf("VOICE_MAX_AUDIO_KB=%d too large: base64 size (%d B) would exceed the 1 MiB body cap — use <= 786", AppConfig.VoiceMaxAudioKB, b64)
 	}
 
 	switch AppConfig.Environment {
@@ -256,72 +288,15 @@ func InitializeAppConfig() error {
 		if AppConfig.AllowedOrigins == "" {
 			return fmt.Errorf("ALLOWED_ORIGINS must be set in production (comma-separated origins)")
 		}
-		if err := validateOrigins(AppConfig.AllowedOriginsList()); err != nil {
-			return err
-		}
-		// .env.example-ийн CHANGE_ME placeholder-ууд validation-ийг
-		// (length, type) дамжих учир operator санамсаргүй deploy хийвэл
-		// "secret" нь жинхэнэ нийтэд мэдэгдэх утга үлдэх эрсдэлтэй.
-		// Production-д ийм placeholder-уудыг хатуу татгалзана.
-		if err := rejectPlaceholderSecrets(); err != nil {
-			return err
+		// Бүх email/SMS OTP нь GeregeCloud Verify-ээр явдаг тул production-д
+		// VERIFY_API_KEY заавал шаардлагатай (эс бөгөөс OTP илгээх боломжгүй).
+		if AppConfig.VerifyAPIKey == "" {
+			return fmt.Errorf("VERIFY_API_KEY must be set in production (GeregeCloud Verify OTP)")
 		}
 	default:
 		return fmt.Errorf("ENVIRONMENT must be 'development' or 'production', got %q", AppConfig.Environment)
 	}
 
-	return nil
-}
-
-// validateOrigins нь ALLOWED_ORIGINS-ын элемент бүрийг scheme://host
-// бүхий зөв origin URL мөн эсэхийг шалгана. Production-д wildcard "*"
-// эсвэл буруу бичсэн утга нь CORS-ыг чимээгүйгээр сулруулдаг тул
-// startup үед шууд унагана.
-func validateOrigins(origins []string) error {
-	for _, o := range origins {
-		if o == "*" {
-			return fmt.Errorf("ALLOWED_ORIGINS must not contain wildcard '*' in production")
-		}
-		u, err := url.Parse(o)
-		if err != nil {
-			return fmt.Errorf("ALLOWED_ORIGINS contains invalid origin %q: %w", o, err)
-		}
-		if u.Scheme != "http" && u.Scheme != "https" {
-			return fmt.Errorf("ALLOWED_ORIGINS %q must use http(s) scheme (got %q)", o, u.Scheme)
-		}
-		if u.Host == "" {
-			return fmt.Errorf("ALLOWED_ORIGINS %q must include a host", o)
-		}
-		if u.Path != "" && u.Path != "/" {
-			return fmt.Errorf("ALLOWED_ORIGINS %q must not include a path (got %q)", o, u.Path)
-		}
-	}
-	return nil
-}
-
-// rejectPlaceholderSecrets нь .env.example-ийн CHANGE_ME ба түүнтэй
-// төстэй placeholder-уудыг production-д хүлээн авахаас сэргийлнэ.
-// Length check (≥32 байт) эдгээрийг чимээгүй давдаг учир тусдаа guard
-// хэрэгтэй. Substring шалгах нь шалтай боловч default placeholder-ыг
-// тогтворгүй үлдээхээс илүү — оператор санаатай "CHANGE" гэдэг үг
-// орсон жинхэнэ секретээр ажиллахыг хүсвэл нэр өөрчилнө.
-func rejectPlaceholderSecrets() error {
-	type check struct{ name, val string }
-	checks := []check{
-		{"JWT_SECRET", AppConfig.JWTSecret},
-		{"REDIS_PASS", AppConfig.REDISPassword},
-		{"VERIFY_API_KEY", AppConfig.VerifyAPIKey},
-		{"OTP_PASSWORD", AppConfig.OTPPassword},
-	}
-	bad := []string{"CHANGE_ME", "CHANGEME", "PLACEHOLDER", "REPLACE_ME", "TODO_SECRET"}
-	for _, c := range checks {
-		upper := strings.ToUpper(c.val)
-		for _, needle := range bad {
-			if strings.Contains(upper, needle) {
-				return fmt.Errorf("%s contains placeholder %q — generate a real secret (e.g. `openssl rand -base64 32`) before deploying", c.name, needle)
-			}
-		}
-	}
 	return nil
 }
 
@@ -356,15 +331,6 @@ func applyDefaults() {
 	if AppConfig.OTPMaxAttempts == 0 {
 		AppConfig.OTPMaxAttempts = 5
 	}
-	if AppConfig.MailerWorkers == 0 {
-		AppConfig.MailerWorkers = 2
-	}
-	if AppConfig.MailerQueueSize == 0 {
-		AppConfig.MailerQueueSize = 64
-	}
-	if AppConfig.MailerRetries == 0 {
-		AppConfig.MailerRetries = 3
-	}
 	if AppConfig.BcryptCost == 0 {
 		// 12 ≈ 2026 оны үеийн CPU дээр 100–200 мс. bcrypt.DefaultCost нь
 		// түүхэн шалтгаанаар одоо ч 10 хэвээр байгаа; үүнийг нэмэгдүүлэв, гэхдээ
@@ -375,41 +341,52 @@ func applyDefaults() {
 	if AppConfig.JWTRefreshExpired == 0 {
 		AppConfig.JWTRefreshExpired = 7
 	}
-	if AppConfig.VerifyChannel == "" {
-		AppConfig.VerifyChannel = "email"
-	}
-	if AppConfig.AnthropicModel == "" {
-		AppConfig.AnthropicModel = "claude-sonnet-4-6"
-	}
-	if AppConfig.AIMaxTokens == 0 {
-		AppConfig.AIMaxTokens = 1024
-	}
-	if AppConfig.AIDailyRequestLimit == 0 {
-		AppConfig.AIDailyRequestLimit = 50
-	}
-	if AppConfig.AIRequestTimeoutSecs == 0 {
-		AppConfig.AIRequestTimeoutSecs = 120
-	}
-	if AppConfig.AIHistoryLimit <= 0 {
-		AppConfig.AIHistoryLimit = 20
-	}
-	if AppConfig.GeminiModel == "" {
-		AppConfig.GeminiModel = "gemini-2.5-flash"
-	}
 	if AppConfig.GeminiTTSModel == "" {
 		AppConfig.GeminiTTSModel = "gemini-2.5-flash-preview-tts"
 	}
-	if AppConfig.GeminiVoice == "" {
-		AppConfig.GeminiVoice = "Kore"
+	// eID RP-ийн өгөгдмөл утгууд. IdP-ийн нийтийн endpoint болон бүртгэгдсэн
+	// callback URL тул орчин болгонд найдвартай ажиллана; тохиргоогоор дарж
+	// бичиж болно.
+	if AppConfig.EIDBaseURL == "" {
+		AppConfig.EIDBaseURL = "https://eidmongolia.mn/v3"
 	}
-	if AppConfig.VoiceDailyRequestLimit == 0 {
-		AppConfig.VoiceDailyRequestLimit = 50
+	if AppConfig.EIDRPName == "" {
+		AppConfig.EIDRPName = "template-web"
 	}
-	if AppConfig.VoiceRequestTimeoutSecs == 0 {
-		AppConfig.VoiceRequestTimeoutSecs = 25
+	if AppConfig.EIDCertLevel == "" {
+		// Нэвтрэлтэд ADVANCED — хамгийн нийцтэй (ADVANCED/QUALIFIED/QSCD бүгдийг
+		// хүлээн авна). Гарын үсэгт QUALIFIED/QSCD шаардлагатай бол override хийнэ.
+		AppConfig.EIDCertLevel = "ADVANCED"
 	}
-	if AppConfig.VoiceMaxAudioKB == 0 {
-		AppConfig.VoiceMaxAudioKB = 640
+	if AppConfig.EIDCallbackURL == "" {
+		AppConfig.EIDCallbackURL = "https://template.gerege.mn/login/verify"
+	}
+	if AppConfig.EIDDisplayText == "" {
+		AppConfig.EIDDisplayText = "template.gerege.mn"
+	}
+	if AppConfig.CoreAPIBase == "" {
+		AppConfig.CoreAPIBase = "https://core.gerege.mn"
+	}
+	if AppConfig.XYPAPIBase == "" {
+		AppConfig.XYPAPIBase = "https://xyp.gerege.mn"
+	}
+	if AppConfig.GSpacePort == 0 {
+		AppConfig.GSpacePort = 22
+	}
+	if AppConfig.GSpaceBasePath == "" {
+		AppConfig.GSpaceBasePath = "gerege-space"
+	}
+	if AppConfig.GSpaceQuota == 0 {
+		AppConfig.GSpaceQuota = 2 << 20 // 2 MB
+	}
+	if AppConfig.SSOIssuer == "" {
+		AppConfig.SSOIssuer = "https://sso.gerege.mn"
+	}
+	if AppConfig.SSOScope == "" {
+		AppConfig.SSOScope = "openid profile email"
+	}
+	if AppConfig.SSONativeClientID == "" {
+		AppConfig.SSONativeClientID = "template-gerege-mn-ios"
 	}
 	// OTel-ийн sample ratio нь зөвхөн exporter тохируулагдсан БА оператор
 	// ratio-г тодорхой зааж өгөөгүй үед 1.0 утгыг анхдагчаар авна. Exporter

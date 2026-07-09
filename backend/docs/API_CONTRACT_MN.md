@@ -2,21 +2,21 @@
 
 > 🌐 [English](API_CONTRACT.md) · **Монгол**
 
-**Government AI Platform Template V1.0**-ийн REST API лавлагаа. Шууд, автоматаар үүсэх
+**Gerege Backend Template v27**-ийн REST API лавлагаа. Шууд, автоматаар үүсэх
 бүрэн тодорхойлолтыг `GET /swagger/` дээр үзнэ (эх: `docs/swagger.json`).
 Англи хувилбар: [API_CONTRACT.md](./API_CONTRACT.md).
 
 > **Эх сурвалж.** Нээлттэй эх
 > [snykk/go-rest-boilerplate](https://github.com/snykk/go-rest-boilerplate)
-> (MIT, Najib Fikri)-аас гаралтай; HTTP давхаргыг **Gin → Fiber v3**,
-> өгөгдлийн давхаргыг **sqlx → GORM** болгосон.
+> (MIT, Najib Fikri)-аас гаралтай; HTTP давхаргыг **Gin → chi (net/http)**,
+> өгөгдлийн давхаргыг **sqlx → pgx (pgxpool)** болгосон.
 
 ## Дүрэм
 
 - **Үндсэн URL:** `http://localhost:8080/api/v1`
 - **Content-Type:** `application/json`
 - **Танилт:** хамгаалагдсан endpoint-д `Authorization: Bearer <access_token>` шаардана
-- **Rate limit:** `/auth/*` нь IP тус бүр ~5 хүсэлт/минут (хэтэрвэл `429`)
+- **Rate limit:** `/auth/*` нь IP тус бүр ~5 хүсэлт/минут, `/ai/*` нь ~20/минут (хэтэрвэл `429`)
 
 ### Хариуны бүтэц (envelope)
 
@@ -37,7 +37,7 @@
 | 403 | Хориглосон (lockout) |
 | 404 | Олдсонгүй |
 | 409 | Давхцал (username/email) |
-| 422 | Validation алдаа (`data.errors` дотор талбараар) |
+| 422 | Validation алдаа (`data.errors` нь `{field, tag, message}` объектуудын массив) |
 | 429 | Хэт олон хүсэлт |
 | 500 | Дотоод алдаа |
 
@@ -49,14 +49,14 @@
 
 | Method | Path | Body | Амжилт (200/201) |
 |--------|------|------|------------------|
-| POST | `/auth/register` | `username`(3–25), `email`(≤50), `password`(12–72, strong) | `201` "registration user success" + user |
+| POST | `/auth/register` | `last_name`, `first_name` (1–50), `last_name_en`/`first_name_en` (сонголттой), `username`(3–25), `email`(≤50), `password`(12–72, strong) | `201` "registration user success" + user |
 | POST | `/auth/login` | `email`, `password` | `200` "login success" + user + `token` + `refresh_token` |
 | POST | `/auth/send-otp` | `email` | `200` "otp code has been send to …" |
 | POST | `/auth/verify-otp` | `email`, `code`(numeric) | `200` "otp verification success" |
 | POST | `/auth/refresh` | `refresh_token` | `200` "token refreshed" + шинэ token pair |
-| POST | `/auth/logout` | `refresh_token` | `200` "logout success" |
-| POST | `/auth/password/forgot` | `email` | `200` "if the email is registered…" |
-| POST | `/auth/password/reset` | `token`, `new_password`(strong) | `200` "password reset" |
+| POST | `/auth/logout` | `refresh_token`, `access_token` (сонголттой — өгвөл access токен deny-list-ээр шууд хүчингүй болно) | `200` "logout success" |
+| POST | `/auth/password/forgot` | `email` | `200` "if the email is registered, a reset code has been sent" (6 оронтой OTP илгээнэ) |
+| POST | `/auth/password/reset` | `email`, `code`, `new_password`(strong) | `200` "password reset"; `401` код буруу/хүчингүй |
 | PUT 🔒 | `/auth/password/change` | `current_password`, `new_password`(strong) | `200` "password changed" |
 
 ### Жишээ: нэвтрэх
@@ -84,27 +84,23 @@
 
 ---
 
-## AI туслах (Anthropic Claude) 🔒
+## AI (Gemini pipeline) 🔒
 
-`ANTHROPIC_API_KEY` хоосон бол бүгд `503`. Хэрэглэгчийн өдрийн лимиттэй.
+Бүх `/ai/*` endpoint bearer токен шаардаж, тусдаа rate limit-тэй (~20/мин).
+`GEMINI_API_KEY` тохируулаагүй бол 500 буцаана. Туслах давхаргат system
+prompt-оор ажиллана — кодод хатуу suurь дүрэм + админ тохируулдаг **хамрах
+хүрээ** (гадуурх асуултад татгалзана) + сонголттой **нэмэлт заавар** — мөн
+платформын асуултад `search_knowledge` tool-оор `ai_knowledge` хүснэгтээс
+хайж тулгуурлан хариулна.
 
-| Method | Path | Тайлбар |
-|--------|------|---------|
-| POST 🔒 | `/ai/chat` | Streaming чат (**SSE**, JSON envelope биш). Body: `{ conversation_id?, message }`. Event: `delta` / `done` / `error`. |
-| GET 🔒 | `/ai/conversations` | Ярианы жагсаалт (`offset`,`limit`≤50) |
-| GET 🔒 | `/ai/conversations/{id}/messages` | Нэг ярианы бүх мессеж (эзэмшигч биш → `404`) |
-
-## Дуу хоолой (Google Gemini) 🔒
-
-`GEMINI_API_KEY` хоосон бол бүгд `503`. Аудио base64-аар (1 MiB body cap дотор);
-буцах аудио нь WAV (PCM 24kHz/16/mono).
-
-| Method | Path | Тайлбар |
-|--------|------|---------|
-| POST 🔒 | `/voice/translate` | MN↔EN яриа орчуулга (STT→орчуулга→TTS). Body: `{ source_lang: mn\|en, mime_type, audio_base64 }` → `{ source_text, translated_text, audio_base64, … }` |
-| GET 🔒 | `/voice/history` | Орчуулгын түүх (аудиогүй; `offset`,`limit`≤50) |
-| POST 🔒 | `/voice/transcribe` | Дуу→бичвэр (чатын микрофон). Body: `{ lang, mime_type, audio_base64 }` → `{ text }` |
-| POST 🔒 | `/voice/speak` | Бичвэр→дуу (чатын "Сонсох"). Body: `{ text }` → `{ audio_base64, audio_mime }` |
+| Method | Path | Body | Хариу (200) |
+|--------|------|------|-------------|
+| POST 🔒 | `/ai/chat` | `message`(≤4000) ба/эсвэл `audio{mime,data}`(base64 ≤~700KB), `history`(≤20 ээлж) | `reply` (Монгол), `steps` (гүйцэтгэсэн tool-ууд), `degraded` (Gemini унасан үед fallback) |
+| POST 🔒 | `/ai/stt` | `audio{mime,data}` | `text` — яриа илрээгүй бол хоосон |
+| POST 🔒 | `/ai/tts` | `text`(≤2000), `voice`(сонголттой) | `mime:"audio/wav"`, `data` (base64 — browser шууд тоглуулна) |
+| POST 🔒 | `/ai/translate` | `text` эсвэл `audio`, `target_lang`(mn/en/ru/zh/ja/ko/de), `speak`(bool) | `source_text`, `translated`, `audio`(speak=true үед); чимээгүй chunk-д хоосон талбарууд |
+| GET 🔒 | `/admin/ai/prompts` | — (`settings.manage` эрх) | Prompt давхаргууд (`scope`, `instructions`) |
+| PUT 🔒 | `/admin/ai/prompts/{key}` | `content`(≤4000, хоосон болно) | Шууд үйлчилнэ (кэш хүчингүй болдог) |
 
 ---
 
@@ -120,4 +116,4 @@ annotation-аас `make swag`-аар дахин үүсгэнэ.
 
 ---
 
-**Government AI Platform Template V1.0** — **Gerege Systems Development Team** болон **Claude AI** хамтран бүтээв, 2026.
+**Gerege Template Version 27.0** — **Gerege Systems Development Team** болон **Claude AI** хамтран бүтээв, 2026.

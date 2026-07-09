@@ -3,8 +3,6 @@
 import React, { useId } from 'react';
 import { Check, X } from 'lucide-react';
 import { evaluatePassword } from '@/lib/password';
-import { useT } from '@/lib/useT';
-import type { DictKey } from '@/lib/i18n';
 
 interface Props {
   label: string;
@@ -18,19 +16,13 @@ interface Props {
   name?: string;
 }
 
-const REQS: { key: keyof ReturnType<typeof evaluatePassword>['checks']; labelKey: DictKey }[] = [
-  { key: 'length',  labelKey: 'pw.req.length' },
-  { key: 'upper',   labelKey: 'pw.req.upper' },
-  { key: 'lower',   labelKey: 'pw.req.lower' },
-  { key: 'number',  labelKey: 'pw.req.number' },
-  { key: 'special', labelKey: 'pw.req.special' },
+const REQS: { key: keyof ReturnType<typeof evaluatePassword>['checks']; label: string }[] = [
+  { key: 'length',  label: '12+ тэмдэгт' },
+  { key: 'upper',   label: 'Том үсэг' },
+  { key: 'lower',   label: 'Жижиг үсэг' },
+  { key: 'number',  label: 'Тоо' },
+  { key: 'special', label: 'Тусгай тэмдэгт' },
 ];
-
-const LEVEL_KEY: Record<'weak' | 'fair' | 'strong', DictKey> = {
-  weak: 'pw.level.weak',
-  fair: 'pw.level.fair',
-  strong: 'pw.level.strong',
-};
 
 /**
  * Нууц үгийн талбар — нэмэлтээр хүчний хэмжигч + шаардлагын жагсаалттай.
@@ -40,7 +32,6 @@ export default function PasswordField({
   label, value, onChange, showStrength, error, autoComplete = 'current-password',
   placeholder, name = 'password',
 }: Props) {
-  const { T } = useT();
   const id = useId();
   const strength = evaluatePassword(value);
   const segOn = strength.level === 'strong' ? 3 : strength.level === 'fair' ? 2 : value ? 1 : 0;
@@ -72,8 +63,8 @@ export default function PasswordField({
               />
             ))}
           </div>
-          {value && (
-            <span className="pwmeter__label">{T('pw.strength')}: {T(LEVEL_KEY[strength.level])}</span>
+          {strength.label && (
+            <span className="pwmeter__label">Хүч: {strength.label}</span>
           )}
           <div className="pwmeter__reqs">
             {REQS.map((r) => {
@@ -81,7 +72,7 @@ export default function PasswordField({
               return (
                 <span key={r.key} className={`pwmeter__req${met ? ' is-met' : ''}`}>
                   {met ? <Check size={12} strokeWidth={3} /> : <X size={12} strokeWidth={2.5} />}
-                  {T(r.labelKey)}
+                  {r.label}
                 </span>
               );
             })}

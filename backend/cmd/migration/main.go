@@ -1,4 +1,4 @@
-// Government AI Platform Template V1.0
+// Gerege Template Version 27.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package main
@@ -7,11 +7,11 @@ import (
 	"context"
 	"flag"
 
-	"govtemplateai/internal/config"
-	"govtemplateai/internal/constants"
-	"govtemplateai/internal/datasources/drivers"
-	"govtemplateai/internal/datasources/migration"
-	"govtemplateai/pkg/logger"
+	"template/internal/config"
+	"template/internal/constants"
+	"template/internal/datasources/drivers"
+	"template/internal/datasources/migration"
+	"template/pkg/logger"
 )
 
 // migrationsDir нь модулийн root-оос харьцангуй (make mig-up нь backend/-ээс
@@ -35,27 +35,20 @@ func main() {
 	flag.BoolVar(&down, "down", false, "drop tables, columns, or other structures")
 	flag.Parse()
 
-	db, err := drivers.SetupGORMPostgres()
+	ctx := context.Background()
+	pool, err := drivers.SetupPgxPostgres(ctx)
 	if err != nil {
 		logger.Panic(err.Error(), logger.Fields{constants.LoggerCategory: constants.LoggerCategoryMigration})
 	}
-	defer func() {
-		if sqlDB, dbErr := db.DB(); dbErr == nil {
-			_ = sqlDB.Close()
-		}
-	}()
+	defer pool.Close()
 
-	runner := migration.New(db, migrationsDir)
-	ctx := context.Background()
+	runner := migration.New(pool, migrationsDir)
 
 	if up {
-		// Эхэлд SQL файлууд (өргөтгөлүүд, partial-unique индексүүд,
-		// uuid_generate_v4() id анхдагч утга), дараа нь моделоос гарган авсан
-		// баганануудыг тааруулахаар GORM AutoMigrate. Хоёулаа идемпотент.
+		// SQL файлууд (өргөтгөлүүд, partial-unique индексүүд,
+		// uuid_generate_v4() id анхдагч утга) бүх schema-г бэлддэг. ORM-гүй
+		// тул AutoMigrate байхгүй — schema нь зөвхөн *.up.sql-аас гарна.
 		if err := runner.Up(ctx); err != nil {
-			logger.Fatal(err.Error(), logger.Fields{constants.LoggerCategory: constants.LoggerCategoryMigration})
-		}
-		if err := runner.AutoMigrate(ctx); err != nil {
 			logger.Fatal(err.Error(), logger.Fields{constants.LoggerCategory: constants.LoggerCategoryMigration})
 		}
 	}

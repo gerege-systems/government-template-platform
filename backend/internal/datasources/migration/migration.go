@@ -1,81 +1,59 @@
-// Government AI Platform Template V1.0
+// Gerege Template Version 27.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 // Package migration нь cmd/migration-ийн ард байрлах туршиж болох
-// сан юм. cmd/migration/main.go дахь CLI нь одоо энэ package-ийн
-// нимгэн бүрхүүл болсон — config ачаалах + flag задлах + db холбох —
-// тиймээс idempotency / advisory-lock / нэг файлд нэг транзакцийн
-// зан төлөвийг binary ажиллуулалгүйгээр integration тестэд шалгаж болно.
+// сан юм. cmd/migration/main.go дахь CLI нь энэ package-ийн нимгэн
+// бүрхүүл (config ачаалах + flag задлах + pool холбох) тул idempotency /
+// advisory-lock / нэг файлд нэг транзакцийн зан төлөвийг binary
+// ажиллуулалгүйгээр integration тестэд шалгаж болно.
 package migration
 
 import (
+	"cmp"
 	"context"
-	"database/sql"
 	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
-	"sort"
+	"slices"
+	"strconv"
+	"strings"
 
-	"govtemplateai/internal/constants"
-	"govtemplateai/internal/datasources/records"
-	"govtemplateai/pkg/logger"
+	"template/internal/constants"
+	"template/pkg/logger"
 
-	"gorm.io/gorm"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-// AdvisoryLockID нь pg_advisory_lock-той хамт ашиглагддаг дурын
-// 64-бит бүхэл тоо бөгөөд хоёр migration runner нэг файлыг зэрэг
-// хэрэгжүүлэхээс сэргийлдэг. CI smoke тест lock төлөвийг шалгаж
-// болохын тулд export хийгдсэн.
+// AdvisoryLockID нь pg_advisory_lock-той хамт ашиглагддаг дурын 64-бит
+// бүхэл тоо бөгөөд хоёр migration runner нэг файлыг зэрэг хэрэгжүүлэхээс
+// сэргийлдэг.
 const AdvisoryLockID = 947328461230
 
 // Runner нь schema_migrations хүснэгтэд хэрэгжсэн төлөвийг хянахын
-// зэрэгцээ Postgres DB-д SQL migration файлуудыг хэрэгжүүлэх /
-// буцаах үйлдлийг гүйцэтгэнэ. DB handle нь GORM; доор байрлах
-// түүхий *sql.DB нь нэг файлд нэг транзакц болон schema_migrations-ийн
-// бүртгэлийг удирддаг (анхны sqlx суурьтай runner-ээс семантик нь
-// өөрчлөгдөөгүй).
+// зэрэгцээ Postgres DB-д SQL migration файлуудыг хэрэгжүүлэх/буцаах
+// үйлдлийг гүйцэтгэнэ. Бүх ажил pool-аас авсан НЭГ dedicated холболт
+// дээр ажилладаг тул session-scoped advisory lock зөв ажиллана.
 type Runner struct {
-	gormDB *gorm.DB
-	db     *sql.DB
-	dir    string
+	pool *pgxpool.Pool
+	dir  string
 	// log нь тестүүдэд no-op sink сольж тавих боломж олгоно; nil бол
 	// төслийн нийтлэг logger руу буцна.
 	log func(msg string, fields logger.Fields)
 }
 
 // New нь `dir`-ээс migration файлуудыг уншдаг Runner-г бүтээнэ.
-func New(db *gorm.DB, dir string) *Runner {
-	sqlDB, _ := db.DB()
-	return &Runner{gormDB: db, db: sqlDB, dir: dir}
+func New(pool *pgxpool.Pool, dir string) *Runner {
+	return &Runner{pool: pool, dir: dir}
 }
 
-// SetLogger нь өгөгдмөл logger sink-г дарж бичнэ. Тестийн үед runner-ийг
-// чимээгүй болгохын тулд no-op дамжуул.
+// SetLogger нь өгөгдмөл logger sink-г дарж бичнэ.
 func (r *Runner) SetLogger(fn func(string, logger.Fields)) { r.log = fn }
 
-// DB нь migration хийсний дараах төлөвийг шалгах шаардлагатай дуудагчдад
-// (жишээ нь schema_migrations-г шууд асуудаг integration тест) зориулж
-// үндсэн GORM handle-г илчилнэ. Production код үүнийг ашиглах ёсгүй —
-// Up/Down/AutoMigrate method-уудыг ашигла.
-func (r *Runner) DB() *gorm.DB { return r.gormDB }
-
-// AutoMigrate нь төслийн model-уудад зориулж GORM-ийн idempotent
-// schema sync-г ажиллуулна. Энэ нь SQL файлуудыг нөхдөг: AutoMigrate нь
-// model-оос гаралтай баганануудыг үүсгэдэг/шинэчилдэг бол *.up.sql
-// файлууд нь AutoMigrate илэрхийлж чадахгүй хэсгүүдийг (uuid_generate_v4()
-// id-ийн өгөгдмөл утгыг дэмждэг uuid-ossp өргөтгөл, хэсэгчилсэн давтагдашгүй
-// индексүүд болон email/username хэвийн болголтыг) хангадаг. Дахин дахин
-// дуудахад аюулгүй.
-func (r *Runner) AutoMigrate(ctx context.Context) error {
-	r.info("running gorm auto-migrate", logger.Fields{constants.LoggerCategory: constants.LoggerCategoryMigration})
-	if err := r.gormDB.WithContext(ctx).AutoMigrate(&records.Users{}); err != nil {
-		return fmt.Errorf("auto-migrate: %w", err)
-	}
-	r.info("gorm auto-migrate success", logger.Fields{constants.LoggerCategory: constants.LoggerCategoryMigration})
-	return nil
-}
+// Pool нь migration хийсний дараах төлөвийг шалгах шаардлагатай
+// дуудагчдад (жишээ нь schema_migrations-г шууд асуудаг integration
+// тест) зориулж pool-г илчилнэ.
+func (r *Runner) Pool() *pgxpool.Pool { return r.pool }
 
 func (r *Runner) info(msg string, fields logger.Fields) {
 	if r.log != nil {
@@ -85,41 +63,61 @@ func (r *Runner) info(msg string, fields logger.Fields) {
 	logger.Info(msg, fields)
 }
 
+// conn нь pool-аас холболт авч, advisory lock-ийн дор fn-г ажиллуулна.
+// Lock болон migration-ууд НЭГ холболт дээр ажилладаг тул session-scoped
+// lock зөв effect-тэй. Зэрэгцээ runner-уудыг (CI + хөгжүүлэгчийн зөөврийн
+// компьютер) дараалалд оруулна.
+func (r *Runner) withConnLock(ctx context.Context, fn func(ctx context.Context, conn *pgxpool.Conn) error) error {
+	conn, err := r.pool.Acquire(ctx)
+	if err != nil {
+		return fmt.Errorf("acquire conn: %w", err)
+	}
+	defer conn.Release()
+
+	if _, err := conn.Exec(ctx, `SELECT pg_advisory_lock($1)`, int64(AdvisoryLockID)); err != nil {
+		return fmt.Errorf("acquire advisory lock: %w", err)
+	}
+	defer func() {
+		if _, err := conn.Exec(ctx, `SELECT pg_advisory_unlock($1)`, int64(AdvisoryLockID)); err != nil {
+			logger.Error("failed to release migration advisory lock", logger.Fields{
+				constants.LoggerCategory: constants.LoggerCategoryMigration,
+				"error":                  err.Error(),
+			})
+		}
+	}()
+	return fn(ctx, conn)
+}
+
 // Up нь бүх *.up.sql файлыг лексикографийн дарааллаар хэрэгжүүлнэ.
 // schema_migrations-д аль хэдийн байгаа файлуудыг алгасдаг тул дахин
 // ажиллуулалт idempotent байна. Файл бүр өөрийн statement болон
 // schema_migrations мөрийг нэг транзакцид commit хийнэ.
 func (r *Runner) Up(ctx context.Context) error {
 	r.info("running migration [up]", logger.Fields{constants.LoggerCategory: constants.LoggerCategoryMigration})
-
-	if err := r.ensureMigrationsTable(ctx); err != nil {
-		return fmt.Errorf("create schema_migrations: %w", err)
-	}
-
-	return r.withAdvisoryLock(ctx, func() error {
+	return r.withConnLock(ctx, func(ctx context.Context, conn *pgxpool.Conn) error {
+		if err := ensureMigrationsTable(ctx, conn); err != nil {
+			return fmt.Errorf("create schema_migrations: %w", err)
+		}
 		files, err := r.listFiles("up")
 		if err != nil {
 			return err
 		}
-		applied, err := r.loadApplied(ctx)
+		applied, err := loadApplied(ctx, conn)
 		if err != nil {
 			return err
 		}
-
 		for _, file := range files {
 			name := filepath.Base(file)
 			if applied[name] {
 				r.info("skipping already-applied migration", logger.Fields{
-					constants.LoggerCategory: constants.LoggerCategoryMigration,
-					constants.LoggerFile:     name,
+					constants.LoggerCategory: constants.LoggerCategoryMigration, constants.LoggerFile: name,
 				})
 				continue
 			}
 			r.info("applying migration", logger.Fields{
-				constants.LoggerCategory: constants.LoggerCategoryMigration,
-				constants.LoggerFile:     name,
+				constants.LoggerCategory: constants.LoggerCategoryMigration, constants.LoggerFile: name,
 			})
-			if err := r.applyFile(ctx, file, name, true); err != nil {
+			if err := applyFile(ctx, conn, file, name, true); err != nil {
 				return err
 			}
 		}
@@ -129,46 +127,25 @@ func (r *Runner) Up(ctx context.Context) error {
 }
 
 // Down нь бүх *.down.sql файлыг лексикографийн ЭСРЭГ дарааллаар
-// хэрэгжүүлнэ (хожуу migration эхэлж буцдаг). Амжилттай down бүр
-// тохирох schema_migrations мөрийг устгана.
+// хэрэгжүүлнэ. Амжилттай down бүр тохирох schema_migrations мөрийг
+// устгана.
 func (r *Runner) Down(ctx context.Context) error {
 	r.info("running migration [down]", logger.Fields{constants.LoggerCategory: constants.LoggerCategoryMigration})
-
-	if err := r.ensureMigrationsTable(ctx); err != nil {
-		return fmt.Errorf("create schema_migrations: %w", err)
-	}
-
-	return r.withAdvisoryLock(ctx, func() error {
+	return r.withConnLock(ctx, func(ctx context.Context, conn *pgxpool.Conn) error {
+		if err := ensureMigrationsTable(ctx, conn); err != nil {
+			return fmt.Errorf("create schema_migrations: %w", err)
+		}
 		files, err := r.listFiles("down")
 		if err != nil {
 			return err
 		}
-		// Зөвхөн ХЭРЭГЖСЭН migration-уудыг буцаана — хэрэгжээгүйг буцаах гэж
-		// оролдвол унадаг (хүснэгт байхгүй г.м.).
-		applied, err := r.loadApplied(ctx)
-		if err != nil {
-			return err
-		}
-		// listFiles нь тоогоор өсөхөөр эрэмбэлдэг — Down нь буурахаар (өндрөөс нам).
-		sort.Slice(files, func(i, j int) bool {
-			return migNum(files[i]) > migNum(files[j])
-		})
-
+		slices.Reverse(files)
 		for _, file := range files {
 			name := filepath.Base(file)
-			upName := deriveUpName(name)
-			if !applied[upName] {
-				r.info("skipping not-applied migration", logger.Fields{
-					constants.LoggerCategory: constants.LoggerCategoryMigration,
-					constants.LoggerFile:     name,
-				})
-				continue
-			}
 			r.info("reverting migration", logger.Fields{
-				constants.LoggerCategory: constants.LoggerCategoryMigration,
-				constants.LoggerFile:     name,
+				constants.LoggerCategory: constants.LoggerCategoryMigration, constants.LoggerFile: name,
 			})
-			if err := r.applyFile(ctx, file, upName, false); err != nil {
+			if err := applyFile(ctx, conn, file, deriveUpName(name), false); err != nil {
 				return err
 			}
 		}
@@ -177,8 +154,8 @@ func (r *Runner) Down(ctx context.Context) error {
 	})
 }
 
-func (r *Runner) ensureMigrationsTable(ctx context.Context) error {
-	_, err := r.db.ExecContext(ctx, `
+func ensureMigrationsTable(ctx context.Context, conn *pgxpool.Conn) error {
+	_, err := conn.Exec(ctx, `
 		CREATE TABLE IF NOT EXISTS schema_migrations (
 			name        TEXT PRIMARY KEY,
 			applied_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -187,63 +164,44 @@ func (r *Runner) ensureMigrationsTable(ctx context.Context) error {
 	return err
 }
 
-// withAdvisoryLock нь зэрэгцээ runner-уудыг (CI + инженерийн зөөврийн
-// компьютер) дараалалд оруулж, нэг удаад зөвхөн нэг нь schema-г
-// өөрчилж чадахаар болгоно.
-func (r *Runner) withAdvisoryLock(ctx context.Context, fn func() error) error {
-	// Session-scoped advisory lock-ийг pool-оос НЭГ холболт дээр барина — эс
-	// бөгөөс lock нэг холболт, unlock өөр холболт дээр буудаж, lock чөлөөлөгдөхгүй
-	// холболт pool-д буцаж дараагийн хүсэлтэд асуудал үүсгэнэ.
-	conn, err := r.db.Conn(ctx)
-	if err != nil {
-		return fmt.Errorf("acquire migration connection: %w", err)
-	}
-	defer func() { _ = conn.Close() }()
-
-	if _, err := conn.ExecContext(ctx, `SELECT pg_advisory_lock($1)`, AdvisoryLockID); err != nil {
-		return fmt.Errorf("acquire advisory lock: %w", err)
-	}
-	defer func() {
-		// ctx цуцлагдсан байж болзошгүй тул unlock-д Background context.
-		if _, err := conn.ExecContext(context.Background(), `SELECT pg_advisory_unlock($1)`, AdvisoryLockID); err != nil {
-			logger.Error("failed to release migration advisory lock", logger.Fields{
-				constants.LoggerCategory: constants.LoggerCategoryMigration,
-				"error":                  err.Error(),
-			})
-		}
-	}()
-	return fn()
-}
-
 func (r *Runner) listFiles(action string) ([]string, error) {
 	files, err := filepath.Glob(filepath.Join(r.dir, fmt.Sprintf("*.%s.sql", action)))
 	if err != nil {
 		return nil, errors.New("glob migration files")
 	}
-	// ТОО-гоор эрэмбэлнэ (лексикографоор биш). Эс бөгөөс "10_" < "2_" болж
-	// бүх Up дараалал эвдэрнэ (шинэ DB унана).
-	sort.Slice(files, func(i, j int) bool {
-		return migNum(files[i]) < migNum(files[j])
+	// Лексикограф эрэмбэ ашиглаж БОЛОХГҮЙ: "10_" нь "1_"-ээс өмнө ордог
+	// ('0' < '_') тул шинэ хоосон DB дээр 10-р migration 1-ээс түрүүлж
+	// ажиллана. Файлын нэрний эхний дугаараар тоон эрэмбэлнэ.
+	slices.SortFunc(files, func(a, b string) int {
+		if c := cmp.Compare(migrationNumber(a), migrationNumber(b)); c != 0 {
+			return c
+		}
+		return cmp.Compare(filepath.Base(a), filepath.Base(b))
 	})
 	return files, nil
 }
 
-// migNum нь migration файлын нэрний эхэнд байгаа тоог буцаана ("12_foo.up.sql" -> 12).
-func migNum(path string) int {
-	base := filepath.Base(path)
-	n := 0
-	for i := 0; i < len(base) && base[i] >= '0' && base[i] <= '9'; i++ {
-		n = n*10 + int(base[i]-'0')
+// migrationNumber нь "N_name.up.sql" маягийн файлын нэрнээс эхний N
+// дугаарыг буцаана; дугааргүй файл хамгийн сүүлд эрэмбэлэгдэнэ.
+func migrationNumber(path string) int {
+	name := filepath.Base(path)
+	i := strings.IndexByte(name, '_')
+	if i <= 0 {
+		return int(^uint(0) >> 1)
+	}
+	n, err := strconv.Atoi(name[:i])
+	if err != nil {
+		return int(^uint(0) >> 1)
 	}
 	return n
 }
 
-func (r *Runner) loadApplied(ctx context.Context) (map[string]bool, error) {
-	rows, err := r.db.QueryContext(ctx, `SELECT name FROM schema_migrations`)
+func loadApplied(ctx context.Context, conn *pgxpool.Conn) (map[string]bool, error) {
+	rows, err := conn.Query(ctx, `SELECT name FROM schema_migrations`)
 	if err != nil {
 		return nil, fmt.Errorf("load applied migrations: %w", err)
 	}
-	defer func() { _ = rows.Close() }()
+	defer rows.Close()
 
 	applied := make(map[string]bool)
 	for rows.Next() {
@@ -257,9 +215,9 @@ func (r *Runner) loadApplied(ctx context.Context) (map[string]bool, error) {
 }
 
 // applyFile нь migration SQL файлыг schema_migrations-ийн бүртгэлийн
-// бичилттэй хамт нэг транзакцид ажиллуулдаг — ингэснээр файлын дунд
-// гацах нь хэсэгчилсэн бичлэг үлдээдэггүй.
-func (r *Runner) applyFile(ctx context.Context, file, upName string, isUp bool) error {
+// бичилттэй хамт нэг транзакцид ажиллуулдаг — ингэснээр файлын дунд гацах
+// нь хэсэгчилсэн бичлэг үлдээдэггүй.
+func applyFile(ctx context.Context, conn *pgxpool.Conn, file, upName string, isUp bool) error {
 	// #nosec G304 — файлын замууд нь хүсэлтийн оролтоос биш, хөгжүүлэгчийн
 	// хяналт дахь migrations директороос ирдэг.
 	data, err := os.ReadFile(file)
@@ -267,35 +225,35 @@ func (r *Runner) applyFile(ctx context.Context, file, upName string, isUp bool) 
 		return fmt.Errorf("read %s: %w", file, err)
 	}
 
-	tx, err := r.db.BeginTx(ctx, nil)
+	tx, err := conn.Begin(ctx)
 	if err != nil {
 		return fmt.Errorf("begin tx: %w", err)
 	}
-	defer func() { _ = tx.Rollback() }()
+	defer func() { _ = tx.Rollback(ctx) }()
 
-	if _, err := tx.ExecContext(ctx, string(data)); err != nil {
+	if _, err := tx.Exec(ctx, string(data)); err != nil {
 		return fmt.Errorf("exec %s: %w", filepath.Base(file), err)
 	}
 
 	if isUp {
-		if _, err := tx.ExecContext(ctx, `INSERT INTO schema_migrations(name) VALUES ($1) ON CONFLICT DO NOTHING`, upName); err != nil {
+		if _, err := tx.Exec(ctx, `INSERT INTO schema_migrations(name) VALUES ($1) ON CONFLICT DO NOTHING`, upName); err != nil {
 			return fmt.Errorf("record migration %s: %w", upName, err)
 		}
 	} else {
-		if _, err := tx.ExecContext(ctx, `DELETE FROM schema_migrations WHERE name = $1`, upName); err != nil {
+		if _, err := tx.Exec(ctx, `DELETE FROM schema_migrations WHERE name = $1`, upName); err != nil {
 			return fmt.Errorf("forget migration %s: %w", upName, err)
 		}
 	}
 
-	if err := tx.Commit(); err != nil {
+	if err := tx.Commit(ctx); err != nil {
 		return fmt.Errorf("commit %s: %w", filepath.Base(file), err)
 	}
 	return nil
 }
 
-// deriveUpName нь "*.down.sql" файлын нэрийг түүний "*.up.sql"
-// хослол болгон хувиргадаг бөгөөд migration-ууд schema_migrations-д
-// яг ийм байдлаар түлхүүрлэгддэг.
+// deriveUpName нь "*.down.sql" файлын нэрийг түүний "*.up.sql" хослол
+// болгон хувиргадаг бөгөөд migration-ууд schema_migrations-д яг ийм
+// байдлаар түлхүүрлэгддэг.
 func deriveUpName(downName string) string {
 	const suffix = ".down.sql"
 	if len(downName) > len(suffix) && downName[len(downName)-len(suffix):] == suffix {

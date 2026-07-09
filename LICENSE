@@ -1,13 +1,6 @@
 MIT License
 
-Copyright (c) 2023 Moh. Najib Fikri (original work: snykk/go-rest-boilerplate)
-Copyright (c) 2026 Gerege Systems Development Team & Claude AI (derivative work:
-                   Government AI Platform Template V1.0)
-
-This project is a derivative of the open-source snykk/go-rest-boilerplate
-(https://github.com/snykk/go-rest-boilerplate), with the HTTP layer converted
-from Gin to Fiber v3 and the data layer converted from sqlx to GORM. The
-original copyright notice above is retained as required by the MIT License.
+Copyright (c) 2026 Gerege Systems
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

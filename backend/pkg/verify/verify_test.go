@@ -1,11 +1,15 @@
-// Government AI Platform Template V1.0
+// Gerege Template Version 27.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
+// GeregeCloud Verify client-ийн unit тест: httptest сервер дээр Send/Check-ийн
+// wire хэлбэр, X-API-Key header, request_id задлалт, approved/non-approved/4xx/
+// 5xx статусын буулгалт, apiKey-гүй үед fail-fast, өгөгдмөл channel/base-ийг
+// шалгана.
 package verify
 
 import (
 	"context"
-	"errors"
+	"encoding/json"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -13,98 +17,121 @@ import (
 	"testing"
 )
 
-// Тест бүр httptest.Server-ээр алсын /send, /check endpoint-уудыг хуурамчаар
-// гаргадаг тул бид төлөв засах ажилгүйгээр HTTP wire-формат, header-уудыг
-// шалгаж чадна. Жинхэнэ verify.gecloud.mn-ийг хэзээ ч цохиогүй.
+func newTestClient(t *testing.T, h http.HandlerFunc) *Client {
+	t.Helper()
+	srv := httptest.NewServer(h)
+	t.Cleanup(srv.Close)
+	return NewClient(srv.URL, "gck_test_key", "email")
+}
 
-func TestSend_HappyPath(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/send" {
-			t.Errorf("unexpected path: %s", r.URL.Path)
+func TestSend(t *testing.T) {
+	c := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/verify/send" {
+			t.Errorf("path = %s", r.URL.Path)
 		}
-		if r.Header.Get("X-API-Key") != "clk_live_test" {
-			t.Errorf("missing/incorrect X-API-Key: %q", r.Header.Get("X-API-Key"))
+		if got := r.Header.Get("X-API-Key"); got != "gck_test_key" {
+			t.Errorf("api key header = %q", got)
 		}
-		body, _ := io.ReadAll(r.Body)
-		got := string(body)
-		if !strings.Contains(got, `"to":"99097189"`) || !strings.Contains(got, `"channel":"sms"`) {
-			t.Errorf("unexpected request body: %s", got)
+		var body map[string]string
+		_ = json.NewDecoder(r.Body).Decode(&body)
+		if body["to"] != "user@example.com" || body["channel"] != "sms" {
+			t.Errorf("body = %+v", body)
 		}
-		w.Header().Set("Content-Type", "application/json")
-		_, _ = w.Write([]byte(`{"request_id":"clv_abc123"}`))
-	}))
-	defer srv.Close()
+		_, _ = io.WriteString(w, `{"request_id":"gcv_123"}`)
+	})
 
-	c := NewClient(srv.URL, "clk_live_test", ChannelSMS)
-	rid, err := c.Send(context.Background(), "99097189")
+	// channel аргумент нь client-ийн default-ыг дардаг.
+	id, err := c.Send(context.Background(), "user@example.com", "sms")
 	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
+		t.Fatal(err)
 	}
-	if rid != "clv_abc123" {
-		t.Fatalf("expected request_id clv_abc123, got %s", rid)
+	if id != "gcv_123" {
+		t.Errorf("request_id = %s", id)
 	}
 }
 
-func TestCheck_Approved(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/check" {
-			t.Errorf("unexpected path: %s", r.URL.Path)
+func TestSendUsesDefaultChannelWhenEmpty(t *testing.T) {
+	c := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
+		var body map[string]string
+		_ = json.NewDecoder(r.Body).Decode(&body)
+		if body["channel"] != "email" {
+			t.Errorf("default channel = %q, want email", body["channel"])
 		}
-		body, _ := io.ReadAll(r.Body)
-		got := string(body)
-		if !strings.Contains(got, `"request_id":"clv_abc123"`) || !strings.Contains(got, `"code":"482916"`) {
-			t.Errorf("unexpected request body: %s", got)
-		}
-		_, _ = w.Write([]byte(`{"status":"approved"}`))
-	}))
-	defer srv.Close()
-
-	c := NewClient(srv.URL, "clk_live_test", ChannelEmail)
-	if err := c.Check(context.Background(), "clv_abc123", "482916"); err != nil {
-		t.Fatalf("expected approved, got %v", err)
+		_, _ = io.WriteString(w, `{"request_id":"x"}`)
+	})
+	if _, err := c.Send(context.Background(), "a@b.mn", ""); err != nil {
+		t.Fatal(err)
 	}
 }
 
-func TestCheck_NotApproved(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-		_, _ = w.Write([]byte(`{"status":"pending"}`))
-	}))
-	defer srv.Close()
-
-	c := NewClient(srv.URL, "clk_live_test", ChannelEmail)
-	err := c.Check(context.Background(), "clv_abc123", "000000")
-	if !errors.Is(err, ErrNotApproved) {
-		t.Fatalf("expected ErrNotApproved, got %v", err)
+func TestSendEmptyRequestIDIsError(t *testing.T) {
+	c := newTestClient(t, func(w http.ResponseWriter, _ *http.Request) {
+		_, _ = io.WriteString(w, `{"request_id":""}`)
+	})
+	if _, err := c.Send(context.Background(), "a@b.mn", ""); err == nil {
+		t.Fatal("expected error on empty request_id")
 	}
 }
 
-func TestSend_NonOK_BubblesServerMessage(t *testing.T) {
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-		w.WriteHeader(http.StatusForbidden)
-		_, _ = w.Write([]byte(`{"message":"insufficient balance"}`))
-	}))
-	defer srv.Close()
-
-	c := NewClient(srv.URL, "clk_live_test", ChannelEmail)
-	_, err := c.Send(context.Background(), "patrick@example.com")
-	if err == nil || !strings.Contains(err.Error(), "insufficient balance") {
-		t.Fatalf("expected error to surface server message, got %v", err)
+func TestSendServerErrorSurfaces(t *testing.T) {
+	c := newTestClient(t, func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusBadGateway)
+	})
+	if _, err := c.Send(context.Background(), "a@b.mn", ""); err == nil {
+		t.Fatal("expected error on 5xx")
 	}
 }
 
-func TestSend_MissingAPIKey(t *testing.T) {
-	c := NewClient("https://example.invalid", "", ChannelEmail)
-	if _, err := c.Send(context.Background(), "x@example.com"); err == nil {
-		t.Fatalf("expected missing api key error")
+func TestCheck(t *testing.T) {
+	cases := []struct {
+		name    string
+		status  int
+		body    string
+		wantErr bool
+	}{
+		{"approved", 200, `{"status":"approved"}`, false},
+		{"2xx not approved", 200, `{"status":"pending"}`, true},
+		{"4xx wrong code", 400, `{"status":"invalid"}`, true},
+		{"5xx surfaces as error", 500, `{}`, true},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			c := newTestClient(t, func(w http.ResponseWriter, _ *http.Request) {
+				w.WriteHeader(tc.status)
+				_, _ = io.WriteString(w, tc.body)
+			})
+			err := c.Check(context.Background(), "gcv_123", "123456")
+			if tc.wantErr && err == nil {
+				t.Fatal("expected error")
+			}
+			if !tc.wantErr && err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			// 4xx / 2xx-non-approved нь ErrNotApproved sentinel байх ёстой (5xx биш).
+			if tc.status < 500 && tc.wantErr && err != ErrNotApproved {
+				t.Errorf("want ErrNotApproved, got %v", err)
+			}
+		})
 	}
 }
 
-func TestNewClient_TrimsTrailingSlash_Defaults(t *testing.T) {
-	c := NewClient("https://example.invalid/", "k", "")
-	if c.baseURL != "https://example.invalid" {
-		t.Errorf("expected trailing slash trimmed, got %q", c.baseURL)
+func TestNoAPIKeyFailsFast(t *testing.T) {
+	// apiKey хоосон бол HTTP хийхгүйгээр шууд алдаа буцаана.
+	c := NewClient("http://127.0.0.1:0", "", "email")
+	if _, err := c.Send(context.Background(), "a@b.mn", ""); err == nil {
+		t.Error("Send: expected 'not configured' error")
 	}
-	if c.channel != ChannelEmail {
-		t.Errorf("expected default channel 'email', got %q", c.channel)
+	if err := c.Check(context.Background(), "r", "c"); err == nil {
+		t.Error("Check: expected 'not configured' error")
+	}
+}
+
+func TestNewClientDefaults(t *testing.T) {
+	c := NewClient("", "k", "")
+	if c.base != strings.TrimRight(defaultBase, "/") {
+		t.Errorf("base default = %s", c.base)
+	}
+	if c.channel != "email" {
+		t.Errorf("channel default = %s", c.channel)
 	}
 }

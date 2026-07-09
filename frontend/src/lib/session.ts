@@ -39,3 +39,23 @@ export function clearSession(): void {
 export function hasSession(): boolean {
   return !!getRefreshToken();
 }
+
+/**
+ * Cookie бичих боломжтой контекст мөн үү (route handler / server action),
+ * эсвэл RSC render үү. Backend refresh нь токеныг ROTATE хийдэг (хуучин
+ * refresh jti шууд хэрэглэгддэг) тул шинэ хосыг хадгалж ЧАДАХГҮЙ контекстод
+ * refresh дуудах нь хүчинтэй сессиэ шатаах алдаа болно — урьдчилж шалгана.
+ * Probe нь одоо байгаа refresh cookie-г ижил утгаар нь дахин бичих тул
+ * route handler-т ямар ч нөлөөгүй; RSC-д synchronous throw хийдэг.
+ */
+export function canPersistSession(): boolean {
+  const jar = cookies();
+  const refresh = jar.get(REFRESH_COOKIE)?.value;
+  if (!refresh) return false;
+  try {
+    jar.set(REFRESH_COOKIE, refresh, cookieOptions(REFRESH_MAX_AGE));
+    return true;
+  } catch {
+    return false;
+  }
+}

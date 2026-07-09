@@ -1,14 +1,16 @@
-// Government AI Platform Template V1.0
+// Gerege Template Version 27.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package main
 
 import (
-	"govtemplateai/cmd/seed/seeders"
-	"govtemplateai/internal/config"
-	"govtemplateai/internal/constants"
-	"govtemplateai/internal/datasources/drivers"
-	"govtemplateai/pkg/logger"
+	"context"
+
+	"template/cmd/seed/seeders"
+	"template/internal/config"
+	"template/internal/constants"
+	"template/internal/datasources/drivers"
+	"template/pkg/logger"
 )
 
 func init() {
@@ -19,27 +21,17 @@ func init() {
 }
 
 func main() {
-	// Production-д seed-ийг хэзээ ч ажиллуулахгүй — таамаглахад хялбар нууц
-	// үгтэй admin backdoor суулгахаас сэргийлнэ.
-	if config.AppConfig.Environment == constants.EnvironmentProduction {
-		logger.Fatal("seed is disabled in production", logger.Fields{constants.LoggerCategory: constants.LoggerCategorySeeder})
-	}
-
-	db, err := drivers.SetupGORMPostgres()
+	ctx := context.Background()
+	pool, err := drivers.SetupPgxPostgres(ctx)
 	if err != nil {
 		logger.Panic(err.Error(), logger.Fields{constants.LoggerCategory: constants.LoggerCategorySeeder})
 	}
-	defer func() {
-		if sqlDB, dbErr := db.DB(); dbErr == nil {
-			_ = sqlDB.Close()
-		}
-	}()
+	defer pool.Close()
 
 	logger.Info("seeding...", logger.Fields{constants.LoggerCategory: constants.LoggerCategorySeeder})
 
-	seeder := seeders.NewSeeder(db)
-	err = seeder.UserSeeder(seeders.UserData)
-	if err != nil {
+	seeder := seeders.NewSeeder(pool)
+	if err := seeder.UserSeeder(seeders.UserData); err != nil {
 		logger.Panic(err.Error(), logger.Fields{constants.LoggerCategory: constants.LoggerCategorySeeder})
 	}
 

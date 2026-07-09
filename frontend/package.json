@@ -1,22 +1,22 @@
 {
-  "name": "gerege-template-ai-web",
-  "version": "1.0.0",
+  "name": "gerege-web",
+  "version": "27.0.0",
   "private": true,
-  "description": "gerege-template-ai-v1.0-д тохирсон Next.js frontend — me.gerege.mn-ийн gerege theme дээр суурилсан.",
+  "description": "gerege-backend-template-v27-д тохирсон Next.js frontend — me.gerege.mn-ийн gerege theme дээр суурилсан.",
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start -p 3000",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "vitest run"
   },
   "dependencies": {
-    "@bpmn-io/form-js": "^1.11.0",
-    "bpmn-js": "^17.11.1",
+    "@tanstack/react-query": "^5.101.0",
     "lucide-react": "^0.363.0",
     "next": "14.2.18",
+    "qrcode.react": "^3.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-markdown": "^9.1.0",
     "server-only": "^0.0.1"
   },
   "devDependencies": {
@@ -25,6 +25,7 @@
     "@types/react-dom": "18.2.22",
     "eslint": "8.57.0",
     "eslint-config-next": "14.2.18",
-    "typescript": "5.4.3"
+    "typescript": "5.4.3",
+    "vitest": "^2.1.9"
   }
 }

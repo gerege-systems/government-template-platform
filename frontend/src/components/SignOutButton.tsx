@@ -3,21 +3,13 @@
 import React from 'react';
 import { LogOut } from 'lucide-react';
 import { signOut } from '@/lib/signout';
-import { showToast } from '@/lib/preferences';
-import { useT } from '@/lib/useT';
 
 /** Энэ төхөөрөмж дээрх сессийг хаах товч (server component-д ашиглах client wrapper). */
-export default function SignOutButton({ label }: { label?: string }) {
-  const { T } = useT();
-  const handle = async () => {
-    // Амжилтгүй (backend 5xx) бол чимээгүй өнгөрөхгүй — toast харуулна.
-    const ok = await signOut();
-    if (!ok) showToast(T('auth.signOutError'));
-  };
+export default function SignOutButton({ label = 'Энэ төхөөрөмжөөс гарах' }: { label?: string }) {
   return (
-    <button className="btn btn--danger" type="button" onClick={() => void handle()}>
+    <button className="btn btn--danger" type="button" onClick={() => signOut()}>
       <LogOut size={16} strokeWidth={2} />
-      <span>{label ?? T('auth.signOutDevice')}</span>
+      <span>{label}</span>
     </button>
   );
 }

@@ -1,63 +1,87 @@
-"use client";
+// Browser талын audio туслахууд — бичлэг (MediaRecorder) болон base64
+// хөрвүүлэлт. AI voice боломжууд (дуут мессеж, live орчуулга) хэрэглэнэ.
 
-// Browser-ийн дуу бичлэгийн хуваалцсан туслахууд — чат (STT) болон
-// /translate хуудас хоёул ашиглана.
-
-// Backend-ийн VOICE_MAX_AUDIO_KB (640 KiB)-тэй тааруулсан client-side хязгаар:
-// base64 + JSON нь глобал 1 MiB body cap дотор багтах ёстой.
-export const MAX_AUDIO_BYTES = 620 * 1024;
-// Авто-зогсолт: урт бичлэгээс (хэмжээ + timeout) сэргийлнэ.
-export const MAX_RECORD_MS = 45_000;
-
-/** Browser-ийн дэмждэг хамгийн тохиромжтой бичлэгийн форматыг сонгоно. */
-export function pickMimeType(): string {
-  if (typeof MediaRecorder === 'undefined') return '';
-  const candidates = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'];
+/** MediaRecorder-ийн дэмждэг хамгийн тохиромжтой audio mime-г сонгоно. */
+export function pickAudioMime(): string {
+  const candidates = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg'];
   for (const c of candidates) {
-    if (MediaRecorder.isTypeSupported(c)) return c;
+    if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported(c)) return c;
   }
-  return '';
+  return 'audio/webm';
 }
 
-/** MIME-ийн codecs параметрийг хасч суурь төрлийг буцаана (backend allowlist). */
-export function baseMime(mime: string): string {
-  return mime.split(';')[0] || 'audio/webm';
-}
-
-// TTS-ийн дээд урт — урт текст Gemini TTS-д ажлын хугацааны төсвөөс (≈25с)
-// хэтэрч timeout болдог тул чатын "Сонсох" дээр энэ хүртэл уншина.
-export const TTS_MAX_CHARS = 700;
-
-/**
- * Markdown тэмдэглэгээг цэвэр текст болгоно — TTS нь `**`, `##`, `-`, `` ` ``
- * зэргийг чанга унших ёсгүй. Мөн TTS_MAX_CHARS-аар богиносгоно (урт хариуг
- * эхнээс нь уншина; timeout-аас сэргийлнэ).
- */
-export function stripMarkdown(md: string): string {
-  let t = md
-    .replace(/```[\s\S]*?```/g, ' ')        // код блок
-    .replace(/`([^`]+)`/g, '$1')            // inline код
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')  // зураг
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1') // холбоос → текст
-    .replace(/^\s{0,3}#{1,6}\s+/gm, '')     // гарчиг #
-    .replace(/^\s{0,3}>\s?/gm, '')          // quote
-    .replace(/^\s*[-*+]\s+/gm, '')          // bullet
-    .replace(/^\s*\d+\.\s+/gm, '')          // дугаарласан жагсаалт
-    .replace(/(\*\*|__)(.*?)\1/g, '$2')     // bold
-    .replace(/(\*|_)(.*?)\1/g, '$2')        // italic
-    .replace(/\n{2,}/g, '. ')               // догол мөр → завсарлага
-    .replace(/\s+/g, ' ')
-    .trim();
-  if (t.length > TTS_MAX_CHARS) t = t.slice(0, TTS_MAX_CHARS).trim() + '…';
-  return t;
-}
-
-/** Blob-г base64 болгоно (data: угтварыг хасна). */
+/** Blob-ийг base64 мөр болгоно (data: prefix-гүй). */
 export function blobToBase64(blob: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onloadend = () => resolve((reader.result as string).split(',')[1] ?? '');
-    reader.onerror = reject;
+    reader.onload = () => {
+      const url = String(reader.result ?? '');
+      resolve(url.slice(url.indexOf(',') + 1));
+    };
+    reader.onerror = () => reject(reader.error);
     reader.readAsDataURL(blob);
+  });
+}
+
+export interface RecordedAudio {
+  /** Backend-ийн whitelist-тэй таарах цэвэр mime (codec параметргүй). */
+  mime: string;
+  /** base64 кодлогдсон бичлэг. */
+  data: string;
+}
+
+/**
+ * Нэг бичлэгийн сегмент — recorder-ийг stop() хийх хүртэл бичээд бүрэн
+ * (тоглуулах боломжтой) файл болгож буцаана. Live орчуулга сегментүүдийг
+ * дараалан авдаг: timeslice-тэй chunk нь зөвхөн эхнийдээ container header
+ * агуулдаг тул сегмент бүрд шинэ MediaRecorder ажиллуулна.
+ */
+export function recordSegment(
+  stream: MediaStream,
+  maxMs: number,
+): { stop: () => void; done: Promise<RecordedAudio | null> } {
+  const mimeFull = pickAudioMime();
+  const recorder = new MediaRecorder(stream, { mimeType: mimeFull });
+  const chunks: Blob[] = [];
+  let timer: ReturnType<typeof setTimeout> | null = null;
+
+  const done = new Promise<RecordedAudio | null>((resolve) => {
+    recorder.ondataavailable = (e) => {
+      if (e.data.size > 0) chunks.push(e.data);
+    };
+    recorder.onstop = async () => {
+      if (timer) clearTimeout(timer);
+      if (chunks.length === 0) return resolve(null);
+      const blob = new Blob(chunks, { type: mimeFull });
+      try {
+        const data = await blobToBase64(blob);
+        resolve({ mime: mimeFull.split(';')[0], data });
+      } catch {
+        resolve(null);
+      }
+    };
+    recorder.onerror = () => resolve(null);
+  });
+
+  recorder.start();
+  timer = setTimeout(() => {
+    if (recorder.state !== 'inactive') recorder.stop();
+  }, maxMs);
+
+  return {
+    stop: () => {
+      if (recorder.state !== 'inactive') recorder.stop();
+    },
+    done,
+  };
+}
+
+/** base64 audio-г тоглуулна; дууссаны дараа resolve хийнэ. */
+export function playBase64Audio(mime: string, data: string): Promise<void> {
+  return new Promise((resolve) => {
+    const audio = new Audio(`data:${mime};base64,${data}`);
+    audio.onended = () => resolve();
+    audio.onerror = () => resolve();
+    void audio.play().catch(() => resolve());
   });
 }

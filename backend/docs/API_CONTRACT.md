@@ -2,21 +2,21 @@
 
 > 🌐 **English** · [Монгол](API_CONTRACT_MN.md)
 
-REST API reference for the **Government AI Platform Template V1.0**. The live,
+REST API reference for the **Gerege Backend Template v27**. The live,
 auto-generated spec is served at `GET /swagger/` (source: `docs/swagger.json`).
 
 > **Origin.** Derived from the open-source
 > [snykk/go-rest-boilerplate](https://github.com/snykk/go-rest-boilerplate)
-> (MIT, by Najib Fikri); HTTP layer ported **Gin → Fiber v3**, data layer
-> **sqlx → GORM**. See [ARCHITECTURE.md](./ARCHITECTURE.md#credits--license).
+> (MIT, by Najib Fikri); HTTP layer ported **Gin → chi (net/http)**, data layer
+> **sqlx → pgx (pgxpool)**. See [ARCHITECTURE.md](./ARCHITECTURE.md#credits--license).
 
 ## Conventions
 
 - **Base URL:** `http://localhost:8080/api/v1`
 - **Content-Type:** `application/json`
 - **Auth:** protected endpoints require `Authorization: Bearer <access_token>`
-- **Rate limit:** `/auth/*` is capped at ~5 requests/minute per IP (429 on excess)
-- **Body cap:** `/auth/*` bodies are limited to 4 KiB
+- **Rate limit:** `/auth/*` is capped at ~5 requests/minute per IP; `/ai/*` at ~20/minute (429 on excess)
+- **Body cap:** `/auth/*` bodies are limited to 4 KiB; everything else to 1 MiB
 
 ### Response envelope
 
@@ -52,13 +52,15 @@ Every response uses one envelope:
 
 ### Validation error (422)
 
-Field-level detail is returned under `data.errors`:
+Field-level detail is returned under `data.errors`, which is an **array** of
+`{ field, tag, message }` objects. `field` is the JSON tag name (e.g.
+`new_password`, `email`):
 
 ```json
 {
   "status": false,
   "message": "validation failed",
-  "data": { "errors": { "password": "password must be at least 12 characters" } },
+  "data": { "errors": [ { "field": "new_password", "tag": "min", "message": "must be at least 12 characters long" } ] },
   "request_id": "b1d2…"
 }
 ```
@@ -74,10 +76,13 @@ Register a new account (regular user role).
 
 **Request**
 ```json
-{ "username": "johndoe", "email": "john@example.com", "password": "Str0ng!Passw0rd" }
+{ "last_name": "Бат", "first_name": "Дорж", "last_name_en": "Bat", "first_name_en": "Dorj",
+  "username": "johndoe", "email": "john@example.com", "password": "Str0ng!Passw0rd" }
 ```
 | Field | Rules |
 |-------|-------|
+| `last_name` / `first_name` | required, 1–50 chars (Mongolian) |
+| `last_name_en` / `first_name_en` | optional, ≤ 50 (Latin) |
 | `username` | required, 3–25 chars |
 | `email` | required, valid email, ≤ 50 |
 | `password` | required, 12–72, strongpassword |
@@ -128,23 +133,26 @@ last password change are rejected.
 Errors: `401` invalid/expired/revoked refresh token.
 
 ### POST `/auth/logout`
-Revoke the supplied refresh token.
+Revoke the supplied refresh token. If `access_token` is also supplied, its
+jti lands on a Redis deny-list for the token's remaining lifetime, so the
+access token stops working immediately as well.
 
-**Request** `{ "refresh_token": "<refresh_jwt>" }`
+**Request** `{ "refresh_token": "<refresh_jwt>", "access_token": "<access_jwt>" }` (`access_token` optional)
 **Response `200`** — message `"logout success"`, `data: null`.
 
 ### POST `/auth/password/forgot`
 Begin a password reset. Always returns 200 (does not reveal whether the email exists).
 
 **Request** `{ "email": "john@example.com" }`
-**Response `200`** — message `"if the email is registered, a reset link has been sent"`, `data: null`.
+**Response `200`** — message `"if the email is registered, a reset code has been sent"`, `data: null`.
+A 6-digit OTP is sent via GeregeCloud Verify to the email.
 
 ### POST `/auth/password/reset`
-Complete a password reset with the token from the reset flow.
+Complete a password reset with the OTP code emailed by the forgot-password flow.
 
-**Request** `{ "token": "<reset_token>", "new_password": "N3w!Str0ngPass" }`
+**Request** `{ "email": "john@example.com", "code": "123456", "new_password": "N3w!Str0ngPass" }`
 **Response `200`** — message `"password reset"`, `data: null`.
-Errors: `401/400` invalid/expired token, `422` validation.
+Errors: `401` reset code is invalid or expired, `422` validation.
 
 ### PUT `/auth/password/change` 🔒
 Change the password for the authenticated user. Requires `Authorization: Bearer`.
@@ -173,75 +181,68 @@ Errors: `401` missing/invalid token.
 
 ---
 
-## AI assistant (Anthropic Claude) 🔒
+## AI (Gemini pipeline) 🔒
 
-All `/ai/*` endpoints require `Authorization: Bearer` and return `503
-"ai service is not configured"` when `ANTHROPIC_API_KEY` is unset. Per-user
-daily limit applies (`AI_DAILY_REQUEST_LIMIT`, Redis counter).
+All `/ai/*` endpoints require a bearer token and share a dedicated rate
+limit (~20 req/min per IP). They are no-ops returning 500 until
+`GEMINI_API_KEY` is configured. The assistant runs on a layered system
+prompt — hardcoded guardrails + an admin-configurable **scope** (the
+assistant refuses anything outside it) + optional **instructions** — and
+grounds platform answers in the `ai_knowledge` table via its
+`search_knowledge` tool.
 
 ### POST `/ai/chat` 🔒
-Streaming chat. The response is **`text/event-stream`** (SSE), not the JSON
-envelope. The user message is appended to a conversation (a new one is created
-when `conversation_id` is omitted) and Claude's reply is streamed token by token.
+Chat with the assistant. Send text, voice (base64 audio the model
+understands directly), or both. The conversation is stateless — pass prior
+turns in `history`.
 
 **Request**
+```json
+{ "message": "what time is it?",
+  "audio": { "mime": "audio/webm", "data": "<base64>" },
+  "history": [ { "role": "user", "text": "…" }, { "role": "model", "text": "…" } ] }
+```
 | Field | Rules |
 |-------|-------|
-| `conversation_id` | optional, uuid4 (omit to start a new conversation) |
-| `message` | required, 1–4000 chars |
+| `message` | optional (required if no `audio`), ≤ 4000 chars |
+| `audio` | optional; `mime` ∈ webm/ogg/wav/mpeg/mp3/mp4/m4a/aac/flac, `data` base64 ≤ ~700 KB |
+| `history` | optional, ≤ 20 turns |
 
-**SSE events**
+**Response `200`**
+```json
+{ "status": true, "message": "ai reply generated", "data": {
+  "reply": "Одоо 12:30 цаг болж байна.",
+  "steps": [ { "tool": "get_server_time", "args": {}, "result": { } } ],
+  "degraded": false }, "request_id": "…" }
 ```
-event: delta   data: {"delta":"text chunk"}
-event: done    data: {"conversation_id":"…","message_id":"…","input_tokens":N,"output_tokens":N}
-event: error   data: {"message":"…","partial":true|false}
-```
-Errors (sent as JSON before the stream starts): `400` malformed, `401` unauth,
-`403` daily limit exceeded, `422` validation, `503` not configured.
+`steps` lists the function calls the model executed (pipeline trace). When
+Gemini is temporarily unavailable the endpoint still returns `200` with a
+Mongolian fallback `reply` and `degraded: true`.
 
-### GET `/ai/conversations` 🔒
-List the user's conversations (newest first). Query: `offset`, `limit` (≤ 50).
-Returns `data: [{ id, title, created_at, updated_at }]`.
+### POST `/ai/stt` 🔒
+Speech-to-text. **Request** `{ "audio": { "mime": "audio/webm", "data": "<base64>" } }`
+**Response `200`** — `data: { "text": "…" }` (empty when no speech detected).
 
-### GET `/ai/conversations/{id}/messages` 🔒
-Return all messages in a conversation the user owns (others → `404`).
-Returns `data: [{ id, conversation_id, role, content, created_at }]`.
+### POST `/ai/tts` 🔒
+Text-to-speech. **Request** `{ "text": "Сайн байна уу", "voice": "Kore" }` (`voice` optional)
+**Response `200`** — `data: { "mime": "audio/wav", "data": "<base64 WAV>" }` — playable directly in a browser.
 
----
+### POST `/ai/translate` 🔒
+Live translation. Provide `text` **or** `audio` (audio goes through an
+internal STT step first); `speak: true` additionally returns a spoken (TTS)
+version of the translation. Silent audio chunks return empty fields — the
+live-translation UI streams short recorded segments here.
 
-## Voice (Google Gemini) 🔒
+**Request** `{ "audio": { … }, "target_lang": "en", "speak": false }`
+(`target_lang`: required, e.g. `mn|en|ru|zh|ja|ko|de`)
+**Response `200`** — `data: { "source_text": "Сайн уу", "translated": "Hello", "audio": { … } }`.
 
-All `/voice/*` endpoints require `Authorization: Bearer` and return `503
-"voice service is not configured"` when `GEMINI_API_KEY` is unset. Audio is sent
-and returned as **base64** (the raw audio plus base64 + JSON must fit the global
-1 MiB body cap; see `VOICE_MAX_AUDIO_KB`). Returned audio is WAV (PCM 24 kHz/16-bit/mono).
-
-### POST `/voice/translate` 🔒
-Mongolian ↔ English voice translation: transcribe (STT) → translate → synthesize (TTS).
-Per-user daily limit applies (`VOICE_DAILY_REQUEST_LIMIT`).
-
-**Request**
-| Field | Rules |
-|-------|-------|
-| `source_lang` | required, `mn` or `en` (target is the other) |
-| `mime_type` | required, one of `audio/webm` `audio/mp4` `audio/ogg` `audio/wav` |
-| `audio_base64` | required, base64 of the recorded clip |
-
-**Response `200`** — `data: { id, source_lang, target_lang, source_text,
-translated_text, audio_base64, audio_mime, created_at }`. If TTS fails the text
-is still returned with an empty `audio_base64`.
-
-### GET `/voice/history` 🔒
-List the user's recent translations (no audio). Query: `offset`, `limit` (≤ 50).
-Returns `data: [{ id, source_lang, target_lang, source_text, translated_text, created_at }]`.
-
-### POST `/voice/transcribe` 🔒
-Speech-to-text only (no translation) — used by the chat mic. Request:
-`{ lang: "mn"|"en", mime_type, audio_base64 }`. Response: `data: { text }`.
-
-### POST `/voice/speak` 🔒
-Text-to-speech — used by the chat "Listen" button. Request: `{ text }` (1–5000
-chars). Response: `data: { audio_base64, audio_mime }` (WAV).
+### GET `/admin/ai/prompts` · PUT `/admin/ai/prompts/{key}` 🔒
+Admin (requires the `settings.manage` permission): list / update the
+configurable prompt layers. `key` ∈ `scope | instructions`; body
+`{ "content": "…" }` (≤ 4000 chars, empty allowed). Changes take effect
+immediately (server-side prompt cache is invalidated). The base guardrail
+layer is hardcoded and not exposed here.
 
 ---
 
@@ -250,7 +251,7 @@ chars). Response: `data: { audio_base64, audio_mime }` (WAV).
 | Method | Path | Description |
 |--------|------|-------------|
 | GET | `/health` | Liveness — always 200 if the process is up |
-| GET | `/ready` | Readiness — pings Postgres (GORM) + Redis |
+| GET | `/ready` | Readiness — pings Postgres (pgx pool) + Redis |
 | GET | `/metrics` | Prometheus exposition |
 | GET | `/swagger/*` | Swagger UI + spec |
 
@@ -261,4 +262,4 @@ handler annotations with `make swag`.
 
 ---
 
-**Government AI Platform Template V1.0** — Co-developed by the **Gerege Systems Development Team** and **Claude AI**, 2026.
+**Gerege Template Version 27.0** — Co-developed by the **Gerege Systems Development Team** and **Claude AI**, 2026.

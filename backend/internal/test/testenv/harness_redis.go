@@ -1,6 +1,6 @@
 //go:build integration
 
-// Government AI Platform Template V1.0
+// Gerege Template Version 27.0
 // Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
 
 package testenv
@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"govtemplateai/internal/datasources/caches"
 	"github.com/testcontainers/testcontainers-go"
 	tcredis "github.com/testcontainers/testcontainers-go/modules/redis"
+	"template/internal/datasources/caches"
 )
 
 // StartRedis нь устгагдах Redis контейнер асааж, түүн рүү чиглэсэн
