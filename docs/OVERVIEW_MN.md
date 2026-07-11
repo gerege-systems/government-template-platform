@@ -18,7 +18,7 @@ Backend нь нээлттэй эхийн [snykk/go-rest-boilerplate](https://git
 | Өгөгдөл | PostgreSQL 16 (+ Row-Level Security) · Redis 7 |
 | Frontend | Next.js 15 · React 19 · TypeScript · TanStack Query |
 | AI | Google Gemini (SDK-гүй REST client) |
-| Identity | eID Mongolia (RP) · dgov SSO (OIDC/Hydra) · Google OAuth |
+| Identity | eID Mongolia (RP) · DAN / dgov SSO (OIDC/Hydra) · Google OAuth |
 | Үндэсний систем | XYP бүртгэл · дижитал гарын үсэг (PAdES) · Gerege Core |
 | Observability | OpenTelemetry · Prometheus · Zap |
 | Delivery | Docker Compose · nginx · distroless image-ууд |
@@ -28,7 +28,7 @@ Backend нь нээлттэй эхийн [snykk/go-rest-boilerplate](https://git
 ## Хайрцаг дотор юу байгаа вэ
 
 - **Clean Architecture backend** — `handler → usecase → repository → domain`, буцаах import байхгүй; бизнесийн цөм нь вэб framework-ийг хэзээ ч import хийдэггүй. Гар DI, гараар бичсэн SQL.
-- **eID-тэргүүтэй нэвтрэлт** — үндэсний eID-ээр нэвтрэх (QR/төхөөрөмж-холбоос эсвэл РД push); эргэлттэй JWT access + refresh, Redis суурьтай цуцлалт, нэвтрэлтийн түгжээ, тоолшгүй байдлыг эсэргүүцсэн урсгалууд.
+- **DAN SSO нэвтрэлт, eID-д суурилсан** — буух хуудасны нэвтрэлт нь **DAN** (dgov-ийн үндэсний SSO, dan.dgov.mn) бөгөөд иргэнийг eID аппаараа дамжуулан баталгаажуулдаг; шууд eID нэвтрэлт (QR/төхөөрөмж-холбоос эсвэл РД push) мөн хэрэгжсэн. Эргэлттэй JWT access + refresh, Redis суурьтай цуцлалт, нэвтрэлтийн түгжээ, тоолшгүй байдлыг эсэргүүцсэн урсгалууд.
 - **Динамик RBAC** — super-admin/admin/manager/user түвшинтэй дүр/зөвшөөрлийн каталог, HTTP давхаргад хэрэгжүүлж, сервер талд дахин шалгадаг.
 - **Row-Level Security** — хэрэглэгч бүрийн хүснэгт бүр RLS-ээр тусгаарлагдсан; API нь non-superuser дүрээр холбогддог бөгөөд boot-үеийн хэрэгжих чадварын хамгаалалттай.
 - **AI туслах (Gemini)** — функц дуудлагатай чат, яриаг-текст рүү, текстийг-яриа руу хөрвүүлэлт болон шууд орчуулга. Давхаргатай системийн prompt (шаттай хатуу кодлосон хамгаалалт + админаар тохируулж болох scope/зааврууд) нь үүнийг домэйн дотор байлгадаг; `search_knowledge` хэрэгсэл нь хариултыг өгөгдлийн санд суурилуулдаг. Чат нь алдаа заахын оронд эвтэйхэн доройтдог.
@@ -65,7 +65,7 @@ government-template-platform/
 
 | Бүс | Хэн | Онцлохууд |
 |------|-----|-----------|
-| **Me** (`/me`) | Иргэд | Хяналтын самбар, профайл, eID иргэний үнэмлэх/сертификат/төхөөрөмжүүд, AI туслах, шууд орчуулга, төрийн үйлчилгээ (өргөдөл, лавлагаа, төлбөр, цаг захиалга), байгууллагууд, нэгтгэлүүд, гарын үсэг зурах. |
+| **Миний систем (My System)** (`/me`) | Иргэд | Эхэнд Төрийн үйлчилгээ (services, applications, references, appointments, payments, notifications), дараа нь Хувийн (dashboard, integrations, AI туслах, шууд орчуулга, гарын үсэг зурах); нэмээд profile, organizations болон eID иргэний үнэмлэхийн хуудсууд. |
 | **Admin** (`/admin`) | Админууд | Хэрэглэгчийн удирдлага, RBAC дүрүүд, AI prompt тохиргоо, аудит бүртгэл + баталгаажуулалт, аюулгүй байдлын үйл явдлууд, Core хайлт, API gateway консол. |
 | **Manager** (`/manager`) | Менежерүүд | Багийн хяналтын самбар + хэрэглэгчийн харагдац. |
 | **Superadmin** | Супер админууд | Админ бүртгэлийг удирдах (аудитлагдсан). |

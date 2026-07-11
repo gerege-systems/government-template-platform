@@ -53,11 +53,13 @@ Related: [BACKEND.md](BACKEND.md) · [SECURITY.md](SECURITY.md) · [AI_AND_INTEG
 > **not routed** in this build (eID/Google/SSO login only) — see
 > [SECURITY.md](SECURITY.md) §1.
 
-## SSO (OIDC) — `/sso`
+## DAN / dgov SSO (OIDC) — `/sso`
+
+The primary landing login (DAN, dgov's eID-backed national SSO).
 
 | Method | Path | Purpose |
 |--------|------|---------|
-| POST | `/sso/start` | Begin dgov OIDC login (returns the auth URL; state stored in Redis). |
+| POST | `/sso/start` | Begin DAN/dgov OIDC login (returns the auth URL; state stored in Redis). |
 | POST | `/sso/callback` | Web redirect exchange (validates + consumes state). |
 | POST | `/sso/native` | Native/mobile PKCE code exchange. |
 | POST | `/sso/logout` | Build the RP-initiated logout URL. |

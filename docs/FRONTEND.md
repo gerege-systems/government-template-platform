@@ -69,9 +69,9 @@ in `<Providers>` (TanStack Query) + `<LangProvider>` (i18n), self-hosts fonts
 
 | Area | Purpose | Notable pages |
 |------|---------|---------------|
-| `/` | Public landing (redirects to `/me/dashboard` if a session exists) | eID + SSO login buttons |
-| `login/` | eID login UI | `LoginForm.tsx`, `login/verify` (App2App return) |
-| `me/` | End-user area ("Миний Гэрэгэ") | `dashboard`, `profile`, `settings`, `ai`, `translate`, `integrations`, `notifications`, `applications`, `appointments`, `payments`, `references`, `services`, `organizations`, and an `eid/` sub-tree (`id`, `certificates`, `devices`, `logs`, `security`, `sign`) |
+| `/` | Public landing (redirects to `/me/dashboard` if a session exists) | single **"DAN-аар нэвтрэх"** button → `/api/auth/sso/start` |
+| `login/` | Direct eID login UI (QR / РД) | `LoginForm.tsx`, `login/verify` (App2App return) |
+| `me/` | End-user area — **"Миний систем" / "My System"** | Nav is **Gov services** first (`services`, `applications`, `references`, `appointments`, `payments`, `notifications`), then **Personal** (`dashboard`, `integrations`, `ai`, `translate`, `eid/sign`); `profile`/`settings` live in the top-right menu; `organizations` and the `eid/` pages (`id`, `certificates`, `devices`, `logs`, `security`, `sign`) still exist as routes (the dedicated eID nav group was dropped) |
 | `admin/` | Admin area | `dashboard`, `users`, `core`, `roles`, `settings`, `superadmin`, `audit`, `security`, `gateway/*` (with server guard) |
 | `manager/` | Manager area | `dashboard`, `users` |
 | `sso/callback` | OIDC redirect_uri handler (route, not page) | — |
@@ -126,9 +126,9 @@ routes call `checkOrigin` first; GET routes use `proxyResult(authedFetch(...))`.
 
 Role constants (`src/lib/types.ts`): superadmin=1, admin=2, manager=3, user=4.
 
-- **eID login (primary):** `LoginForm.tsx` offers **РД/National ID** (`POST /api/auth/eid/start-id` → push to the citizen's eID app) or **QR/device-link** (`POST /api/auth/eid/start` → rendered as a QR). Desktop polls `POST /api/auth/eid/poll` every 2.5s; mobile deep-links the eID app and returns via `auth/eid/callback`. On `COMPLETE`, the poll route sets the httpOnly cookies and **strips the tokens** from the browser-facing response.
+- **DAN SSO (primary landing login):** the landing page's only sign-in button, **"DAN-аар нэвтрэх"**, links to `/api/auth/sso/start` → the DAN IdP (dgov's national SSO, dan.dgov.mn), where the citizen authenticates with their eID app → `sso/callback` sets the session. Native iOS uses `/api/auth/sso/native` (PKCE, no secret).
+- **Direct eID login:** `LoginForm.tsx` (at `/login`) still offers **РД/National ID** (`POST /api/auth/eid/start-id` → push to the citizen's eID app) or **QR/device-link** (`POST /api/auth/eid/start` → rendered as a QR). Desktop polls `POST /api/auth/eid/poll` every 2.5s; mobile deep-links the eID app and returns via `auth/eid/callback`. On `COMPLETE`, the poll route sets the httpOnly cookies and **strips the tokens** from the browser-facing response.
 - **Google login (secondary + eID linking):** `/api/auth/google/start` → Google consent → `/api/auth/google/callback`. If already linked → session; if first-time → a short-lived `g_link` cookie forces an eID verification that links the accounts.
-- **dgov SSO (OIDC):** `/api/auth/sso/start` → IdP → `sso/callback` sets the session. Native iOS uses `/api/auth/sso/native` (PKCE, no secret).
 - **Protected pages:** each area `layout.tsx` renders `AreaShell`, which calls `getMe()` server-side. On 401/403 (dead session) it redirects to `/api/auth/expired` (a GET route that can actually clear cookies — an RSC cannot) → `/login?notice=expired`, avoiding a redirect loop. On 5xx it renders `<BackendUnavailable>` and preserves the session.
 - **RBAC in the shell:** `AppShell` fetches `/api/rbac/me` (permission keys) and filters the nav (`canSeeItem`). Admin/gateway pages **also** enforce server-side guards (e.g. `admin/gateway/guard.ts`). UI gates are convenience only — the backend re-validates every route.
 - **Logout:** `signOut()` → `POST /api/auth/logout` (backend revokes refresh + deny-lists access) → clears cookies → RP-initiated SSO logout if `dgov_sso_logout` is present.

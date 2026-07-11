@@ -128,11 +128,14 @@ the citizen is actually authorized; otherwise `Forbidden`. Signer management
 
 ---
 
-## 3. dgov SSO — OIDC (`backend/pkg/oidc`, `usecases/sso`)
+## 3. DAN / dgov SSO — OIDC (`backend/pkg/oidc`, `usecases/sso`)
 
-Minimal Authorization-Code client for **sso.dgov.mn (Ory Hydra)**. Endpoints
-derived from the issuer (`/oauth2/auth`, `/oauth2/token`, `/userinfo`,
-`/oauth2/sessions/logout`).
+This is the **primary landing login** — branded **DAN** (dgov's national SSO,
+user portal dan.dgov.mn), where the citizen authenticates via their eID app.
+A minimal Authorization-Code client for an **Ory Hydra** IdP; the `SSO_ISSUER`
+default is `https://sso.dgov.mn` (set it to the DAN issuer in deployment).
+Endpoints are derived from the issuer (`/oauth2/auth`, `/oauth2/token`,
+`/userinfo`, `/oauth2/sessions/logout`).
 
 - Confidential web client (`client_secret_basic`) + a **PKCE public-client** variant for native/mobile (no secret).
 - Reads claims from `/userinfo` over TLS (does not verify id_token JWKS).
@@ -201,7 +204,7 @@ citizen eID app; it drives eID login through this platform's backend.
 
 - **BFF-only**: talks to `https://template.dgov.mn/api/*`, never the Go backend directly. Session in httpOnly cookies via `HTTPCookieStorage`; mutations set `x-dgov-csrf: 1`.
 - **eID login**: РД push or "this phone" App2App (opens the eID app via `geregesmartid://approve?sessionId=…`, QR fallback), polling `/api/auth/eid/poll`. App2App returns via the `geregetemp://eid/callback` deep link.
-- **SSO login**: native OIDC + PKCE via `ASWebAuthenticationSession` → `POST /api/auth/sso/native`.
+- **DAN SSO login**: native OIDC + PKCE via `ASWebAuthenticationSession` (public client `template-dgov-mn-ios`) → `POST /api/auth/sso/native`.
 - **Universal Links / AASA**: `frontend/src/app/api/aasa/route.ts` serves the Apple App Site Association (`APP_ID = CQTHTD6YJQ.mn.gerege.temp`) so the eID app's callback URL routes straight into the app instead of Safari.
 
 ---

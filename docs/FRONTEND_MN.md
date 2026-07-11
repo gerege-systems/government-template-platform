@@ -71,9 +71,9 @@ Browser тал (`src/lib/client.ts`) энэ header-г үргэлж нэмдэг:
 
 | Хэсэг | Зорилго | Онцлох хуудсууд |
 |------|---------|-----------------|
-| `/` | Нийтийн буух хуудас (сешн байвал `/me/dashboard` руу чиглүүлнэ) | eID + SSO нэвтрэх товчнууд |
-| `login/` | eID нэвтрэх UI | `LoginForm.tsx`, `login/verify` (App2App буцах) |
-| `me/` | Эцсийн хэрэглэгчийн хэсэг ("Миний Гэрэгэ") | `dashboard`, `profile`, `settings`, `ai`, `translate`, `integrations`, `notifications`, `applications`, `appointments`, `payments`, `references`, `services`, `organizations`, болон `eid/` дэд мод (`id`, `certificates`, `devices`, `logs`, `security`, `sign`) |
+| `/` | Нийтийн буух хуудас (сешн байвал `/me/dashboard` руу чиглүүлнэ) | цорын ганц **"DAN-аар нэвтрэх"** товч → `/api/auth/sso/start` |
+| `login/` | Шууд eID нэвтрэлт (QR / РД) UI | `LoginForm.tsx`, `login/verify` (App2App буцах) |
+| `me/` | Эцсийн хэрэглэгчийн хэсэг — **"Миний систем" / "My System"** | Nav нь эхэнд **Төрийн үйлчилгээ** (`services`, `applications`, `references`, `appointments`, `payments`, `notifications`), дараа нь **Хувийн** (`dashboard`, `integrations`, `ai`, `translate`, `eid/sign`); `profile`/`settings` нь баруун дээд цэсэнд байрлана; `organizations` болон `eid/` хуудсууд (`id`, `certificates`, `devices`, `logs`, `security`, `sign`) route хэлбэрээр хэвээр байгаа (тусгайлсан eID nav бүлгийг хассан) |
 | `admin/` | Админ хэсэг | `dashboard`, `users`, `core`, `roles`, `settings`, `superadmin`, `audit`, `security`, `gateway/*` (server хамгаалалттай) |
 | `manager/` | Менежерийн хэсэг | `dashboard`, `users` |
 | `sso/callback` | OIDC redirect_uri handler (хуудас биш, route) | — |
@@ -128,9 +128,9 @@ Mutating route-ууд эхлээд `checkOrigin`-г дуудна; GET route-уу
 
 Role тогтмолууд (`src/lib/types.ts`): superadmin=1, admin=2, manager=3, user=4.
 
-- **eID нэвтрэлт (үндсэн):** `LoginForm.tsx` нь **РД/National ID** (`POST /api/auth/eid/start-id` → иргэний eID апп руу push) эсвэл **QR/төхөөрөмж холбох** (`POST /api/auth/eid/start` → QR болгон харуулна) сонголтыг санал болгодог. Desktop нь `POST /api/auth/eid/poll`-г 2.5 секунд тутам poll хийдэг; mobile нь eID аппыг deep-link хийж, `auth/eid/callback`-аар буцдаг. `COMPLETE` үед poll route нь httpOnly cookie-нуудыг тохируулж, browser руу чиглэсэн хариултаас token-уудыг **хасдаг**.
+- **DAN SSO (буух хуудасны үндсэн нэвтрэлт):** буух хуудасны цорын ганц нэвтрэх товч, **"DAN-аар нэвтрэх"** нь `/api/auth/sso/start` руу холбогддог → DAN IdP (dgov-ийн үндэсний SSO, dan.dgov.mn) бөгөөд иргэн eID аппаараа баталгаажуулна → `sso/callback` нь сешнийг тохируулдаг. Native iOS нь `/api/auth/sso/native`-г ашигладаг (PKCE, secret-гүй).
+- **Шууд eID нэвтрэлт:** `LoginForm.tsx` (`/login` дээр) нь мөн **РД/National ID** (`POST /api/auth/eid/start-id` → иргэний eID апп руу push) эсвэл **QR/төхөөрөмж холбох** (`POST /api/auth/eid/start` → QR болгон харуулна) сонголтыг санал болгодог. Desktop нь `POST /api/auth/eid/poll`-г 2.5 секунд тутам poll хийдэг; mobile нь eID аппыг deep-link хийж, `auth/eid/callback`-аар буцдаг. `COMPLETE` үед poll route нь httpOnly cookie-нуудыг тохируулж, browser руу чиглэсэн хариултаас token-уудыг **хасдаг**.
 - **Google нэвтрэлт (нэмэлт + eID холбох):** `/api/auth/google/start` → Google зөвшөөрөл → `/api/auth/google/callback`. Хэрэв аль хэдийн холбогдсон бол → сешн; хэрэв анх удаа бол → богино хугацааны `g_link` cookie нь бүртгэлүүдийг холбох eID баталгаажуулалтыг албаддаг.
-- **dgov SSO (OIDC):** `/api/auth/sso/start` → IdP → `sso/callback` нь сешнийг тохируулдаг. Native iOS нь `/api/auth/sso/native`-г ашигладаг (PKCE, secret-гүй).
 - **Хамгаалагдсан хуудсууд:** хэсэг бүрийн `layout.tsx` нь `AreaShell`-г render хийдэг бөгөөд энэ нь server талд `getMe()`-г дуудна. 401/403 (үхсэн сешн) дээр `/api/auth/expired` (cookie-г бодитоор цэвэрлэж чадах GET route — RSC чадахгүй) → `/login?notice=expired` руу чиглүүлж, redirect давталтаас сэргийлдэг. 5xx дээр `<BackendUnavailable>`-г render хийж, сешнийг хадгалдаг.
 - **Shell доторх RBAC:** `AppShell` нь `/api/rbac/me` (permission key-үүд)-г татаж, nav-г шүүдэг (`canSeeItem`). Admin/gateway хуудсууд **бас** server талын хамгаалалтыг хэрэгжүүлдэг (ж.нь `admin/gateway/guard.ts`). UI gate-үүд зөвхөн тохь ашиглалтын зорилготой — backend route бүрийг дахин баталгаажуулдаг.
 - **Гарах:** `signOut()` → `POST /api/auth/logout` (backend refresh-г цуцалж, access-г deny-list хийдэг) → cookie-нуудыг цэвэрлэдэг → `dgov_sso_logout` байвал RP-initiated SSO гарах.

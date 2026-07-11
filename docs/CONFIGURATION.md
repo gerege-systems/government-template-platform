@@ -87,7 +87,7 @@ Gitignore covers `.env`, `.env.*`, `*.env`, `backend.env`, `*.pem`, `*.key`
 | `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_TTS_MODEL`, `GEMINI_VOICE`, `GEMINI_API_BASE`, `AI_SCOPE_PROMPT` | AI pipeline | blank key → AI endpoints 500 |
 | `XYP_API_BASE`, `XYP_CLIENT_ID`, `XYP_CLIENT_SECRET` | org registry lookup | optional |
 | `EID_BASE_URL`, `EID_RP_UUID`, `EID_RP_NAME`, `EID_RP_SECRET`, `EID_CERT_LEVEL`, `EID_CALLBACK_URL`, `EID_DISPLAY_TEXT` | eID login | `EID_BASE_URL` defaults to `https://eidmongolia.mn/v3`, cert level `ADVANCED` |
-| `SSO_ISSUER`, `SSO_CLIENT_ID`, `SSO_CLIENT_SECRET`, `SSO_REDIRECT_URI`, `SSO_SCOPE`, `SSO_NATIVE_CLIENT_ID` | dgov SSO (OIDC) | issuer defaults to `https://sso.dgov.mn` |
+| `SSO_ISSUER`, `SSO_CLIENT_ID`, `SSO_CLIENT_SECRET`, `SSO_REDIRECT_URI`, `SSO_SCOPE`, `SSO_NATIVE_CLIENT_ID` | DAN / dgov SSO (OIDC) — the primary login | issuer defaults to `https://sso.dgov.mn` (set to the DAN issuer in prod); `SSO_NATIVE_CLIENT_ID` defaults to `template-dgov-mn-ios` |
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Google login | |
 | `GSPACE_HOST`, `GSPACE_PORT`, `GSPACE_USER`, `GSPACE_PASSWORD`, `GSPACE_BASE_PATH`, `GSPACE_QUOTA_BYTES` | Gerege Space SFTP | port 22, quota 2 MB defaults |
 | `CORE_API_BASE`, `CORE_API_TOKEN` | Gerege Core lookup | base `https://core.dgov.mn` |

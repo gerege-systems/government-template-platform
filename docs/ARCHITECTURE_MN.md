@@ -35,7 +35,7 @@ Full-stack бүтэн зураглал: хүсэлт хэрхэн browser-оос
               ┌────────────▼─────┐        ┌────────▼──────────────────────┐
               │ PostgreSQL 16    │        │ External services              │
               │ • pgx, no ORM    │        │ • eID Mongolia (RP)            │
-              │ • Row-Level Sec. │        │ • dgov SSO (OIDC / Hydra)      │
+              │ • Row-Level Sec. │        │ • DAN/dgov SSO (OIDC/Hydra)    │
               │ Redis 7          │        │ • XYP registry, Gemini AI,     │
               │ • auth/session   │        │   Google OAuth, Verify OTP,    │
               │   state, OTP     │        │   Gerege Space (SFTP)          │
@@ -58,7 +58,7 @@ Full-stack бүтэн зураглал: хүсэлт хэрхэн browser-оос
 | **db** | PostgreSQL 16 | Бүртгэлийн эх систем; хэрэглэгч бүрд Row-Level Security. |
 | **redis** | Redis 7 | Auth/session төлөв: refresh-token бүртгэл, access deny-list, OTP, rate-limit тоолуур, password-cutoff. |
 | **migrate** | Go (нэг удаагийн) | Дугаарласан SQL migration-уудыг хэрэглээд гардаг. DB superuser эрхээр ажилладаг. |
-| **iOS app** | SwiftUI | Ижил BFF-ээр дамжуулан eID/SSO нэвтрэлтийг ажиллуулдаг native RP-consumer. |
+| **iOS app** | SwiftUI | Ижил BFF-ээр дамжуулан DAN SSO / eID нэвтрэлтийг ажиллуулдаг native RP-consumer. |
 
 ---
 

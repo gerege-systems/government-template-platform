@@ -50,8 +50,10 @@ refresh-token table in Postgres.
 > **Current wiring note.** The password / OTP / classic register+login flows are
 > fully implemented and unit-tested (`usecases/auth/*`, `handlers/v1/auth/*`) but
 > are **not mounted as HTTP routes** in this build — `route_auth.go` exposes only
-> eID + Google login and the session lifecycle (`refresh`/`logout`/`poll`). eID
-> is the primary login. To re-enable classic login, mount the existing handlers.
+> eID + Google login, the SSO routes, and the session lifecycle
+> (`refresh`/`logout`/`poll`). The primary landing login is **DAN SSO** (dgov's
+> national SSO, eID-backed); direct eID login remains available. To re-enable
+> classic password login, mount the existing handlers.
 
 ---
 

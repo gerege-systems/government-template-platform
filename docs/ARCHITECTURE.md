@@ -37,7 +37,7 @@ services — and the boundaries that keep each layer honest.
               ┌────────────▼─────┐        ┌────────▼──────────────────────┐
               │ PostgreSQL 16    │        │ External services              │
               │ • pgx, no ORM    │        │ • eID Mongolia (RP)            │
-              │ • Row-Level Sec. │        │ • dgov SSO (OIDC / Hydra)      │
+              │ • Row-Level Sec. │        │ • DAN/dgov SSO (OIDC/Hydra)    │
               │ Redis 7          │        │ • XYP registry, Gemini AI,     │
               │ • auth/session   │        │   Google OAuth, Verify OTP,    │
               │   state, OTP     │        │   Gerege Space (SFTP)          │
@@ -60,7 +60,7 @@ Two properties define the architecture:
 | **db** | PostgreSQL 16 | System of record; Row-Level Security per user. |
 | **redis** | Redis 7 | Auth/session state: refresh-token registry, access deny-list, OTP, rate-limit counters, password-cutoff. |
 | **migrate** | Go (one-off) | Applies numbered SQL migrations, then exits. Runs as the DB superuser. |
-| **iOS app** | SwiftUI | Native RP-consumer that drives eID/SSO login through the same BFF. |
+| **iOS app** | SwiftUI | Native RP-consumer that drives DAN SSO / eID login through the same BFF. |
 
 ---
 

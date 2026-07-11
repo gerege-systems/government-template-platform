@@ -23,7 +23,7 @@ Related: [ARCHITECTURE.md](ARCHITECTURE.md) · [README.md](README.md)
 | Data | PostgreSQL 16 (+ Row-Level Security) · Redis 7 |
 | Frontend | Next.js 15 · React 19 · TypeScript · TanStack Query |
 | AI | Google Gemini (SDK-free REST client) |
-| Identity | eID Mongolia (RP) · dgov SSO (OIDC/Hydra) · Google OAuth |
+| Identity | eID Mongolia (RP) · DAN / dgov SSO (OIDC/Hydra) · Google OAuth |
 | National | XYP registry · digital signing (PAdES) · Gerege Core |
 | Observability | OpenTelemetry · Prometheus · Zap |
 | Delivery | Docker Compose · nginx · distroless images |
@@ -33,7 +33,7 @@ Related: [ARCHITECTURE.md](ARCHITECTURE.md) · [README.md](README.md)
 ## What's in the box
 
 - **Clean Architecture backend** — `handler → usecase → repository → domain`, no back-imports; the business core never imports the web framework. Manual DI, hand-written SQL.
-- **eID-first authentication** — login with the national eID (QR/device-link or РД push); JWT access + refresh with rotation, Redis-backed revocation, login lockout, and enumeration-resistant flows.
+- **DAN SSO login, eID-backed** — the landing sign-in is **DAN** (dgov's national SSO at dan.dgov.mn), which authenticates the citizen through their eID app; direct eID login (QR/device-link or РД push) is also implemented. JWT access + refresh with rotation, Redis-backed revocation, login lockout, and enumeration-resistant flows.
 - **Dynamic RBAC** — roles/permissions catalogue with super-admin/admin/manager/user tiers, enforced at the HTTP layer and re-checked server-side.
 - **Row-Level Security** — every per-user table is RLS-isolated; the API connects as a non-superuser role, with a boot-time enforceability guard.
 - **AI assistant (Gemini)** — function-calling chat, speech-to-text, text-to-speech, and live translation. A layered system prompt (hardcoded guardrails + admin-configurable scope/instructions) keeps it in-domain; a `search_knowledge` tool grounds answers in the database. Chat degrades gracefully instead of erroring.
@@ -70,7 +70,7 @@ government-template-platform/
 
 | Area | Who | Highlights |
 |------|-----|-----------|
-| **Me** (`/me`) | Citizens | Dashboard, profile, eID identity/certificates/devices, AI assistant, live translate, gov services (applications, references, payments, appointments), organizations, integrations, signing. |
+| **My System** (`/me`) | Citizens | Gov services first (services, applications, references, appointments, payments, notifications), then Personal (dashboard, integrations, AI assistant, live translate, digital signing); plus profile, organizations, and eID identity pages. |
 | **Admin** (`/admin`) | Admins | User management, RBAC roles, AI prompt config, audit log + verification, security events, Core search, API gateway console. |
 | **Manager** (`/manager`) | Managers | Team dashboard + user views. |
 | **Superadmin** | Super admins | Manage admin accounts (audited). |

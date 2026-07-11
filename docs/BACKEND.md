@@ -99,7 +99,7 @@ There is no DI framework; wiring is explicit and reads top-to-bottom:
 `integrations`, `org`, `rbac`, `security`, `sign`, `sso`, `superadmin`, `users`.
 Highlights:
 
-- **auth** — the largest; eID login lifecycle (`EIDStart`, `EIDStartByNationalID`, `EIDPoll`), session (`Refresh`, `Logout`), Google (`GoogleLogin`, unlink), eID org linking + signers, eID profile reads. eID is the primary login path.
+- **auth** — the largest; eID login lifecycle (`EIDStart`, `EIDStartByNationalID`, `EIDPoll`), session (`Refresh`, `Logout`), Google (`GoogleLogin`, unlink), eID org linking + signers, eID profile reads. The primary landing login is DAN SSO (see `usecases/sso`), which is itself eID-backed; direct eID login is also wired.
 - **users** — user store/lookup, eID upsert (`UpsertFromEID`), Google link/unlink, role/active/delete admin ops (cache-correct via Ristretto).
 - **ai** — Gemini chat with function-calling, prompt admin, speech `Transcribe`/`Speak`, `Translate`.
 - **rbac** — role/permission CRUD + `Resolve(roleID)` (used by the RBAC middleware).

@@ -88,7 +88,7 @@ Gitignore нь `.env`, `.env.*`, `*.env`, `backend.env`, `*.pem`, `*.key`-г
 | `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_TTS_MODEL`, `GEMINI_VOICE`, `GEMINI_API_BASE`, `AI_SCOPE_PROMPT` | AI pipeline | хоосон түлхүүр → AI endpoint-ууд 500 буцаана |
 | `XYP_API_BASE`, `XYP_CLIENT_ID`, `XYP_CLIENT_SECRET` | байгууллагын бүртгэлийн хайлт | сонголттой |
 | `EID_BASE_URL`, `EID_RP_UUID`, `EID_RP_NAME`, `EID_RP_SECRET`, `EID_CERT_LEVEL`, `EID_CALLBACK_URL`, `EID_DISPLAY_TEXT` | eID нэвтрэлт | `EID_BASE_URL`-ийн анхны утга `https://eidmongolia.mn/v3`, cert level `ADVANCED` |
-| `SSO_ISSUER`, `SSO_CLIENT_ID`, `SSO_CLIENT_SECRET`, `SSO_REDIRECT_URI`, `SSO_SCOPE`, `SSO_NATIVE_CLIENT_ID` | dgov SSO (OIDC) | issuer-ийн анхны утга `https://sso.dgov.mn` |
+| `SSO_ISSUER`, `SSO_CLIENT_ID`, `SSO_CLIENT_SECRET`, `SSO_REDIRECT_URI`, `SSO_SCOPE`, `SSO_NATIVE_CLIENT_ID` | DAN / dgov SSO (OIDC) — үндсэн нэвтрэлт | issuer-ийн анхны утга `https://sso.dgov.mn` (prod-д DAN issuer-ээр тохируулна); `SSO_NATIVE_CLIENT_ID`-ийн анхны утга `template-dgov-mn-ios` |
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Google нэвтрэлт | |
 | `GSPACE_HOST`, `GSPACE_PORT`, `GSPACE_USER`, `GSPACE_PASSWORD`, `GSPACE_BASE_PATH`, `GSPACE_QUOTA_BYTES` | Gerege Space SFTP | порт 22, квот 2 MB-ийн анхны утгууд |
 | `CORE_API_BASE`, `CORE_API_TOKEN` | Gerege Core хайлт | суурь `https://core.dgov.mn` |
