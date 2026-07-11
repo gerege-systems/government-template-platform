@@ -6,7 +6,7 @@
 > Clean Architecture дээр суурилсан, аюулгүй байдлаар бэхжүүлсэн, үйлдвэрлэлд бэлэн бүрэн-стекийн загвар:
 > Go (chi · pgx · PostgreSQL · Redis) backend болон Next.js BFF frontend.
 
-Энэ хавтас нь кодоос шинээр хянан үзсэн **бүх платформын баримт бичгийн багц** юм. Төслийн танилцуулга болон хурдан эхлүүлэх зааврыг эх хавтасын [README.md](../README.md)-аас үзнэ үү.
+Энэ хавтас нь кодоос шинээр хянан үзсэн **бүх платформын баримт бичгийн багц** юм. Төслийн танилцуулга болон хурдан эхлүүлэх зааврыг эх хавтасын [README.md](https://github.com/gerege-systems/government-template-platform/blob/main/README.md)-аас үзнэ үү.
 
 ---
 
@@ -46,9 +46,9 @@
 ### Зөвхөн backend-ийн гүнзгий судалгаа (`backend/docs/`)
 
 `backend/docs/` хавтас нь backend-ийн доод түвшний лавлагаануудыг (EN/MN хосууд) хадгалдаг:
-[ARCHITECTURE](../backend/docs/ARCHITECTURE.md), [DEVELOPMENT](../backend/docs/DEVELOPMENT.md)
-(шинэ онцлог нэмэх заавар), [API_CONTRACT](../backend/docs/API_CONTRACT.md),
-[AI_PIPELINE](../backend/docs/AI_PIPELINE.md), [SECURITY](../backend/docs/SECURITY.md),
+[ARCHITECTURE](https://github.com/gerege-systems/government-template-platform/blob/main/backend/docs/ARCHITECTURE.md), [DEVELOPMENT](https://github.com/gerege-systems/government-template-platform/blob/main/backend/docs/DEVELOPMENT.md)
+(шинэ онцлог нэмэх заавар), [API_CONTRACT](https://github.com/gerege-systems/government-template-platform/blob/main/backend/docs/API_CONTRACT.md),
+[AI_PIPELINE](https://github.com/gerege-systems/government-template-platform/blob/main/backend/docs/AI_PIPELINE.md), [SECURITY](https://github.com/gerege-systems/government-template-platform/blob/main/backend/docs/SECURITY.md),
 болон үүсгэсэн OpenAPI spec.
 
 ---

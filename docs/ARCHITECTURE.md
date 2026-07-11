@@ -7,7 +7,7 @@ BFF to the Go API, down to PostgreSQL/Redis and out to the national eID/SSO/AI
 services — and the boundaries that keep each layer honest.
 
 > A backend-only deep dive lives in
-> [backend/docs/ARCHITECTURE.md](../backend/docs/ARCHITECTURE.md). This chapter is
+> [backend/docs/ARCHITECTURE.md](https://github.com/gerege-systems/government-template-platform/blob/main/backend/docs/ARCHITECTURE.md). This chapter is
 > the platform view. See also [BACKEND.md](BACKEND.md), [FRONTEND.md](FRONTEND.md),
 > [DATABASE.md](DATABASE.md), [SECURITY.md](SECURITY.md).
 

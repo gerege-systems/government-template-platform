@@ -7,9 +7,9 @@ tenant isolation, security headers, CORS, rate limiting, CSRF, audit logging,
 input validation, and secrets handling. All facts here are verified against the
 code.
 
-> To **report** a vulnerability, see the root [SECURITY.md](../SECURITY.md).
+> To **report** a vulnerability, see the root [SECURITY.md](https://github.com/gerege-systems/government-template-platform/blob/main/SECURITY.md).
 > For the backend's ASVS roadmap and known gaps, see
-> [backend/docs/SECURITY.md](../backend/docs/SECURITY.md).
+> [backend/docs/SECURITY.md](https://github.com/gerege-systems/government-template-platform/blob/main/backend/docs/SECURITY.md).
 
 Related: [BACKEND.md](BACKEND.md) · [DATABASE.md](DATABASE.md) · [ARCHITECTURE.md](ARCHITECTURE.md)
 

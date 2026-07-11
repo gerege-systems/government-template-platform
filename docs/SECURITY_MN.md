@@ -7,9 +7,9 @@
 хязгаарлалт, CSRF, аудит бүртгэл, оролтын шалгалт болон нууц түлхүүр удирдлага.
 Энд бичигдсэн бүх баримт кодтой тулган баталгаажуулагдсан.
 
-> Эмзэг цоорхойг **мэдээлэхийн** тулд язгуур [SECURITY.md](../SECURITY.md)-ыг үзнэ үү.
+> Эмзэг цоорхойг **мэдээлэхийн** тулд язгуур [SECURITY.md](https://github.com/gerege-systems/government-template-platform/blob/main/SECURITY.md)-ыг үзнэ үү.
 > Backend-ийн ASVS замын зураглал болон мэдэгдэж буй цоорхойнуудыг
-> [backend/docs/SECURITY.md](../backend/docs/SECURITY.md)-аас үзнэ үү.
+> [backend/docs/SECURITY.md](https://github.com/gerege-systems/government-template-platform/blob/main/backend/docs/SECURITY.md)-аас үзнэ үү.
 
 Холбоотой: [BACKEND.md](BACKEND_MN.md) · [DATABASE.md](DATABASE_MN.md) · [ARCHITECTURE.md](ARCHITECTURE_MN.md)
 

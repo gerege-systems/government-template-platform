@@ -7,7 +7,7 @@ dgov SSO (OIDC), XYP state registry, digital signing (PAdES), Google OAuth,
 Gerege Space (SFTP), third-party OAuth vault, and the iOS companion.
 
 > The backend deep-dive of the AI internals lives in
-> [backend/docs/AI_PIPELINE.md](../backend/docs/AI_PIPELINE.md) — this chapter is
+> [backend/docs/AI_PIPELINE.md](https://github.com/gerege-systems/government-template-platform/blob/main/backend/docs/AI_PIPELINE.md) — this chapter is
 > the platform-level view. All backend routes are mounted under `/api`, so
 > `/v1/ai/chat` is reachable at `/api/v1/ai/chat`.
 

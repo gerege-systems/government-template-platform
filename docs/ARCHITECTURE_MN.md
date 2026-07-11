@@ -5,7 +5,7 @@
 Full-stack бүтэн зураглал: хүсэлт хэрхэн browser-оос Next.js BFF-ээр дамжин Go API руу, тэндээс доош PostgreSQL/Redis, гадагш үндэсний eID/SSO/AI үйлчилгээ рүү урсдаг вэ — мөн давхарга бүрийг цэвэр байлгадаг хил заагууд.
 
 > Зөвхөн backend-д зориулсан гүнзгий тайлбар
-> [backend/docs/ARCHITECTURE.md](../backend/docs/ARCHITECTURE.md) дотор байдаг. Энэ бүлэг нь
+> [backend/docs/ARCHITECTURE.md](https://github.com/gerege-systems/government-template-platform/blob/main/backend/docs/ARCHITECTURE.md) дотор байдаг. Энэ бүлэг нь
 > платформын түвшний харагдац юм. Мөн [BACKEND_MN.md](BACKEND_MN.md), [FRONTEND_MN.md](FRONTEND_MN.md),
 > [DATABASE_MN.md](DATABASE_MN.md), [SECURITY_MN.md](SECURITY_MN.md)-г үзнэ үү.
 

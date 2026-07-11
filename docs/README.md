@@ -8,7 +8,7 @@
 
 This directory is the **whole-platform documentation set**, reviewed fresh from
 the code. For the project intro and quick start, see the root
-[README.md](../README.md).
+[README.md](https://github.com/gerege-systems/government-template-platform/blob/main/README.md).
 
 ---
 
@@ -48,9 +48,9 @@ the code. For the project intro and quick start, see the root
 ### Backend-only deep dives (`backend/docs/`)
 
 The `backend/docs/` folder keeps the low-level backend references (EN/MN pairs):
-[ARCHITECTURE](../backend/docs/ARCHITECTURE.md), [DEVELOPMENT](../backend/docs/DEVELOPMENT.md)
-(add-a-feature guide), [API_CONTRACT](../backend/docs/API_CONTRACT.md),
-[AI_PIPELINE](../backend/docs/AI_PIPELINE.md), [SECURITY](../backend/docs/SECURITY.md),
+[ARCHITECTURE](https://github.com/gerege-systems/government-template-platform/blob/main/backend/docs/ARCHITECTURE.md), [DEVELOPMENT](https://github.com/gerege-systems/government-template-platform/blob/main/backend/docs/DEVELOPMENT.md)
+(add-a-feature guide), [API_CONTRACT](https://github.com/gerege-systems/government-template-platform/blob/main/backend/docs/API_CONTRACT.md),
+[AI_PIPELINE](https://github.com/gerege-systems/government-template-platform/blob/main/backend/docs/AI_PIPELINE.md), [SECURITY](https://github.com/gerege-systems/government-template-platform/blob/main/backend/docs/SECURITY.md),
 and the generated OpenAPI spec.
 
 ---

@@ -9,7 +9,7 @@ OpenAPI spec — this page is the hand-written map.
 > **OpenAPI spec:** `GET /swagger/doc.json` (in production, behind
 > `Bearer OBSERVABILITY_TOKEN`). Regenerate with `make swag`. The static spec
 > also lives at `backend/docs/swagger.json` / `swagger.yaml`.
-> A prose contract is in [backend/docs/API_CONTRACT.md](../backend/docs/API_CONTRACT.md).
+> A prose contract is in [backend/docs/API_CONTRACT.md](https://github.com/gerege-systems/government-template-platform/blob/main/backend/docs/API_CONTRACT.md).
 
 Related: [BACKEND.md](BACKEND.md) · [SECURITY.md](SECURITY.md) · [AI_AND_INTEGRATIONS.md](AI_AND_INTEGRATIONS.md)
 

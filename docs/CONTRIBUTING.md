@@ -5,7 +5,7 @@ Thanks for your interest in improving **Government Template Platform V3.0**! / *
 ## Getting started · Эхлэх
 
 1. Fork the repo and create a branch from `main`: `git checkout -b feat/short-description`.
-2. Set up the stack — see the [README](../README.md) Quick start.
+2. Set up the stack — see the [README](https://github.com/gerege-systems/government-template-platform/blob/main/README.md) Quick start.
 3. Make your change in `backend/` and/or `frontend/`.
 
 ## Before opening a PR · PR нээхээс өмнө
@@ -45,7 +45,7 @@ Use clear, imperative messages (Conventional Commits encouraged):
 ## Reporting bugs / requesting features
 
 Open an issue using the templates under `.github/ISSUE_TEMPLATE/`. For security
-issues, **do not** open a public issue — see [SECURITY.md](../SECURITY.md).
+issues, **do not** open a public issue — see [SECURITY.md](https://github.com/gerege-systems/government-template-platform/blob/main/SECURITY.md).
 
 ## Code of Conduct
 
@@ -53,4 +53,4 @@ By participating you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 
-By contributing, you agree your contributions are licensed under the [MIT License](../LICENSE).
+By contributing, you agree your contributions are licensed under the [MIT License](https://github.com/gerege-systems/government-template-platform/blob/main/LICENSE).

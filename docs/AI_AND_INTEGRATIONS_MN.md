@@ -7,7 +7,7 @@ dgov SSO (OIDC), XYP улсын бүртгэл, тоон гарын үсэг (PA
 Gerege Space (SFTP), гуравдагч талын OAuth хадгалалт (vault), болон iOS хамтрагч апп.
 
 > AI-ийн дотоод механизмын бэкэнд түвшний нарийвчилсан задаргаа
-> [backend/docs/AI_PIPELINE.md](../backend/docs/AI_PIPELINE_MN.md) файлд байдаг — энэ бүлэг нь
+> [backend/docs/AI_PIPELINE.md](https://github.com/gerege-systems/government-template-platform/blob/main/backend/docs/AI_PIPELINE_MN.md) файлд байдаг — энэ бүлэг нь
 > платформ түвшний харагдац юм. Бүх бэкэнд route-ууд `/api` доор холбогддог тул
 > `/v1/ai/chat` нь `/api/v1/ai/chat` хаягаар хандах боломжтой.
 

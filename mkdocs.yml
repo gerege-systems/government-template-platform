@@ -1,0 +1,103 @@
+site_name: Government Template Platform V3.0 — Docs
+site_description: eID based · AI enabled government services platform — documentation
+site_url: https://gerege-systems.github.io/government-template-platform/
+site_author: Gerege Systems Development Team
+
+repo_url: https://github.com/gerege-systems/government-template-platform
+repo_name: gerege-systems/government-template-platform
+edit_uri: edit/main/docs/
+
+docs_dir: docs
+copyright: >-
+  Government Template Platform V3.0 — Co-developed by the Gerege Systems
+  Development Team and Claude AI, 2026.
+
+theme:
+  name: material
+  language: en
+  icon:
+    logo: material/bank
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep orange
+      accent: deep orange
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep orange
+      accent: deep orange
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.action.edit
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - footnotes
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.details
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+nav:
+  - Home: README.md
+  - Getting started:
+      - Overview: OVERVIEW.md
+      - Architecture: ARCHITECTURE.md
+  - Backend:
+      - Backend deep dive: BACKEND.md
+      - Database & data layer: DATABASE.md
+      - API reference: API_REFERENCE.md
+  - Frontend:
+      - Frontend (BFF): FRONTEND.md
+  - Platform:
+      - AI & integrations: AI_AND_INTEGRATIONS.md
+      - Security: SECURITY.md
+  - Operations:
+      - Deployment: DEPLOYMENT.md
+      - Configuration: CONFIGURATION.md
+  - Reference:
+      - eID endpoint requests: EID_ENDPOINT_REQUESTS.md
+      - Secure system guide (MN): secure_system_guide_mn.md
+      - Contributing: CONTRIBUTING.md
+      - Code of Conduct: CODE_OF_CONDUCT.md
+  - "Монгол (MN)":
+      - "Танилцуулга": README_MN.md
+      - "Тойм": OVERVIEW_MN.md
+      - "Архитектур": ARCHITECTURE_MN.md
+      - "Backend": BACKEND_MN.md
+      - "Frontend": FRONTEND_MN.md
+      - "Өгөгдлийн сан": DATABASE_MN.md
+      - "API лавлагаа": API_REFERENCE_MN.md
+      - "AI ба интеграци": AI_AND_INTEGRATIONS_MN.md
+      - "Аюулгүй байдал": SECURITY_MN.md
+      - "Deploy": DEPLOYMENT_MN.md
+      - "Тохиргоо": CONFIGURATION_MN.md
