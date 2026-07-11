@@ -53,4 +53,4 @@ By participating you agree to the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 
-By contributing, you agree your contributions are licensed under the [MIT License](LICENSE).
+By contributing, you agree your contributions are licensed under the [MIT License](../LICENSE).

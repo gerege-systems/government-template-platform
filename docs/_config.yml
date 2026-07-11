@@ -1,0 +1,14 @@
+# GitHub Pages (github.io) configuration — serves this docs/ folder.
+# Pages source: main branch, /docs path. Published at:
+#   https://gerege-systems.github.io/government-template-platform/
+#
+# GitHub Pages enables these plugins by default, so our plain Markdown
+# (no YAML front matter) still builds correctly:
+#   - jekyll-optional-front-matter : renders .md files without front matter
+#   - jekyll-default-layout        : applies the theme layout automatically
+#   - jekyll-relative-links        : rewrites [x](FILE.md) links to built URLs
+# README.md is used as the site index.
+
+title: Government Template Platform V3.0
+description: eID based · AI enabled government services platform — documentation
+theme: jekyll-theme-cayman

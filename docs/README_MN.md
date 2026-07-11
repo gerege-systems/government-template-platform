@@ -1,96 +1,65 @@
-# Government Template Platform V3.0
+# Баримт бичиг — Government Template Platform V3.0
 
-> **eID-д суурилсан · AI-аар хүчирхэгжсэн** засгийн газрын үйлчилгээний платформ
+> 🌐 [English](README.md) · **Монгол**
 
-> 🌐 [English](../README.md) · **Монгол**
+> **eID суурьтай · AI боломжтой** төрийн үйлчилгээний платформ.
+> Clean Architecture дээр суурилсан, аюулгүй байдлаар бэхжүүлсэн, үйлдвэрлэлд бэлэн бүрэн-стекийн загвар:
+> Go (chi · pgx · PostgreSQL · Redis) backend болон Next.js BFF frontend.
 
-[![Go](https://img.shields.io/badge/Go-1.26-blue.svg)](https://golang.org/)
-[![chi](https://img.shields.io/badge/chi-v5-00ADD8.svg)](https://github.com/go-chi/chi)
-[![pgx](https://img.shields.io/badge/pgx-v5-336791.svg)](https://github.com/jackc/pgx)
-[![Next.js](https://img.shields.io/badge/Next.js-14-black.svg)](https://nextjs.org/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-
-Clean Architecture зарчмаар бүтээгдсэн, аюулгүй байдлыг хатууруулсан,
-production-д бэлэн **full-stack template**. Go (**chi · net/http + pgx (pgxpool) +
-PostgreSQL + Redis**) backend болон Next.js (**BFF**) frontend-ийг хослуулсан —
-хооронд нь холбож, ямар ч систем рүү өргөтгөхөд бэлэн. Backend нь стандарт сангийн
-`net/http`-ийг [go-chi/chi](https://github.com/go-chi/chi) router болон гар бичмэл
-SQL-тэй [jackc/pgx](https://github.com/jackc/pgx) драйвертэй хослуулдаг — ORM
-ашиглахгүй.
-
-## 📌 Эх сурвалж ба нээлттэй эх
-
-**Backend** нь нээлттэй эх
-[snykk/go-rest-boilerplate](https://github.com/snykk/go-rest-boilerplate)
-(MIT, Najib Fikri)-аас гаралтай; HTTP давхаргыг **Gin → chi (net/http)**, өгөгдлийн
-давхаргыг **sqlx → pgx (pgxpool, гар бичмэл SQL)** болгож хөрвүүлсэн, бүх фичерийг
-хадгалсан. Эх төслийн attribution-г [AUTHORS](../AUTHORS)-д хадгалсан. Энэ төсөл **MIT
-лицензтэй** — [LICENSE](../LICENSE).
-
-## Monorepo бүтэц
-
-```
-gerege-template/
-├── backend/           # Go · chi (net/http) · pgx (pgxpool) · PostgreSQL · Redis · JWT/OTP танилт
-│   └── docs/          # ARCHITECTURE · DEVELOPMENT · API_CONTRACT · SECURITY (EN/MN)
-└── frontend/          # Next.js BFF (backend руу server талаас прокси; cookie session)
-```
-
-- **[backend/README_MN.md](../backend/README_MN.md)** — Clean Architecture Go API.
-- **[frontend/README.md](../frontend/README.md)** — Next.js Backend-for-Frontend.
-
-## Онцлог
-
-- **Clean Architecture** — `handler → usecase → repository → domain`, back-import байхгүй; business core нь web framework-ийг import хийдэггүй.
-- **Танилт** — JWT access + refresh (rotation), OTP-баталгаажуулсан бүртгэл, bcrypt, login lockout; logout хоёр токеныг хоёуланг хүчингүй болгоно (refresh + access deny-list).
-- **AI pipeline (Gemini)** — SDK-гүй REST client + function calling: текст/дуут чат, яриа→текст (STT), текст→яриа (TTS), шууд орчуулга. Давхаргат system prompt (кодод хатуу suurь дүрэм + админ DB-ээс тохируулдаг хамрах хүрээ/заавар) туслахыг зөвхөн заасан хүрээнд барина; `search_knowledge` tool нь хариултыг `ai_knowledge` хүснэгтийн өгөгдөлд тулгуурлуулна.
-- **Аюулгүй хатууруулсан** — security headers (CSP, HSTS, COOP/COEP/CORP), CORS allow-list, rate limiting, серверийн бүрэн timeout-ууд, parameterized query, Postgres Row-Level Security + boot-үеийн мөрдөлтийн guard. [SECURITY.md](../SECURITY.md)-г үз.
-- **Observability** — OpenTelemetry trace + Prometheus metrics + Zap structured log.
-- **Frontend BFF** — браузер зөвхөн ижил-origin Next.js route рүү залгаж, тэр нь server талаас backend руу проксиолдог (токен client JS-д хүрэхгүй); давхар CSRF хамгаалалт (custom header + origin), TanStack Query өгөгдлийн давхарга.
-- **Тесттэй** — unit + testcontainers integration тест.
-
-## Түргэн эхлүүлэх
-
-**Шаардлага:** Go 1.26+, Node 20+, PostgreSQL 15+, Redis 7+.
-
-```bash
-# 1) Backend  →  http://localhost:8080
-cd backend
-cp internal/config/.env.example internal/config/.env   # JWT_SECRET (≥32), DB, Redis тохируул
-
-# 2) Frontend →  http://localhost:3000
-cd ../frontend
-cp .env.example .env.local                              # BACKEND_URL=http://localhost:8080
-npm install
-npm run dev
-```
-
-**http://localhost:3000** нээж бүртгүүлэх / нэвтрэх.
-
-## Баримтжуулалт
-
-| Doc | Юу |
-|-----|------|
-| [backend/docs/ARCHITECTURE_MN.md](../backend/docs/ARCHITECTURE_MN.md) | Давхаргууд, dependency flow |
-| [backend/docs/DEVELOPMENT_MN.md](../backend/docs/DEVELOPMENT_MN.md) | Фичер нэмэх заавар, тест, code style |
-| [backend/docs/API_CONTRACT_MN.md](../backend/docs/API_CONTRACT_MN.md) | REST endpoint, request/response |
-| [backend/docs/AI_PIPELINE_MN.md](../backend/docs/AI_PIPELINE_MN.md) | AI туслахын дотоод бүтэц: урсгал, prompt давхарга, tools, voice, өргөтгөх заавар |
-| [backend/docs/SECURITY.md](../backend/docs/SECURITY.md) | Хэрэгжсэн хяналт + ASVS roadmap |
-| [docs/DEPLOYMENT_MN.md](DEPLOYMENT_MN.md) | VPS deploy runbook (compose, env файлууд, nginx, шинэчлэх, rollback) |
-| [SECURITY.md](../SECURITY.md) | Эмзэг байдлыг хэрхэн мэдээлэх |
-| [CONTRIBUTING.md](../CONTRIBUTING.md) | Хэрхэн хувь нэмэр оруулах |
-
-## Хувь нэмэр
-
-Хувь нэмэр оруулахыг урьж байна — [CONTRIBUTING.md](../CONTRIBUTING.md) болон
-[Code of Conduct](CODE_OF_CONDUCT.md)-ийг уншина уу.
-
-## Лиценз
-
-[MIT](../LICENSE) — snykk/go-rest-boilerplate (MIT)-ийн derivative; эх төслийн
-attribution-г [AUTHORS](../AUTHORS)-д хадгалсан.
+Энэ хавтас нь кодоос шинээр хянан үзсэн **бүх платформын баримт бичгийн багц** юм. Төслийн танилцуулга болон хурдан эхлүүлэх зааврыг эх хавтасын [README.md](../README.md)-аас үзнэ үү.
 
 ---
 
-**Government Template Platform V3.0** — **Gerege Systems Development Team** болон
-**Claude AI** хамтран бүтээв, 2026.
+## Эндээс эхэл
+
+| Хэрэв та… | Уншина уу |
+|-----------------|------|
+| Платформыг эхнээс нь дуустал ойлгох | [OVERVIEW.md](OVERVIEW_MN.md) → [ARCHITECTURE.md](ARCHITECTURE_MN.md) |
+| Go API дээр ажиллах | [BACKEND.md](BACKEND_MN.md) + [DATABASE.md](DATABASE_MN.md) |
+| Вэб UI дээр ажиллах | [FRONTEND.md](FRONTEND_MN.md) |
+| API дуудах эсвэл өргөтгөх | [API_REFERENCE.md](API_REFERENCE_MN.md) |
+| AI / eID / SSO / гарын үсэг зурах процессыг ойлгох | [AI_AND_INTEGRATIONS.md](AI_AND_INTEGRATIONS_MN.md) |
+| Аюулгүй байдлын төлөв байдлыг хянах | [SECURITY.md](SECURITY_MN.md) |
+| Байршуулах эсвэл ажиллуулах | [DEPLOYMENT.md](DEPLOYMENT_MN.md) + [CONFIGURATION.md](CONFIGURATION_MN.md) |
+| Хувь нэмэр оруулах | [CONTRIBUTING.md](CONTRIBUTING.md) + [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) |
+
+---
+
+## Бүрэн багц
+
+| Баримт | Юуг хамардаг |
+|-----|----------------|
+| [OVERVIEW.md](OVERVIEW.md) · [_MN](OVERVIEW_MN.md) | Онцлогийн тойм, tech stack, репозиторийн бүтэц. |
+| [ARCHITECTURE.md](ARCHITECTURE.md) · [_MN](ARCHITECTURE_MN.md) | Бүрэн-стекийн архитектур, хүсэлтийн амьдралын мөчлөг, хил хязгаар. |
+| [BACKEND.md](BACKEND.md) · [_MN](BACKEND_MN.md) | Go API: давхаргалалт, DI, HTTP давхарга, middleware-ууд, багцууд. |
+| [FRONTEND.md](FRONTEND.md) · [_MN](FRONTEND_MN.md) | Next.js BFF: route-ууд, proxy, cookie/CSRF, TanStack Query, i18n. |
+| [DATABASE.md](DATABASE.md) · [_MN](DATABASE_MN.md) | Схем, migration-ууд, RLS, кэш, seed өгөгдөл. |
+| [API_REFERENCE.md](API_REFERENCE.md) · [_MN](API_REFERENCE_MN.md) | Домэйнээр ангилсан REST endpoint-ууд, envelope, алдааны загвар. |
+| [AI_AND_INTEGRATIONS.md](AI_AND_INTEGRATIONS.md) · [_MN](AI_AND_INTEGRATIONS_MN.md) | Gemini AI, eID, SSO, XYP, гарын үсэг зурах, Google, iOS. |
+| [SECURITY.md](SECURITY.md) · [_MN](SECURITY_MN.md) | Нэвтрэлт, RLS, header-ууд, CORS, хүсэлт хязгаарлалт, CSRF, аудит. |
+| [DEPLOYMENT.md](DEPLOYMENT.md) · [_MN](DEPLOYMENT_MN.md) | VPS runbook, compose стек, CI, эрүүл мэндийн endpoint-ууд. |
+| [CONFIGURATION.md](CONFIGURATION.md) · [_MN](CONFIGURATION_MN.md) | Бүх орчны хувьсагч + үйлдвэрлэлийн хамгаалалтууд. |
+| [EID_ENDPOINT_REQUESTS.md](EID_ENDPOINT_REQUESTS.md) | Энэ платформын хүсдэг RP-д зориулсан eID endpoint-ууд. |
+| [secure_system_guide_mn.md](secure_system_guide_mn.md) | Аюулгүй web+mobile+API систем бүтээх дэлгэрэнгүй заавар (стандартад суурилсан лавлагаа, MN). |
+| [CONTRIBUTING.md](CONTRIBUTING.md) · [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Хэрхэн хувь нэмэр оруулах. |
+
+### Зөвхөн backend-ийн гүнзгий судалгаа (`backend/docs/`)
+
+`backend/docs/` хавтас нь backend-ийн доод түвшний лавлагаануудыг (EN/MN хосууд) хадгалдаг:
+[ARCHITECTURE](../backend/docs/ARCHITECTURE.md), [DEVELOPMENT](../backend/docs/DEVELOPMENT.md)
+(шинэ онцлог нэмэх заавар), [API_CONTRACT](../backend/docs/API_CONTRACT.md),
+[AI_PIPELINE](../backend/docs/AI_PIPELINE.md), [SECURITY](../backend/docs/SECURITY.md),
+болон үүсгэсэн OpenAPI spec.
+
+---
+
+## Эхэлж мэдэх ёстой хоёр зүйл
+
+Өөр газар баримтжуулсан боловч **энэ репозиторид байхгүй** — кодын хяналтын явцад баталгаажуулж, операторуудыг гэнэт гайхшруулахгүйн тулд тэмдэглэсэн:
+
+1. **Репозиторид CI workflow байхгүй.** `.github/` хавтас байхгүй. CI хаалтуудыг `backend/Makefile` (`make pre-push`)-ээр давтан гүйцэтгэх боломжтой — [DEPLOYMENT.md](DEPLOYMENT_MN.md) § CI/CD-г үзнэ үү.
+2. **Сонгодог нууц үг/OTP нэвтрэлт route хийгдээгүй.** Эдгээр урсгалыг хэрэгжүүлж, тестэлсэн боловч зөвхөн eID/Google/SSO нэвтрэлт холбогдсон — [SECURITY.md](SECURITY_MN.md) §1-г үзнэ үү.
+
+---
+
+**Government Template Platform V3.0** — Gerege Systems Development Team болон Claude AI хамтран бүтээв, 2026.
