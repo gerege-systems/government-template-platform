@@ -61,8 +61,8 @@ const mn: LandingCopy = {
   nav: { platform: 'Платформ', features: 'Онцлог', stack: 'Технологи', deploy: 'Байршуулалт', login: 'DAN-аар нэвтрэх' },
   hero: {
     badge: 'Хувилбар 3.0 · Тогтвортой',
-    titleLead: 'Цахим засаглалын',
-    titleAccent: 'ирээдүйг',
+    titleLead: 'Цахим',
+    titleAccent: 'засаглалыг',
     titleTail: 'бүтээх суурь',
     lede:
       'Цэгцтэй архитектурт тулгуурласан, өндөр түвшний хамгаалалттай, ашиглалтад бэлэн бүрэн бүтэн загвар. Иргэн төвтэй цахим үйлчилгээний дараагийн үеийг эхлүүл.',
@@ -144,9 +144,9 @@ const en: LandingCopy = {
   nav: { platform: 'Platform', features: 'Features', stack: 'Stack', deploy: 'Deployment', login: 'Sign in with DAN' },
   hero: {
     badge: 'Version 3.0 · Stable',
-    titleLead: 'The foundation for the',
-    titleAccent: 'future',
-    titleTail: 'of digital government',
+    titleLead: 'The foundation to build',
+    titleAccent: 'digital',
+    titleTail: 'government',
     lede:
       'A production-ready, security-hardened full-stack template built on Clean Architecture. Empower the next generation of civil-centric digital services.',
     ctaLogin: 'Sign in with DAN',
